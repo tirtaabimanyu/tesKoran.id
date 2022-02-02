@@ -114,3 +114,18 @@
     flex-direction: column;
   }
 }
+
+.mask {
+  height: 70vh;
+  mask-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.numbers {
+  display: flex;
+  flex-direction: column;
+}
