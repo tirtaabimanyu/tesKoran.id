@@ -116,16 +116,31 @@
 }
 
 .mask {
-  height: 70vh;
+  display: flex;
+  height: 60vh;
   mask-image: radial-gradient(
     circle,
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 1) 50%,
     rgba(0, 0, 0, 0) 100%
   );
+  gap: 1em;
 }
 
 .numbers {
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.numbersinput {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #0070f3;
+  padding-top: 5em;
 }

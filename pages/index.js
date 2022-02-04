@@ -1,25 +1,33 @@
 import Head from "next/head";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useReducer } from "react";
 import styles from "../styles/Home.module.css";
+
+const ACTIONS = {
+  INCREMENT: "increment",
+};
 
 export async function getServerSideProps() {
   return {
     props: {
-      numbers: [
-        -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-      ],
+      numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     },
   };
 }
 
-export default function Home({ numbers }) {
-  const [active, _setActive] = useState(4);
-
-  const activeRef = useRef(active);
-  function setActive(value) {
-    activeRef.current = value;
-    _setActive(value);
+function reducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.INCREMENT:
+      return { ...state, active: state.active + 1 };
+    default:
+      return state;
   }
+}
+
+export default function Home({ numbers }) {
+  const [state, dispatch] = useReducer(reducer, {
+    active: 0,
+    numbersLength: numbers.length,
+  });
 
   useEffect(() => {
     console.log("used");
@@ -31,8 +39,24 @@ export default function Home({ numbers }) {
   }, []);
 
   function keyDown(e) {
-    setActive(activeRef.current + 1);
-    console.log(e, active, activeRef.current);
+    dispatch({ type: ACTIONS.INCREMENT });
+  }
+
+  function createPaddingNumbers(paddingLength, active, keyPrefix) {
+    const n = paddingLength - active;
+    if (n < 0) return null;
+
+    return [...Array(n)].map((e, idx) => (
+      <h1
+        style={{
+          display: "block",
+          minHeight: "43px",
+          marginBlockStart: "0.67em",
+          marginBlockEnd: "0.67em",
+        }}
+        key={`${keyPrefix}-${idx}`}
+      />
+    ));
   }
 
   return (
@@ -46,15 +70,31 @@ export default function Home({ numbers }) {
       <main className={styles.main}>
         <div className={styles.mask}>
           <div className={styles.numbers}>
+            {createPaddingNumbers(3, state.active, "start")}
             {numbers.map((element, idx) => {
               return (
-                Math.abs(active - idx) < 5 && (
-                  <div style={{ display: "inline-block" }}>
-                    <h1 key={idx}>{element < 0 ? "*" : element}</h1>
-                  </div>
+                Math.abs(state.active - idx) < 4 && (
+                  <h1 key={"numbers-" + idx}>{element}</h1>
                 )
               );
             })}
+            {createPaddingNumbers(
+              3,
+              state.numbersLength - state.active - 1,
+              "end"
+            )}
+          </div>
+          <div className={styles.numbersinput}>
+            {createPaddingNumbers(3, state.active, "input")}
+            {numbers.map((element, idx) => {
+              return (
+                state.active - idx >= 0 &&
+                state.active - idx <= 3 && (
+                  <h1 key={"numbers-" + idx}>{element}</h1>
+                )
+              );
+            })}
+            {createPaddingNumbers(3, 0, "end")}
           </div>
         </div>
       </main>
