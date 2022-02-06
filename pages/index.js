@@ -12,7 +12,7 @@ const ACTIONS = {
 export async function getServerSideProps() {
   return {
     props: {
-      numbers: Array.from({ length: 20 }, () => Math.floor(Math.random() * 10)),
+      numbers: Array.from({ length: 25 }, () => Math.floor(Math.random() * 10)),
     },
   };
 }
@@ -54,22 +54,20 @@ export default function Home({ numbers }) {
   }, []);
 
   function keyDown(e) {
-    // console.log(e.keyCode);
+    console.log(e);
+    if (e.ctrlKey) return;
+    if (e.repeat) return;
     switch (true) {
       case e.keyCode == 8 || e.keyCode == 38:
-        // console.log("backspace", e.key);
         return dispatch({ type: ACTIONS.DECREMENT });
       case e.keyCode == 13 || e.keyCode == 40:
-        // console.log("enter", e.key);
         return dispatch({ type: ACTIONS.INCREMENT });
       case e.keyCode >= 48 && e.keyCode <= 57:
-        // console.log("number", e.key);
         return dispatch({
           type: ACTIONS.PUSH_ANSWER,
           payload: { input: e.keyCode - 48 },
         });
       case e.keyCode >= 96 && e.keyCode <= 105:
-        // console.log("numpad", e.key);
         return dispatch({
           type: ACTIONS.PUSH_ANSWER,
           payload: { input: e.keyCode - 96 },
