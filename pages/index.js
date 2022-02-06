@@ -1,16 +1,18 @@
 import Head from "next/head";
+import cn from "classnames";
 import { useState, useEffect, useReducer } from "react";
 import styles from "../styles/Home.module.css";
 
 const ACTIONS = {
-  INCREMENT: "increment",
   PUSH_ANSWER: "push-answer",
+  INCREMENT: "increment",
+  DECREMENT: "decrement",
 };
 
 export async function getServerSideProps() {
   return {
     props: {
-      numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      numbers: Array.from({ length: 20 }, () => Math.floor(Math.random() * 10)),
     },
   };
 }
@@ -18,11 +20,20 @@ export async function getServerSideProps() {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.INCREMENT:
-      return { ...state, active: state.active + 1 };
+      return {
+        ...state,
+        active: Math.min(state.numbersLength - 1, state.active + 1),
+      };
+    case ACTIONS.DECREMENT:
+      return { ...state, active: Math.max(0, state.active - 1) };
     case ACTIONS.PUSH_ANSWER:
       const newAnswers = state.answers;
       newAnswers[state.active] = action.payload.input;
-      return { ...state, newAnswers };
+      return {
+        ...state,
+        newAnswers,
+        active: Math.min(state.numbersLength - 1, state.active + 1),
+      };
     default:
       return state;
   }
@@ -36,20 +47,34 @@ export default function Home({ numbers }) {
   });
 
   useEffect(() => {
-    console.log("used");
     window.addEventListener("keydown", (e) => keyDown(e));
     return () => {
-      console.log("cleaned");
       window.removeEventListener("keydown", (e) => keyDown(e));
     };
   }, []);
 
   function keyDown(e) {
-    dispatch({
-      type: ACTIONS.PUSH_ANSWER,
-      payload: { input: Math.floor(Math.random() * 10) },
-    });
-    dispatch({ type: ACTIONS.INCREMENT });
+    // console.log(e.keyCode);
+    switch (true) {
+      case e.keyCode == 8 || e.keyCode == 38:
+        // console.log("backspace", e.key);
+        return dispatch({ type: ACTIONS.DECREMENT });
+      case e.keyCode == 13 || e.keyCode == 40:
+        // console.log("enter", e.key);
+        return dispatch({ type: ACTIONS.INCREMENT });
+      case e.keyCode >= 48 && e.keyCode <= 57:
+        // console.log("number", e.key);
+        return dispatch({
+          type: ACTIONS.PUSH_ANSWER,
+          payload: { input: e.keyCode - 48 },
+        });
+      case e.keyCode >= 96 && e.keyCode <= 105:
+        // console.log("numpad", e.key);
+        return dispatch({
+          type: ACTIONS.PUSH_ANSWER,
+          payload: { input: e.keyCode - 96 },
+        });
+    }
   }
 
   function createPaddingNumbers(paddingLength, active, keyPrefix) {
@@ -60,6 +85,13 @@ export default function Home({ numbers }) {
       <h1 className={styles.paddingElement} key={`${keyPrefix}-${idx}`} />
     ));
   }
+
+  console.log("state.active", state.active);
+
+  const renderedNumbers = numbers.slice(
+    Math.max(0, state.active - 2),
+    state.active + 4
+  );
 
   return (
     <div className={styles.container}>
@@ -73,11 +105,9 @@ export default function Home({ numbers }) {
         <div className={styles.mask}>
           <div className={styles.numbers}>
             {createPaddingNumbers(2, state.active, "start")}
-            {numbers
-              .slice(Math.max(0, state.active - 2), state.active + 4)
-              .map((element, idx) => {
-                return <h1 key={"numbers-" + idx}>{element}</h1>;
-              })}
+            {renderedNumbers.map((element, idx) => {
+              return <h1 key={"numbers-" + idx}>{element}</h1>;
+            })}
             {createPaddingNumbers(
               3,
               state.numbersLength - state.active - 1,
@@ -92,7 +122,13 @@ export default function Home({ numbers }) {
               .map((element, idx) => {
                 return (
                   <h1
-                    className={element ? "" : styles.paddingElement}
+                    className={cn({
+                      [styles.activeAnswers]: idx === Math.min(state.active, 2),
+                      [styles.paddingElement]: element === undefined,
+                      [styles.wrong]:
+                        element !==
+                        (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
+                    })}
                     key={"input-" + idx}
                   >
                     {element}
