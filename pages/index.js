@@ -4,6 +4,7 @@ import styles from "../styles/Home.module.css";
 
 const ACTIONS = {
   INCREMENT: "increment",
+  PUSH_ANSWER: "push-answer",
 };
 
 export async function getServerSideProps() {
@@ -18,6 +19,10 @@ function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.INCREMENT:
       return { ...state, active: state.active + 1 };
+    case ACTIONS.PUSH_ANSWER:
+      const newAnswers = state.answers;
+      newAnswers[state.active] = action.payload.input;
+      return { ...state, newAnswers };
     default:
       return state;
   }
@@ -27,6 +32,7 @@ export default function Home({ numbers }) {
   const [state, dispatch] = useReducer(reducer, {
     active: 0,
     numbersLength: numbers.length,
+    answers: [...Array(numbers.length)],
   });
 
   useEffect(() => {
@@ -39,6 +45,10 @@ export default function Home({ numbers }) {
   }, []);
 
   function keyDown(e) {
+    dispatch({
+      type: ACTIONS.PUSH_ANSWER,
+      payload: { input: Math.floor(Math.random() * 10) },
+    });
     dispatch({ type: ACTIONS.INCREMENT });
   }
 
@@ -47,15 +57,7 @@ export default function Home({ numbers }) {
     if (n < 0) return null;
 
     return [...Array(n)].map((e, idx) => (
-      <h1
-        style={{
-          display: "block",
-          minHeight: "43px",
-          marginBlockStart: "0.67em",
-          marginBlockEnd: "0.67em",
-        }}
-        key={`${keyPrefix}-${idx}`}
-      />
+      <h1 className={styles.paddingElement} key={`${keyPrefix}-${idx}`} />
     ));
   }
 
@@ -70,31 +72,38 @@ export default function Home({ numbers }) {
       <main className={styles.main}>
         <div className={styles.mask}>
           <div className={styles.numbers}>
-            {createPaddingNumbers(3, state.active, "start")}
-            {numbers.map((element, idx) => {
-              return (
-                Math.abs(state.active - idx) < 4 && (
-                  <h1 key={"numbers-" + idx}>{element}</h1>
-                )
-              );
-            })}
+            {createPaddingNumbers(2, state.active, "start")}
+            {numbers
+              .slice(Math.max(0, state.active - 2), state.active + 4)
+              .map((element, idx) => {
+                return <h1 key={"numbers-" + idx}>{element}</h1>;
+              })}
             {createPaddingNumbers(
               3,
               state.numbersLength - state.active - 1,
               "end"
             )}
           </div>
+
           <div className={styles.numbersinput}>
-            {createPaddingNumbers(3, state.active, "input")}
-            {numbers.map((element, idx) => {
-              return (
-                state.active - idx >= 0 &&
-                state.active - idx <= 3 && (
-                  <h1 key={"numbers-" + idx}>{element}</h1>
-                )
-              );
-            })}
-            {createPaddingNumbers(3, 0, "end")}
+            {createPaddingNumbers(2, state.active, "input")}
+            {state.answers
+              .slice(Math.max(0, state.active - 2), state.active + 4)
+              .map((element, idx) => {
+                return (
+                  <h1
+                    className={element ? "" : styles.paddingElement}
+                    key={"input-" + idx}
+                  >
+                    {element}
+                  </h1>
+                );
+              })}
+            {createPaddingNumbers(
+              3,
+              state.numbersLength - state.active - 1,
+              "end"
+            )}
           </div>
         </div>
       </main>
