@@ -133,7 +133,10 @@ export default function Home({ numbers }) {
                     {element}
                   </h1>
                 ) : (
-                  <div className={styles.activeAnswerContainer}>
+                  <div
+                    key={"input-" + idx}
+                    className={styles.activeAnswerContainer}
+                  >
                     <input
                       autoFocus
                       type="number"
@@ -144,7 +147,6 @@ export default function Home({ numbers }) {
                             10,
                       })}
                       onChange={(e) => (e.target.value = "")}
-                      onKeyDown={(e) => (e.target.value = "")}
                       value={element}
                     />
                   </div>

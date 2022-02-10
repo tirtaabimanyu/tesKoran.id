@@ -145,10 +145,13 @@
   padding-top: 5em;
 }
 
+.numbersinput > h1:last-child {
+  color: transparent;
+}
+
 .paddingElement {
   display: block;
   padding-top: 43px;
-  min-width: 18.41px;
 }
 
 .activeAnswerContainer {
