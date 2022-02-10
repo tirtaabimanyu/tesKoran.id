@@ -55,19 +55,21 @@ export default function Home({ numbers }) {
 
   function keyDown(e) {
     console.log(e);
-    if (e.ctrlKey) return;
-    if (e.repeat) return;
     switch (true) {
       case e.keyCode == 8 || e.keyCode == 38:
         return dispatch({ type: ACTIONS.DECREMENT });
       case e.keyCode == 13 || e.keyCode == 40:
         return dispatch({ type: ACTIONS.INCREMENT });
       case e.keyCode >= 48 && e.keyCode <= 57:
+        if (e.ctrlKey) return;
+        if (e.repeat) return;
         return dispatch({
           type: ACTIONS.PUSH_ANSWER,
           payload: { input: e.keyCode - 48 },
         });
       case e.keyCode >= 96 && e.keyCode <= 105:
+        if (e.repeat) return;
+        if (e.ctrlKey) return;
         return dispatch({
           type: ACTIONS.PUSH_ANSWER,
           payload: { input: e.keyCode - 96 },
@@ -118,10 +120,9 @@ export default function Home({ numbers }) {
             {state.answers
               .slice(Math.max(0, state.active - 2), state.active + 4)
               .map((element, idx) => {
-                return (
+                return idx !== Math.min(state.active, 2) ? (
                   <h1
                     className={cn({
-                      [styles.activeAnswers]: idx === Math.min(state.active, 2),
                       [styles.paddingElement]: element === undefined,
                       [styles.wrong]:
                         element !==
@@ -131,6 +132,22 @@ export default function Home({ numbers }) {
                   >
                     {element}
                   </h1>
+                ) : (
+                  <div className={styles.activeAnswerContainer}>
+                    <input
+                      autoFocus
+                      type="number"
+                      className={cn([styles.activeAnswer], {
+                        [styles.wrong]:
+                          element !==
+                          (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
+                            10,
+                      })}
+                      onChange={(e) => (e.target.value = "")}
+                      onKeyDown={(e) => (e.target.value = "")}
+                      value={element}
+                    />
+                  </div>
                 );
               })}
             {createPaddingNumbers(
