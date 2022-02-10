@@ -1,6 +1,6 @@
 import Head from "next/head";
 import cn from "classnames";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useRef } from "react";
 import styles from "../styles/Home.module.css";
 
 const ACTIONS = {
@@ -45,6 +45,13 @@ export default function Home({ numbers }) {
     numbersLength: numbers.length,
     answers: [...Array(numbers.length)],
   });
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => keyDown(e));
@@ -135,7 +142,7 @@ export default function Home({ numbers }) {
                 ) : (
                   <div className={styles.activeAnswerContainer}>
                     <input
-                      autoFocus
+                      ref={inputRef}
                       type="number"
                       className={cn([styles.activeAnswer], {
                         [styles.wrong]:

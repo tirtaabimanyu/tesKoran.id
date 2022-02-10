@@ -117,7 +117,7 @@
 
 .mask {
   display: flex;
-  height: 50vh;
+  height: 60vh;
   mask-image: radial-gradient(
     circle,
     rgba(0, 0, 0, 1) 0%,
