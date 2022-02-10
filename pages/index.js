@@ -46,13 +46,6 @@ export default function Home({ numbers }) {
     answers: [...Array(numbers.length)],
   });
 
-  const inputRef = useRef(null);
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-
   useEffect(() => {
     window.addEventListener("keydown", (e) => keyDown(e));
     return () => {
@@ -142,7 +135,7 @@ export default function Home({ numbers }) {
                 ) : (
                   <div className={styles.activeAnswerContainer}>
                     <input
-                      ref={inputRef}
+                      autoFocus
                       type="number"
                       className={cn([styles.activeAnswer], {
                         [styles.wrong]:
