@@ -201,7 +201,7 @@
 
 .paddingNumber {
   display: block;
-  height: 3rem;
+  min-height: 3rem;
   background-color: transparent;
   margin-bottom: 1.5rem;
 }
@@ -211,20 +211,20 @@
   font-size: 2em;
   font-weight: bold;
   position: relative;
-  top: 44%;
+  top: 13rem;
   width: 6rem;
   text-align: right;
 }
 
 .paddingTimer {
-  width: 6rem;
+  min-width: 6rem;
 }
 
 .activeAnswerContainer {
   display: flex;
   align-items: center;
   flex-direction: column;
-  height: 3rem;
+  min-height: 3rem;
   margin-bottom: 1.5rem;
   justify-content: space-around;
 }
@@ -237,4 +237,15 @@
   height: 0.3em;
   background-color: #f0860c;
   border-radius: 16px;
+}
+
+@media only screen and (max-width: 600px) {
+  .mask {
+    width: 100%;
+    mask-image: none;
+  }
+
+  .timer {
+    top: 45%;
+  }
 }
