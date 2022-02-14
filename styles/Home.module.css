@@ -120,8 +120,8 @@
   position: relative;
   gap: 1rem;
   justify-content: center;
-  height: 50vh;
-  width: 40vw;
+  /* height: 50vh; */
+  /* width: 40vw; */
   mask-image: linear-gradient(
       0deg,
       rgba(0, 0, 0, 0) 0%,
@@ -155,6 +155,7 @@
   justify-content: center;
   align-items: center;
   color: #0070f3;
+  padding-top: 2rem;
 }
 
 .numbersInput > div:last-child {
@@ -197,7 +198,7 @@
 .number {
   text-align: center;
   font-size: 2em;
-  height: 3rem;
+  min-height: 3rem;
   font-weight: bold;
   background-color: transparent;
   margin-bottom: 1.5rem;
@@ -207,6 +208,7 @@
 .paddingNumber {
   display: block;
   min-height: 3rem;
+  min-width: 1rem;
   background-color: transparent;
   margin-bottom: 1.5rem;
 }
@@ -216,7 +218,7 @@
   font-size: 2em;
   font-weight: bold;
   position: relative;
-  top: 14rem;
+  top: 11.5rem;
   width: 6rem;
   text-align: right;
 }
@@ -227,6 +229,7 @@
 
 .activeAnswerContainer {
   display: flex;
+  position: relative;
   align-items: center;
   flex-direction: column;
   min-height: 3rem;
@@ -237,7 +240,8 @@
 .activeAnswerContainer:after {
   content: " ";
   display: block;
-  position: relative;
+  position: absolute;
+  top: 2.5rem;
   width: 1.5rem;
   height: 0.3rem;
   background-color: #f0860c;
@@ -247,10 +251,5 @@
 @media only screen and (max-width: 600px) {
   .mask {
     width: 100%;
-    mask-image: none;
-  }
-
-  .timer {
-    top: 45%;
   }
 }
