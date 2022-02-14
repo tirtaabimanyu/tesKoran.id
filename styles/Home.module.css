@@ -118,8 +118,8 @@
 .mask {
   display: flex;
   position: relative;
-  justify-content: center;
   gap: 1rem;
+  justify-content: center;
   height: 50vh;
   width: 40vw;
   mask-image: linear-gradient(
@@ -144,6 +144,10 @@
   align-items: center;
 }
 
+.numbers > div:last-child {
+  margin: 0;
+}
+
 .numbersInput {
   height: 100%;
   display: flex;
@@ -151,11 +155,11 @@
   justify-content: center;
   align-items: center;
   color: #0070f3;
-  padding-top: 4rem;
 }
 
-.numbersInput > .number:last-child {
+.numbersInput > div:last-child {
   color: transparent;
+  margin: 0;
 }
 
 .activeAnswer {
@@ -163,6 +167,7 @@
   border: none;
   font-size: 2em;
   font-weight: bold;
+  font-family: inherit;
   color: #0070f3;
   caret-color: transparent;
   background-color: transparent;
@@ -211,7 +216,7 @@
   font-size: 2em;
   font-weight: bold;
   position: relative;
-  top: 13rem;
+  top: 14rem;
   width: 6rem;
   text-align: right;
 }
@@ -233,8 +238,8 @@
   content: " ";
   display: block;
   position: relative;
-  width: 1.5em;
-  height: 0.3em;
+  width: 1.5rem;
+  height: 0.3rem;
   background-color: #f0860c;
   border-radius: 16px;
 }

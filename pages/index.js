@@ -128,6 +128,7 @@ export default function Home({ numbers }) {
   }, []);
 
   function keyDown(e) {
+    console.log(e.keyCode);
     if (!allowedKeys.has(e.keyCode)) return;
     if (!stateRef.current.isGameRunning) dispatch({ type: ACTIONS.START_GAME });
 
@@ -196,6 +197,7 @@ export default function Home({ numbers }) {
           </div>
 
           <div className={styles.numbersInput}>
+            <div style={{ minHeight: "4rem" }} />
             {createPaddingNumbers(2, state.active, "input")}
             {state.answers
               .slice(Math.max(0, state.active - 2), state.active + 4)
