@@ -117,14 +117,23 @@
 
 .mask {
   display: flex;
-  height: 60vh;
-  mask-image: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) 50%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  gap: 1em;
+  position: relative;
+  justify-content: center;
+  gap: 1rem;
+  height: 50vh;
+  width: 40vw;
+  mask-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 30%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 30%,
+      rgba(0, 0, 0, 0) 100%
+    );
 }
 
 .numbers {
@@ -135,42 +144,18 @@
   align-items: center;
 }
 
-.numbersinput {
+.numbersInput {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #0070f3;
-  padding-top: 5em;
+  padding-top: 4rem;
 }
 
-.numbersinput > h1:last-child {
+.numbersInput > .number:last-child {
   color: transparent;
-}
-
-.paddingElement {
-  display: block;
-  padding-top: 43px;
-}
-
-.activeAnswerContainer {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-block-start: 0.67em;
-  margin-block-end: 0.67em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-}
-
-.activeAnswerContainer:after {
-  content: " ";
-  display: block;
-  width: 1.5em;
-  height: 0.3em;
-  background-color: #f0860c;
-  border-radius: 16px;
 }
 
 .activeAnswer {
@@ -190,4 +175,66 @@
 
 .wrong {
   color: red;
+}
+
+@keyframes caretBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation-name: caretBlink;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+.number {
+  text-align: center;
+  font-size: 2em;
+  height: 3rem;
+  font-weight: bold;
+  background-color: transparent;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.paddingNumber {
+  display: block;
+  height: 3rem;
+  background-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.timer {
+  color: #f0860c;
+  font-size: 2em;
+  font-weight: bold;
+  position: relative;
+  top: 44%;
+  width: 6rem;
+  text-align: right;
+}
+
+.paddingTimer {
+  width: 6rem;
+}
+
+.activeAnswerContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 3rem;
+  margin-bottom: 1.5rem;
+  justify-content: space-around;
+}
+
+.activeAnswerContainer:after {
+  content: " ";
+  display: block;
+  position: relative;
+  width: 1.5em;
+  height: 0.3em;
+  background-color: #f0860c;
+  border-radius: 16px;
 }

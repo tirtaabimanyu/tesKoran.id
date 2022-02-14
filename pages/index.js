@@ -7,6 +7,9 @@ const ACTIONS = {
   PUSH_ANSWER: "push-answer",
   INCREMENT: "increment",
   DECREMENT: "decrement",
+  START_GAME: "start-game",
+  STOP_GAME: "stop-game",
+  DECREASE_TIME: "decrease-time",
 };
 
 export async function getServerSideProps() {
@@ -15,6 +18,26 @@ export async function getServerSideProps() {
       numbers: Array.from({ length: 25 }, () => Math.floor(Math.random() * 10)),
     },
   };
+}
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
 }
 
 function reducer(state, action) {
@@ -27,54 +50,106 @@ function reducer(state, action) {
     case ACTIONS.DECREMENT:
       return { ...state, active: Math.max(0, state.active - 1) };
     case ACTIONS.PUSH_ANSWER:
-      const newAnswers = state.answers;
-      newAnswers[state.active] = action.payload.input;
+      state.answers[state.active] = action.payload.input;
       return {
         ...state,
-        newAnswers,
         active: Math.min(state.numbersLength - 1, state.active + 1),
+      };
+    case ACTIONS.START_GAME:
+      console.log("triggered");
+      return {
+        ...state,
+        isGameRunning: true,
+      };
+    case ACTIONS.STOP_GAME:
+      return {
+        ...state,
+        isGameRunning: false,
+      };
+    case ACTIONS.DECREASE_TIME:
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
       };
     default:
       return state;
   }
 }
 
+const allowedKeys = new Set([
+  8, 13, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100,
+  101, 102, 103, 104, 105,
+]);
+
+function formatTime(time) {
+  const seconds = (time % 60).toLocaleString("en-US", {
+    minimumIntegerDigits: 2,
+    useGrouping: false,
+  });
+  const minute = Math.floor(time / 60).toLocaleString("en-US", {
+    minimumIntegerDigits: 2,
+    useGrouping: false,
+  });
+  return minute + ":" + seconds;
+}
+
 export default function Home({ numbers }) {
   const [state, dispatch] = useReducer(reducer, {
     active: 0,
     numbersLength: numbers.length,
-    answers: [...Array(numbers.length)],
+    answers: Array(numbers.length).fill(null),
+    isGameRunning: false,
+    secondsRemaining: 60,
   });
 
+  useInterval(
+    () => {
+      if (state.secondsRemaining > 0) {
+        dispatch({ type: ACTIONS.DECREASE_TIME });
+      } else {
+        dispatch({ type: ACTIONS.STOP_GAME });
+      }
+    },
+    state.isGameRunning ? 1000 : null
+  );
+
+  const stateRef = useRef(state);
   useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  useEffect(() => {
+    console.log("init");
     window.addEventListener("keydown", (e) => keyDown(e));
     return () => {
+      console.log("clean");
       window.removeEventListener("keydown", (e) => keyDown(e));
     };
   }, []);
 
   function keyDown(e) {
-    console.log(e);
-    switch (true) {
-      case e.keyCode == 8 || e.keyCode == 38:
-        return dispatch({ type: ACTIONS.DECREMENT });
-      case e.keyCode == 13 || e.keyCode == 40:
-        return dispatch({ type: ACTIONS.INCREMENT });
-      case e.keyCode >= 48 && e.keyCode <= 57:
-        if (e.ctrlKey) return;
-        if (e.repeat) return;
-        return dispatch({
-          type: ACTIONS.PUSH_ANSWER,
-          payload: { input: e.keyCode - 48 },
-        });
-      case e.keyCode >= 96 && e.keyCode <= 105:
-        if (e.repeat) return;
-        if (e.ctrlKey) return;
-        return dispatch({
-          type: ACTIONS.PUSH_ANSWER,
-          payload: { input: e.keyCode - 96 },
-        });
-    }
+    if (!allowedKeys.has(e.keyCode)) return;
+    if (!stateRef.current.isGameRunning) dispatch({ type: ACTIONS.START_GAME });
+
+    if (e.keyCode == 8 || e.keyCode == 38)
+      return dispatch({ type: ACTIONS.DECREMENT });
+
+    if (e.keyCode == 13 || e.keyCode == 40)
+      return dispatch({ type: ACTIONS.INCREMENT });
+
+    if (e.repeat || e.ctrlKey) return;
+
+    if (e.keyCode >= 48 && e.keyCode <= 57)
+      return dispatch({
+        type: ACTIONS.PUSH_ANSWER,
+        payload: { input: e.keyCode - 48 },
+      });
+
+    if (e.keyCode >= 96 && e.keyCode <= 105)
+      return dispatch({
+        type: ACTIONS.PUSH_ANSWER,
+        payload: { input: e.keyCode - 96 },
+      });
   }
 
   function createPaddingNumbers(paddingLength, active, keyPrefix) {
@@ -82,11 +157,9 @@ export default function Home({ numbers }) {
     if (n < 0) return null;
 
     return [...Array(n)].map((e, idx) => (
-      <h1 className={styles.paddingElement} key={`${keyPrefix}-${idx}`} />
+      <div className={styles.paddingNumber} key={`${keyPrefix}-${idx}`} />
     ));
   }
-
-  console.log("state.active", state.active);
 
   const renderedNumbers = numbers.slice(
     Math.max(0, state.active - 2),
@@ -96,17 +169,24 @@ export default function Home({ numbers }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="Generated by create next app" />
+        <title>Numberplus+</title>
+        <meta name="description" content="Add them numbers" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.mask}>
+          <div className={styles.timer}>
+            {formatTime(state.secondsRemaining)}
+          </div>
           <div className={styles.numbers}>
             {createPaddingNumbers(2, state.active, "start")}
             {renderedNumbers.map((element, idx) => {
-              return <h1 key={"numbers-" + idx}>{element}</h1>;
+              return (
+                <div className={styles.number} key={"numbers-" + idx}>
+                  {element}
+                </div>
+              );
             })}
             {createPaddingNumbers(
               3,
@@ -115,27 +195,29 @@ export default function Home({ numbers }) {
             )}
           </div>
 
-          <div className={styles.numbersinput}>
+          <div className={styles.numbersInput}>
             {createPaddingNumbers(2, state.active, "input")}
             {state.answers
               .slice(Math.max(0, state.active - 2), state.active + 4)
               .map((element, idx) => {
                 return idx !== Math.min(state.active, 2) ? (
-                  <h1
-                    className={cn({
-                      [styles.paddingElement]: element === undefined,
+                  <div
+                    className={cn([styles.number], {
+                      [styles.paddingNumber]: element === null,
                       [styles.wrong]:
                         element !==
                         (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
                     })}
-                    key={"input-" + idx}
+                    key={"answer-" + idx}
                   >
                     {element}
-                  </h1>
+                  </div>
                 ) : (
                   <div
-                    key={"input-" + idx}
-                    className={styles.activeAnswerContainer}
+                    key={"answer-" + idx}
+                    className={cn([styles.activeAnswerContainer], {
+                      [styles.blink]: !state.isGameRunning,
+                    })}
                   >
                     <input
                       autoFocus
@@ -146,8 +228,8 @@ export default function Home({ numbers }) {
                           (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
                             10,
                       })}
-                      onChange={(e) => (e.target.value = "")}
-                      value={element}
+                      onChange={(e) => e.preventDefault()}
+                      value={element === null ? "" : element}
                     />
                   </div>
                 );
@@ -157,6 +239,9 @@ export default function Home({ numbers }) {
               state.numbersLength - state.active - 1,
               "end"
             )}
+          </div>
+          <div className={styles.timer} style={{ opacity: 0 }}>
+            {formatTime(state.secondsRemaining)}
           </div>
         </div>
       </main>
