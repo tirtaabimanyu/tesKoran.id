@@ -253,3 +253,21 @@
     width: 100%;
   }
 }
+
+.menuChoice > div:not(:last-child):after {
+  content: "/";
+  color: black;
+  cursor: default;
+}
+
+.activeChoice {
+  color: #f0860c;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.clickable:hover {
+  cursor: pointer;
+}

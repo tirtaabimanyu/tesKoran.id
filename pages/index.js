@@ -4,38 +4,36 @@ import { useState, useEffect, useReducer, useRef } from "react";
 import styles from "../styles/Home.module.css";
 
 const allowedKeys = new Set([
-  8, 13, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100,
-  101, 102, 103, 104, 105,
+  8, 13, 27, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99,
+  100, 101, 102, 103, 104, 105,
 ]);
 
 const PHASE = {
   PRESTART: "prestart",
+  START: "start",
   RUNNING: "running",
   OVER: "over",
 };
 
+const MODE = {
+  PRACTICE: "practice",
+  RANKED: "ranked",
+};
+
 const ACTIONS = {
-  INIT_NUMBERS: "init-numbers",
   GENERATE_NEXT_NUMBERS: "generate-next-numbers",
   PUSH_ANSWER: "push-answer",
   INCREMENT: "increment",
   DECREMENT: "decrement",
-  START_GAME: "start-game",
-  STOP_GAME: "stop-game",
+  INIT_GAME: "init-game",
+  SET_PHASE: "set-phase",
+  SET_TIME: "set-time",
   DECREASE_TIME: "decrease-time",
+  SET_MODE: "set-mode",
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case ACTIONS.INIT_NUMBERS:
-      const numbers = Array.from({ length: 100 }, () =>
-        Math.floor(Math.random() * 10)
-      );
-      return {
-        ...state,
-        numbers,
-        answers: Array(numbers.length).fill(null),
-      };
     case ACTIONS.GENERATE_NEXT_NUMBERS:
       console.log("hehe");
       const newNumbers = Array.from({ length: 100 }, () =>
@@ -65,21 +63,40 @@ function reducer(state, action) {
         active,
         maxActive: active,
       };
-    case ACTIONS.START_GAME:
-      console.log("triggered");
+    case ACTIONS.INIT_GAME:
+      const numbers = Array.from({ length: 100 }, () =>
+        Math.floor(Math.random() * 10)
+      );
+
       return {
         ...state,
-        gamePhase: PHASE.RUNNING,
+        numbers,
+        answers: Array(numbers.length).fill(null),
+        gamePhase: PHASE.START,
+        secondsRemaining: state.gameDuration,
+        active: 0,
+        maxActive: 0,
       };
-    case ACTIONS.STOP_GAME:
+    case ACTIONS.SET_PHASE:
       return {
         ...state,
-        gamePhase: PHASE.OVER,
+        gamePhase: action.payload,
+      };
+    case ACTIONS.SET_TIME:
+      return {
+        ...state,
+        gameDuration: action.payload,
+        secondsRemaining: action.payload,
       };
     case ACTIONS.DECREASE_TIME:
       return {
         ...state,
         secondsRemaining: state.secondsRemaining - 1,
+      };
+    case ACTIONS.SET_MODE:
+      return {
+        ...state,
+        gameMode: action.payload,
       };
     default:
       return state;
@@ -125,7 +142,9 @@ export default function Home() {
     numbers: [],
     answers: [],
     gamePhase: PHASE.PRESTART,
-    secondsRemaining: 10,
+    gameMode: MODE.PRACTICE,
+    gameDuration: 60,
+    secondsRemaining: 60,
   });
 
   const stateRef = useRef(state);
@@ -133,16 +152,12 @@ export default function Home() {
     stateRef.current = state;
   }, [state]);
 
-  useEffect(() => {
-    dispatch({ type: ACTIONS.INIT_NUMBERS });
-  }, []);
-
   useInterval(
     () => {
       if (state.secondsRemaining > 0) {
         dispatch({ type: ACTIONS.DECREASE_TIME });
       } else {
-        dispatch({ type: ACTIONS.STOP_GAME });
+        dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.OVER });
       }
     },
     state.gamePhase == PHASE.RUNNING ? 1000 : null
@@ -159,9 +174,15 @@ export default function Home() {
 
   function keyDown(e) {
     if (!allowedKeys.has(e.keyCode)) return;
-    if (stateRef.current.gamePhase == PHASE.PRESTART)
-      dispatch({ type: ACTIONS.START_GAME });
+    if (stateRef.current.gamePhase == PHASE.START)
+      dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.RUNNING });
     if (stateRef.current.gamePhase == PHASE.OVER) return;
+
+    if (e.keyCode == 27) {
+      if (confirm("Are you sure you want to exit the game?")) {
+        return dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART });
+      }
+    }
 
     if (e.keyCode == 8 || e.keyCode == 38)
       return dispatch({ type: ACTIONS.DECREMENT });
@@ -206,7 +227,7 @@ export default function Home() {
 
   const inputRef = useRef(null);
   function scrollHandler() {
-    inputRef.current.scrollIntoView({ block: "center" });
+    inputRef.current?.scrollIntoView({ block: "center" });
   }
 
   useEffect(() => {
@@ -217,7 +238,113 @@ export default function Home() {
     };
   }, []);
 
-  return (
+  const renderStartScreen = () => (
+    <div className={styles.container}>
+      <Head>
+        <title>Numberplus+</title>
+        <meta name="description" content="Add them numbers" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className={styles.main}>
+        <div style={{ width: "300px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>Mode:</div>
+            <div
+              className={styles.menuChoice}
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <div
+                className={cn([styles.clickable], {
+                  [styles.activeChoice]: state.gameMode == MODE.PRACTICE,
+                })}
+                onClick={() =>
+                  dispatch({ type: ACTIONS.SET_MODE, payload: MODE.PRACTICE })
+                }
+              >
+                Practice
+              </div>
+              <div
+                className={cn([styles.clickable], {
+                  [styles.activeChoice]: state.gameMode == MODE.RANKED,
+                })}
+                onClick={() =>
+                  dispatch({ type: ACTIONS.SET_MODE, payload: MODE.RANKED })
+                }
+              >
+                Ranked
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>Duration:</div>
+            <div
+              className={styles.menuChoice}
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <div
+                className={cn([styles.clickable], {
+                  [styles.activeChoice]: state.gameDuration == 60,
+                })}
+                onClick={() =>
+                  dispatch({ type: ACTIONS.SET_TIME, payload: 60 })
+                }
+              >
+                1m
+              </div>
+              <div
+                className={cn([styles.clickable], {
+                  [styles.activeChoice]: state.gameDuration == 180,
+                })}
+                onClick={() =>
+                  dispatch({ type: ACTIONS.SET_TIME, payload: 180 })
+                }
+              >
+                3m
+              </div>
+              <div
+                className={cn([styles.clickable], {
+                  [styles.activeChoice]: state.gameDuration == 3600,
+                })}
+                onClick={() =>
+                  dispatch({ type: ACTIONS.SET_TIME, payload: 3600 })
+                }
+              >
+                60m
+              </div>
+              <div
+                className={cn([styles.clickable], {
+                  [styles.activeChoice]:
+                    state.gameDuration != 60 &&
+                    state.gameDuration != 180 &&
+                    state.gameDuration != 3600,
+                })}
+                onClick={() => {
+                  const customSecond = parseInt(
+                    prompt("Enter duration in seconds")
+                  );
+                  if (!customSecond) return;
+                  dispatch({ type: ACTIONS.SET_TIME, payload: customSecond });
+                }}
+              >
+                Custom
+              </div>
+            </div>
+          </div>
+          <hr></hr>
+          <div
+            className={styles.clickable}
+            style={{ display: "flex", justifyContent: "center" }}
+            onClick={() => dispatch({ type: ACTIONS.INIT_GAME })}
+          >
+            Start
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+
+  const renderGameBoard = () => (
     <div className={styles.container}>
       <Head>
         <title>Numberplus+</title>
@@ -227,7 +354,11 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.mask}>
-          <div className={styles.timer}>
+          <div
+            className={cn([styles.timer], {
+              [styles.hide]: state.gameMode == MODE.RANKED,
+            })}
+          >
             {formatTime(state.secondsRemaining)}
           </div>
           <div className={styles.numbers}>
@@ -256,8 +387,10 @@ export default function Home() {
                     className={cn([styles.number], {
                       [styles.paddingNumber]: element === null,
                       [styles.wrong]:
+                        state.gameMode == MODE.PRACTICE &&
                         element !==
-                        (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
+                          (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
+                            10,
                     })}
                     key={"answer-" + idx}
                   >
@@ -267,7 +400,7 @@ export default function Home() {
                   <div
                     key={"answer-" + idx}
                     className={cn([styles.activeAnswerContainer], {
-                      [styles.blink]: state.gamePhase == PHASE.PRESTART,
+                      [styles.blink]: state.gamePhase == PHASE.START,
                     })}
                   >
                     <input
@@ -275,9 +408,10 @@ export default function Home() {
                       type="number"
                       className={cn([styles.activeAnswer], {
                         [styles.wrong]:
+                          state.gameMode == MODE.PRACTICE &&
                           element !==
-                          (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
-                            10,
+                            (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
+                              10,
                       })}
                       ref={inputRef}
                       onChange={(e) => e.preventDefault()}
@@ -299,4 +433,69 @@ export default function Home() {
       </main>
     </div>
   );
+
+  const renderResultScreen = () => {
+    const correctAnswers = state.answers.filter(
+      (e, idx) => e == (state.numbers[idx] + state.numbers[idx + 1]) % 10
+    ).length;
+    const wrongAnswers = state.maxActive - correctAnswers;
+    const rawAPM = (state.maxActive / state.gameDuration) * 60;
+    const APM = (correctAnswers / state.gameDuration) * 60;
+
+    return (
+      <div className={styles.container}>
+        <Head>
+          <title>Numberplus+</title>
+          <meta name="description" content="Add them numbers" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <main className={styles.main}>
+          <div style={{ width: "300px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>APM:</div>
+              <div>{APM}</div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Raw APM:</div>
+              <div>{rawAPM}</div>
+            </div>
+            <hr></hr>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Total:</div>
+              <div>{state.maxActive}</div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Correct:</div>
+              <div>{correctAnswers}</div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Wrong:</div>
+              <div>{wrongAnswers}</div>
+            </div>
+            <br></br>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                onClick={() =>
+                  dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART })
+                }
+              >
+                Restart
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  };
+
+  switch (state.gamePhase) {
+    case PHASE.PRESTART:
+      return renderStartScreen();
+    case PHASE.START:
+    case PHASE.RUNNING:
+      return renderGameBoard();
+    case PHASE.OVER:
+      return renderResultScreen();
+  }
 }
