@@ -1,6 +1,7 @@
 import Head from "next/head";
 import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
+import router from "next/router";
 import styles from "../styles/Home.module.css";
 
 const allowedKeys = new Set([
@@ -179,9 +180,13 @@ export default function Home() {
     if (stateRef.current.gamePhase == PHASE.OVER) return;
 
     if (e.keyCode == 27) {
-      if (confirm("Are you sure you want to exit the game?")) {
-        return dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART });
-      }
+      if (
+        stateRef.current.gamePhase == PHASE.RUNNING &&
+        !confirm("Are you sure you want to exit the game?")
+      )
+        return;
+
+      return dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART });
     }
 
     if (e.keyCode == 8 || e.keyCode == 38)
@@ -237,6 +242,28 @@ export default function Home() {
       window.removeEventListener("resize", scrollHandler);
     };
   }, []);
+
+  const gameIsRunning = state.gamePhase == PHASE.RUNNING;
+  useEffect(() => {
+    const warningText = "Are you sure you want to exit the game?";
+    const handleWindowClose = (e) => {
+      if (!gameIsRunning) return;
+      e.preventDefault();
+      return (e.returnValue = warningText);
+    };
+    const handleBrowseAway = () => {
+      if (!gameIsRunning) return;
+      if (window.confirm(warningText)) return;
+      router.events.emit("routeChangeError");
+      throw "routeChange aborted.";
+    };
+    window.addEventListener("beforeunload", handleWindowClose);
+    router.events.on("routeChangeStart", handleBrowseAway);
+    return () => {
+      window.removeEventListener("beforeunload", handleWindowClose);
+      router.events.off("routeChangeStart", handleBrowseAway);
+    };
+  }, [gameIsRunning]);
 
   const renderStartScreen = () => (
     <div className={styles.container}>
@@ -479,6 +506,7 @@ export default function Home() {
                 onClick={() =>
                   dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART })
                 }
+                style={{ cursor: "pointer" }}
               >
                 Restart
               </div>
