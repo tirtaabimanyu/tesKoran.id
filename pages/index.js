@@ -295,9 +295,15 @@ export default function Home() {
                 className={cn([styles.clickable], {
                   [styles.activeChoice]: state.gameMode == MODE.RANKED,
                 })}
-                onClick={() =>
-                  dispatch({ type: ACTIONS.SET_MODE, payload: MODE.RANKED })
-                }
+                onClick={() => {
+                  dispatch({ type: ACTIONS.SET_MODE, payload: MODE.RANKED });
+                  if (
+                    state.gameDuration != 60 &&
+                    state.gameDuration != 180 &&
+                    state.gameDuration != 3600
+                  )
+                    dispatch({ type: ACTIONS.SET_TIME, payload: 60 });
+                }}
               >
                 Ranked
               </div>
@@ -340,13 +346,17 @@ export default function Home() {
                 60m
               </div>
               <div
-                className={cn([styles.clickable], {
+                className={cn({
+                  [styles.clickable]: state.gameMode == MODE.PRACTICE,
+                  [styles.strikethrough]: state.gameMode == MODE.RANKED,
                   [styles.activeChoice]:
                     state.gameDuration != 60 &&
                     state.gameDuration != 180 &&
                     state.gameDuration != 3600,
                 })}
-                onClick={() => {
+                onClick={(e) => {
+                  if (state.gameMode == MODE.RANKED) return;
+
                   const customSecond = parseInt(
                     prompt("Enter duration in seconds")
                   );
