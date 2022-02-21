@@ -8,6 +8,12 @@ const allowedKeys = new Set([
   101, 102, 103, 104, 105,
 ]);
 
+const PHASE = {
+  PRESTART: "prestart",
+  RUNNING: "running",
+  OVER: "over",
+};
+
 const ACTIONS = {
   INIT_NUMBERS: "init-numbers",
   GENERATE_NEXT_NUMBERS: "generate-next-numbers",
@@ -63,12 +69,12 @@ function reducer(state, action) {
       console.log("triggered");
       return {
         ...state,
-        isGameRunning: true,
+        gamePhase: PHASE.RUNNING,
       };
     case ACTIONS.STOP_GAME:
       return {
         ...state,
-        isGameRunning: false,
+        gamePhase: PHASE.OVER,
       };
     case ACTIONS.DECREASE_TIME:
       return {
@@ -118,8 +124,8 @@ export default function Home() {
     maxActive: 0,
     numbers: [],
     answers: [],
-    isGameRunning: false,
-    secondsRemaining: 60,
+    gamePhase: PHASE.PRESTART,
+    secondsRemaining: 10,
   });
 
   const stateRef = useRef(state);
@@ -139,7 +145,7 @@ export default function Home() {
         dispatch({ type: ACTIONS.STOP_GAME });
       }
     },
-    state.isGameRunning ? 1000 : null
+    state.gamePhase == PHASE.RUNNING ? 1000 : null
   );
 
   useEffect(() => {
@@ -153,7 +159,9 @@ export default function Home() {
 
   function keyDown(e) {
     if (!allowedKeys.has(e.keyCode)) return;
-    if (!stateRef.current.isGameRunning) dispatch({ type: ACTIONS.START_GAME });
+    if (stateRef.current.gamePhase == PHASE.PRESTART)
+      dispatch({ type: ACTIONS.START_GAME });
+    if (stateRef.current.gamePhase == PHASE.OVER) return;
 
     if (e.keyCode == 8 || e.keyCode == 38)
       return dispatch({ type: ACTIONS.DECREMENT });
@@ -259,7 +267,7 @@ export default function Home() {
                   <div
                     key={"answer-" + idx}
                     className={cn([styles.activeAnswerContainer], {
-                      [styles.blink]: !state.isGameRunning,
+                      [styles.blink]: state.gamePhase == PHASE.PRESTART,
                     })}
                   >
                     <input
