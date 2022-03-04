@@ -1,0 +1,18 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: opacity 0.1s;
+}
+
+.group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.hide {
+  opacity: 0;
+}

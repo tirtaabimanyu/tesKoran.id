@@ -497,5 +497,7 @@ export default function Home() {
     }
   };
 
-  return <Layout>{renderCurrentScreen()}</Layout>;
+  const hideLayout =
+    state.gamePhase == PHASE.START || state.gamePhase == PHASE.RUNNING;
+  return <Layout hide={hideLayout}>{renderCurrentScreen()}</Layout>;
 }
