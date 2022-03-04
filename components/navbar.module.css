@@ -110,6 +110,7 @@
   transition: 0.25s;
   position: relative;
   padding: 10px;
+  color: dimgray;
 }
 
 .loginButton .text {
@@ -118,11 +119,11 @@
 }
 
 .loginButton:hover {
-  color: dimgray;
+  color: black;
 }
 
 .loginButton:active {
-  color: black;
+  color: dimgray;
 }
 
 .loginButton::after {
