@@ -10,7 +10,7 @@ import {
 
 export default function Navbar({ hide }) {
   return (
-    <div className={cn([styles.container], { [styles.hide]: hide })}>
+    <div className={cn([styles.container])}>
       <div className={styles.group}>
         <Link href="/">
           <div className={styles.titleContainer}>
@@ -22,14 +22,14 @@ export default function Navbar({ hide }) {
         </Link>
 
         <Link href="/leaderboard">
-          <div className={styles.expandable}>
+          <div className={cn([styles.expandable], { [styles.hide]: hide })}>
             <FaTrophy className={styles.icon} size="24px" />
             <h4 className={cn([styles.text])}>Leaderboard</h4>
           </div>
         </Link>
 
         <Link href="/about">
-          <div className={styles.expandable}>
+          <div className={cn([styles.expandable], { [styles.hide]: hide })}>
             <FaInfoCircle className={styles.icon} size="24px" />
             <h4 className={cn([styles.text])}>About</h4>
           </div>
@@ -38,7 +38,7 @@ export default function Navbar({ hide }) {
 
       <div className={styles.group}>
         <Link href="/login">
-          <div className={styles.loginButton}>
+          <div className={cn([styles.loginButton], { [styles.hide]: hide })}>
             <h4 className={cn([styles.text])}>Log In</h4>
             <FaSignInAlt className={styles.icon} size="24px" />
           </div>

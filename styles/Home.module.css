@@ -38,7 +38,7 @@
   justify-content: center;
   align-items: center;
   color: #0070f3;
-  padding-top: 2rem;
+  padding-top: 4rem;
 }
 
 .numbersInput > div:last-child {
@@ -101,7 +101,7 @@
   font-size: 2em;
   font-weight: bold;
   position: relative;
-  top: 11.25rem;
+  top: 13.25rem;
   width: 6rem;
   text-align: right;
 }

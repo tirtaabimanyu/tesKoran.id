@@ -18,6 +18,7 @@
 
 .hide {
   opacity: 0;
+  visibility: hidden;
 }
 
 .titleContainer {
@@ -108,6 +109,7 @@
   gap: 10px;
   transition: 0.25s;
   position: relative;
+  padding: 10px;
 }
 
 .loginButton .text {
@@ -129,12 +131,12 @@
   min-width: 0px;
   min-height: 5px;
   transition: min-width 0.25s;
-  bottom: -5px;
+  bottom: 5px;
   background-color: darkorange;
   border-radius: 25px;
   margin-left: 1px;
 }
 
 .loginButton:hover::after {
-  min-width: 100%;
+  min-width: calc(100% - 20px);
 }

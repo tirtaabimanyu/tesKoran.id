@@ -135,7 +135,7 @@ function formatTime(time) {
   return minute + ":" + seconds;
 }
 
-export default function Home() {
+export default function Home({ setHideLayout }) {
   const [state, dispatch] = useReducer(reducer, {
     active: 0,
     maxActive: 0,
@@ -485,19 +485,17 @@ export default function Home() {
     );
   };
 
-  const renderCurrentScreen = () => {
-    switch (state.gamePhase) {
-      case PHASE.PRESTART:
-        return renderStartScreen();
-      case PHASE.START:
-      case PHASE.RUNNING:
-        return renderGameBoard();
-      case PHASE.OVER:
-        return renderResultScreen();
-    }
-  };
+  setHideLayout(
+    state.gamePhase == PHASE.START || state.gamePhase == PHASE.RUNNING
+  );
 
-  const hideLayout =
-    state.gamePhase == PHASE.START || state.gamePhase == PHASE.RUNNING;
-  return <Layout hide={hideLayout}>{renderCurrentScreen()}</Layout>;
+  switch (state.gamePhase) {
+    case PHASE.PRESTART:
+      return renderStartScreen();
+    case PHASE.START:
+    case PHASE.RUNNING:
+      return renderGameBoard();
+    case PHASE.OVER:
+      return renderResultScreen();
+  }
 }
