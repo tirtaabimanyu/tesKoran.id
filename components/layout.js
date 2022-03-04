@@ -7,7 +7,7 @@ export default function Layout({ children, hide }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>+tesKoran</title>
+        <title>tesKoran</title>
         <meta name="description" content="Add them numbers" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

@@ -11,15 +11,130 @@
 .group {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  align-items: center;
+  /* gap: 5px; */
+  align-items: baseline;
+  justify-content: baseline;
 }
 
 .hide {
   opacity: 0;
 }
 
+.titleContainer {
+  position: relative;
+  display: flex;
+  justify-content: baseline;
+  align-items: baseline;
+  flex-direction: column;
+  color: black;
+  transition: 0.25s;
+}
+
+.titleContainer:active {
+  color: dimgray;
+}
+
 .title {
   margin: 0;
+  padding: 10px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.title::after {
+  position: absolute;
+  content: " ";
+  min-width: 0px;
+  min-height: 5px;
+  transition: min-width 0.25s;
+  bottom: 10px;
+  background-color: darkorange;
+  border-radius: 25px;
+  margin-left: 1px;
+}
+
+.title:hover::after {
+  min-width: calc(100% - 20px - 2px);
+}
+
+.expandable {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+  padding: 10px;
+}
+
+.expandable .icon {
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  color: dimgray;
+}
+
+.expandable .icon:hover {
+  color: black;
+}
+
+.expandable .icon:active {
+  color: dimgray;
+}
+
+.expandable .icon + .text {
+  transition: 0.2s ease-in-out;
+  max-width: 0;
+  overflow: hidden;
+  user-select: none;
+  color: dimgray;
+  margin: 0;
+}
+
+.expandable .icon:hover + .text {
+  max-width: 150px;
+  padding-left: 5px;
+  color: black;
+}
+
+.expandable .icon:active + .text {
+  color: dimgray;
+}
+
+.loginButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  transition: 0.25s;
+  position: relative;
+}
+
+.loginButton .text {
+  margin: 0;
+  user-select: none;
+}
+
+.loginButton:hover {
+  color: dimgray;
+}
+
+.loginButton:active {
+  color: black;
+}
+
+.loginButton::after {
+  position: absolute;
+  content: " ";
+  min-width: 0px;
+  min-height: 5px;
+  transition: min-width 0.25s;
+  bottom: -5px;
+  background-color: darkorange;
+  border-radius: 25px;
+  margin-left: 1px;
+}
+
+.loginButton:hover::after {
+  min-width: 100%;
 }
