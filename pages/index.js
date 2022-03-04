@@ -27,6 +27,7 @@ const ACTIONS = {
   INCREMENT: "increment",
   DECREMENT: "decrement",
   INIT_GAME: "init-game",
+  RESET_GAME: "reset-game",
   SET_PHASE: "set-phase",
   SET_TIME: "set-time",
   DECREASE_TIME: "decrease-time",
@@ -78,6 +79,9 @@ function reducer(state, action) {
         active: 0,
         maxActive: 0,
       };
+
+    case ACTIONS.RESET_GAME:
+      return { ...state, gamePhase: PHASE.PRESTART };
 
     case ACTIONS.SET_PHASE:
       console.log("setphase");
@@ -135,7 +139,7 @@ function formatTime(time) {
   return minute + ":" + seconds;
 }
 
-export default function Home({ setHideLayout }) {
+export default function Home({ setHideLayout, titleClickHandler }) {
   const [state, dispatch] = useReducer(reducer, {
     active: 0,
     maxActive: 0,
@@ -153,6 +157,19 @@ export default function Home({ setHideLayout }) {
   );
 
   const stateRef = useCurrent(state);
+
+  const resetGame = () => {
+    if (
+      stateRef.current.gamePhase == PHASE.RUNNING &&
+      !confirm("Are you sure you want to exit the game?")
+    )
+      return;
+    return dispatch({ type: ACTIONS.RESET_GAME });
+  };
+
+  useEffect(() => {
+    titleClickHandler.click = resetGame;
+  }, [titleClickHandler]);
 
   useInterval(
     () => {
@@ -176,19 +193,13 @@ export default function Home({ setHideLayout }) {
 
   function keyDown(e) {
     if (!allowedKeys.has(e.keyCode)) return;
+
+    if (e.keyCode == 27) return resetGame();
+
     if (stateRef.current.gamePhase == PHASE.START)
       dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.RUNNING });
+
     if (stateRef.current.gamePhase == PHASE.OVER) return;
-
-    if (e.keyCode == 27) {
-      if (
-        stateRef.current.gamePhase == PHASE.RUNNING &&
-        !confirm("Are you sure you want to exit the game?")
-      )
-        return;
-
-      return dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART });
-    }
 
     if (e.keyCode == 8 || e.keyCode == 38)
       return dispatch({ type: ACTIONS.DECREMENT });
@@ -485,9 +496,11 @@ export default function Home({ setHideLayout }) {
     );
   };
 
-  setHideLayout(
-    state.gamePhase == PHASE.START || state.gamePhase == PHASE.RUNNING
-  );
+  const hideLayout =
+    state.gamePhase == PHASE.START || state.gamePhase == PHASE.RUNNING;
+  useEffect(() => {
+    setHideLayout(hideLayout);
+  }, [hideLayout]);
 
   switch (state.gamePhase) {
     case PHASE.PRESTART:

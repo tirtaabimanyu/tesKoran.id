@@ -3,7 +3,7 @@ import Navbar from "./navbar.js";
 import Footer from "./footer.js";
 import styles from "./layout.module.css";
 
-export default function Layout({ children, hide }) {
+export default function Layout({ children, hide, titleClickHandler }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -12,9 +12,9 @@ export default function Layout({ children, hide }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Navbar hide={hide} />
+        <Navbar {...{ hide, titleClickHandler }} />
         {children}
-        <Footer hide={hide} />
+        <Footer {...{ hide }} />
       </main>
     </div>
   );

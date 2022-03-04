@@ -1,6 +1,7 @@
 import styles from "./navbar.module.css";
 import cn from "classnames";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {
   FaRegPlusSquare,
   FaTrophy,
@@ -8,18 +9,24 @@ import {
   FaSignInAlt,
 } from "react-icons/fa";
 
-export default function Navbar({ hide }) {
+export default function Navbar({ hide, titleClickHandler }) {
+  const router = useRouter();
+
   return (
     <div className={cn([styles.container])}>
       <div className={styles.group}>
-        <Link href="/">
-          <div className={styles.titleContainer}>
-            <h1 className={styles.title}>
-              <FaRegPlusSquare size="32px" />
-              tesKoran.id
-            </h1>
-          </div>
-        </Link>
+        <div
+          className={styles.titleContainer}
+          onClick={() => {
+            if (router.pathname == "/") titleClickHandler.click();
+            else router.push("/");
+          }}
+        >
+          <h1 className={styles.title}>
+            <FaRegPlusSquare size="32px" />
+            tesKoran.id
+          </h1>
+        </div>
 
         <Link href="/leaderboard">
           <div className={cn([styles.expandable], { [styles.hide]: hide })}>

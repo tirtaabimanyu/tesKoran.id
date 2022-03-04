@@ -4,10 +4,15 @@ import Layout from "../components/layout.js";
 
 function MyApp({ Component, pageProps }) {
   const [hideLayout, setHideLayout] = useState(false);
+  const titleClickHandler = { click: () => {} };
 
   return (
-    <Layout hide={hideLayout}>
-      <Component {...pageProps} setHideLayout={setHideLayout} />
+    <Layout {...{ hide: hideLayout, titleClickHandler }}>
+      <Component
+        {...pageProps}
+        setHideLayout={setHideLayout}
+        titleClickHandler={titleClickHandler}
+      />
     </Layout>
   );
 }
