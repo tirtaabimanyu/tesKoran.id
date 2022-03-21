@@ -9,6 +9,7 @@ export default function Layout({ children, hide, titleClickHandler }) {
       <Head>
         <title>Tes Koran Online</title>
         <meta name="description" content="Add them numbers" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
