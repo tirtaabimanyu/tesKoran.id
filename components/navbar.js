@@ -6,7 +6,7 @@ import {
   FaRegPlusSquare,
   FaTrophy,
   FaInfoCircle,
-  FaSignInAlt,
+  FaUserAlt,
 } from "react-icons/fa";
 
 export default function Navbar({ hide, titleClickHandler }) {
@@ -47,7 +47,7 @@ export default function Navbar({ hide, titleClickHandler }) {
         <Link href="/login">
           <div className={cn([styles.loginButton], { [styles.hide]: hide })}>
             <h4 className={cn([styles.text])}>Log In</h4>
-            <FaSignInAlt className={styles.icon} size="24px" />
+            <FaUserAlt className={styles.icon} size="24px" />
           </div>
         </Link>
       </div>

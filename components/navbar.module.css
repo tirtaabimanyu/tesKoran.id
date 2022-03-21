@@ -2,18 +2,16 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   transition: opacity 0.1s;
-  /* background: red; */
 }
 
 .group {
   display: flex;
   flex-direction: row;
   /* gap: 5px; */
-  align-items: baseline;
-  justify-content: baseline;
+  align-items: center;
 }
 
 .hide {
@@ -24,7 +22,6 @@
 .titleContainer {
   position: relative;
   display: flex;
-  justify-content: baseline;
   align-items: baseline;
   flex-direction: column;
   color: black;
@@ -41,22 +38,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-}
-
-.title::after {
-  position: absolute;
-  content: " ";
-  min-width: 0px;
-  min-height: 5px;
-  transition: min-width 0.25s;
-  bottom: 10px;
-  background-color: darkorange;
-  border-radius: 25px;
-  margin-left: 1px;
-}
-
-.title:hover::after {
-  min-width: calc(100% - 20px - 2px);
+  user-select: none;
 }
 
 .expandable {
@@ -82,25 +64,6 @@
   color: dimgray;
 }
 
-.expandable .icon + .text {
-  transition: 0.2s ease-in-out;
-  max-width: 0;
-  overflow: hidden;
-  user-select: none;
-  color: dimgray;
-  margin: 0;
-}
-
-.expandable .icon:hover + .text {
-  max-width: 150px;
-  padding-left: 5px;
-  color: black;
-}
-
-.expandable .icon:active + .text {
-  color: dimgray;
-}
-
 .loginButton {
   display: flex;
   flex-direction: row;
@@ -114,6 +77,7 @@
 }
 
 .loginButton .text {
+  display: none;
   margin: 0;
   user-select: none;
 }
@@ -126,18 +90,68 @@
   color: dimgray;
 }
 
-.loginButton::after {
-  position: absolute;
-  content: " ";
-  min-width: 0px;
-  min-height: 5px;
-  transition: min-width 0.25s;
-  bottom: 5px;
-  background-color: darkorange;
-  border-radius: 25px;
-  margin-left: 1px;
+.expandable .icon + .text {
+  display: none;
 }
 
-.loginButton:hover::after {
-  min-width: calc(100% - 20px);
+@media only screen and (min-width: 600px) {
+  .loginButton .text {
+    display: block;
+  }
+
+  /* .loginButton::after {
+    position: absolute;
+    content: " ";
+    min-width: 0px;
+    min-height: 5px;
+    transition: min-width 0.25s;
+    bottom: 5px;
+    background-color: darkorange;
+    border-radius: 25px;
+    margin-left: 1px;
+  }
+
+  .loginButton:hover::after {
+    min-width: calc(100% - 20px);
+  } */
+
+  .expandable .icon + .text {
+    display: block;
+    transition: 0.2s ease-in-out;
+    max-width: 0;
+    overflow: hidden;
+    user-select: none;
+    color: dimgray;
+    margin: 0;
+  }
+
+  .expandable .icon:hover + .text {
+    max-width: 150px;
+    padding-left: 5px;
+    color: black;
+  }
+
+  .expandable .icon:active + .text {
+    color: dimgray;
+  }
+
+  .title::after {
+    position: absolute;
+    content: " ";
+    min-width: 0px;
+    min-height: 5px;
+    transition: min-width 0.25s;
+    bottom: 10px;
+    background-color: darkorange;
+    border-radius: 25px;
+    margin-left: 1px;
+  }
+
+  .title:hover::after {
+    min-width: calc(100% - 20px - 2px);
+  }
+
+  .container {
+    justify-content: space-between;
+  }
 }
