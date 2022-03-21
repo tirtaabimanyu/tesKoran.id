@@ -118,4 +118,12 @@
     width: 100%;
     flex-direction: column;
   }
+
+  .container {
+    padding: 0;
+  }
+
+  .main {
+    padding: 1rem 0;
+  }
 }
