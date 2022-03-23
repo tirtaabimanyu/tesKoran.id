@@ -22,7 +22,7 @@
 
 .clickable {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
   cursor: pointer;
   gap: 4px;
@@ -30,6 +30,9 @@
   user-select: none;
   padding: 0 0.5rem;
   color: dimgray;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 @media only screen and (min-width: 600px) {

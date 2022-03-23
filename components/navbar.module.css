@@ -3,8 +3,14 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   transition: opacity 0.1s;
+}
+
+.links {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
 }
 
 .group {
@@ -39,6 +45,9 @@
   display: flex;
   align-items: center;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 .expandable {
@@ -54,6 +63,9 @@
   transition: 0.2s ease-in-out;
   cursor: pointer;
   color: dimgray;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 .expandable .icon:hover {
@@ -92,6 +104,10 @@
 
 .expandable .icon + .text {
   display: none;
+}
+
+.greyed {
+  color: dimgray;
 }
 
 @media only screen and (min-width: 600px) {
@@ -153,6 +169,10 @@
 
   .container {
     width: 100%;
+    justify-content: space-between;
+  }
+
+  .links {
     justify-content: space-between;
   }
 }
