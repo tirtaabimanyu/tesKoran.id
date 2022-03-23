@@ -40,7 +40,7 @@
 
 .title {
   margin: 0;
-  padding: 10px;
+  padding: 0.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -86,6 +86,7 @@
   position: relative;
   padding: 10px;
   color: dimgray;
+  cursor: pointer;
 }
 
 .loginButton .text {
@@ -157,14 +158,14 @@
     min-width: 0px;
     min-height: 5px;
     transition: min-width 0.25s;
-    bottom: 10px;
+    bottom: 0.5rem;
     background-color: darkorange;
     border-radius: 25px;
-    margin-left: 1px;
+    margin-left: 2px;
   }
 
   .title:hover::after {
-    min-width: calc(100% - 20px - 2px);
+    min-width: calc(100% - 1rem - 2px);
   }
 
   .container {

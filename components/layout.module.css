@@ -8,7 +8,7 @@
 .main {
   min-height: 100vh;
   max-width: 1000px;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -124,6 +124,6 @@
   }
 
   .main {
-    padding: 1rem 0;
+    padding: 0;
   }
 }

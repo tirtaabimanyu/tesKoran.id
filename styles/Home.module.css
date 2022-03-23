@@ -1,9 +1,11 @@
 .mask {
+  /* background: pink; */
   display: flex;
   position: relative;
+  overflow: hidden;
   gap: 1rem;
   justify-content: center;
-  /* height: 50vh; */
+  /* height: 400px; */
   /* width: 40vw; */
   mask-image: linear-gradient(
       0deg,

@@ -239,7 +239,14 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
   const inputRef = useRef(null);
   function scrollHandler() {
-    inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(
+      () =>
+        inputRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        }),
+      50
+    );
   }
 
   useEffect(() => {
