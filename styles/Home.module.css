@@ -1,3 +1,13 @@
+.gameContainer {
+  display: flex;
+  /* flex-grow: 1; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 59px - 66px);
+}
+
 .mask {
   /* background: pink; */
   display: flex;
@@ -133,9 +143,111 @@
   border-radius: 16px;
 }
 
+.keyboard {
+  display: none;
+}
+
 @media only screen and (max-width: 600px) {
   .mask {
     width: 100%;
+    height: 55%;
+    /* background-color: pink; */
+  }
+
+  .numbers {
+    justify-content: flex-start;
+  }
+
+  .numbersInput {
+    justify-content: flex-start;
+    padding-top: 2.25rem;
+  }
+
+  .timer {
+    top: 11.25rem;
+  }
+
+  .gameContainer {
+    justify-content: flex-start;
+  }
+
+  .keyboard {
+    height: 40%;
+    /* background-color: aquamarine; */
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    touch-action: none;
+  }
+
+  .keyboardRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+  }
+
+  .keyboardKey {
+    font-weight: bold;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100%;
+    user-select: none;
+    transition: 100ms;
+  }
+
+  .keyboardKey:active {
+    transition: none;
+    background-color: lightgray;
+  }
+
+  .horizontalKeySeparator {
+    height: 4px;
+    width: 100%;
+    background-color: black;
+    border-radius: 8px;
+  }
+
+  .horizontalKeySeparator:last-child {
+    display: none;
+  }
+
+  .verticalKeySeparator {
+    width: 4px;
+    height: 100%;
+    background-color: black;
+  }
+
+  .keyboardRow:first-child .verticalKeySeparator {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .keyboardRow:last-child .verticalKeySeparator {
+    border-radius: 0 0 8px 8px;
+  }
+
+  .keyboardRow:first-child .keyboardKey:first-child {
+    border-top-left-radius: 16px;
+  }
+
+  .keyboardRow:first-child .keyboardKey:first-child {
+    border-top-left-radius: 16px;
+  }
+
+  .keyboardRow:first-child .keyboardKey:last-child {
+    border-top-right-radius: 16px;
+  }
+
+  .keyboardRow:nth-last-child(2) .keyboardKey:first-child {
+    border-bottom-left-radius: 16px;
+  }
+
+  .keyboardRow:nth-last-child(2) .keyboardKey:last-child {
+    border-bottom-right-radius: 16px;
   }
 }
 

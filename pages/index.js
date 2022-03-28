@@ -2,6 +2,7 @@ import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
 import router from "next/router";
 import styles from "../styles/Home.module.css";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // const allowedKeys = new Set([
 //   8, 13, 27, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99,
@@ -209,6 +210,8 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   }, []);
 
   function keyDown(e) {
+    // alert(e.which);
+    // console.log(e);
     if (!allowedKeys.has(e.key)) return;
 
     if (e.keyCode == 27) return resetGame();
@@ -387,79 +390,120 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   );
 
   const renderGameBoard = () => (
-    <div className={styles.mask}>
-      <div
-        className={cn([styles.timer], {
-          [styles.hide]: state.gameMode == MODE.RANKED,
-        })}
-      >
-        {formatTime(state.secondsRemaining)}
-      </div>
-      <div className={styles.numbers}>
-        {createPaddingNumbers(2, state.active, "start")}
-        {renderedNumbers.map((element, idx) => {
-          return (
-            <div className={styles.number} key={"numbers-" + idx}>
-              {element}
-            </div>
-          );
-        })}
-        {createPaddingNumbers(
-          3,
-          state.numbers.length - state.active - 1,
-          "end"
-        )}
-      </div>
-
-      <div className={styles.numbersInput}>
-        {createPaddingNumbers(2, state.active, "input")}
-        {state.answers
-          .slice(Math.max(0, state.active - 2), state.active + 4)
-          .map((element, idx) => {
-            return idx !== Math.min(state.active, 2) ? (
-              <div
-                className={cn([styles.number], {
-                  [styles.paddingNumber]: element === null,
-                  [styles.wrong]:
-                    state.gameMode == MODE.PRACTICE &&
-                    element !==
-                      (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
-                })}
-                key={"answer-" + idx}
-              >
+    <div className={styles.gameContainer}>
+      <div className={styles.mask}>
+        <div
+          className={cn([styles.timer], {
+            [styles.hide]: state.gameMode == MODE.RANKED,
+          })}
+        >
+          {formatTime(state.secondsRemaining)}
+        </div>
+        <div className={styles.numbers}>
+          {createPaddingNumbers(2, state.active, "start")}
+          {renderedNumbers.map((element, idx) => {
+            return (
+              <div className={styles.number} key={"numbers-" + idx}>
                 {element}
               </div>
-            ) : (
-              <div
-                key={"answer-" + idx}
-                className={cn([styles.activeAnswerContainer], {
-                  [styles.blink]: state.gamePhase == PHASE.START,
-                })}
-              >
-                <input
-                  autoFocus
-                  type="number"
-                  className={cn([styles.activeAnswer], {
+            );
+          })}
+          {createPaddingNumbers(
+            3,
+            state.numbers.length - state.active - 1,
+            "end"
+          )}
+        </div>
+
+        <div className={styles.numbersInput}>
+          {createPaddingNumbers(2, state.active, "input")}
+          {state.answers
+            .slice(Math.max(0, state.active - 2), state.active + 4)
+            .map((element, idx) => {
+              return idx !== Math.min(state.active, 2) ? (
+                <div
+                  className={cn([styles.number], {
+                    [styles.paddingNumber]: element === null,
                     [styles.wrong]:
                       state.gameMode == MODE.PRACTICE &&
                       element !==
                         (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
                   })}
-                  ref={inputRef}
-                  onChange={(e) => e.preventDefault()}
-                  value={element === null ? "" : element}
-                />
-              </div>
-            );
-          })}
-        {createPaddingNumbers(
-          3,
-          state.numbers.length - state.active - 1,
-          "end"
-        )}
+                  key={"answer-" + idx}
+                >
+                  {element}
+                </div>
+              ) : (
+                <div
+                  key={"answer-" + idx}
+                  className={cn([styles.activeAnswerContainer], {
+                    [styles.blink]: state.gamePhase == PHASE.START,
+                  })}
+                >
+                  <input
+                    // autoFocus
+                    type="number"
+                    className={cn([styles.activeAnswer], {
+                      [styles.wrong]:
+                        state.gameMode == MODE.PRACTICE &&
+                        element !==
+                          (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
+                            10,
+                    })}
+                    ref={inputRef}
+                    onChange={(e) => e.preventDefault()}
+                    value={element === null ? "" : element}
+                  />
+                </div>
+              );
+            })}
+          {createPaddingNumbers(
+            3,
+            state.numbers.length - state.active - 1,
+            "end"
+          )}
+        </div>
+        <div className={styles.timer} style={{ opacity: 0 }}>
+          {formatTime(state.secondsRemaining)}
+        </div>
       </div>
-      <div className={styles.timer} style={{ opacity: 0 }}>
-        {formatTime(state.secondsRemaining)}
+      <div className={styles.keyboard}>
+        <div className={styles.keyboardRow}>
+          <div className={styles.keyboardKey}>7</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>8</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>9</div>
+        </div>
+        <div className={styles.horizontalKeySeparator} />
+        <div className={styles.keyboardRow}>
+          <div className={styles.keyboardKey}>4</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>5</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>6</div>
+        </div>
+        <div className={styles.horizontalKeySeparator} />
+        <div className={styles.keyboardRow}>
+          <div className={styles.keyboardKey}>1</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>2</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>3</div>
+        </div>
+        <div className={styles.horizontalKeySeparator} />
+        <div className={styles.keyboardRow}>
+          <div className={styles.keyboardKey}>
+            <FaChevronLeft />
+          </div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>0</div>
+          <div className={styles.verticalKeySeparator} />
+          <div className={styles.keyboardKey}>
+            <FaChevronRight />
+          </div>
+        </div>
+        <div className={styles.horizontalKeySeparator} />
       </div>
     </div>
   );
