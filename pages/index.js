@@ -2,11 +2,28 @@ import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
 import router from "next/router";
 import styles from "../styles/Home.module.css";
-import Layout from "../components/layout.js";
+
+// const allowedKeys = new Set([
+//   8, 13, 27, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99,
+//   100, 101, 102, 103, 104, 105,
+// ]);
 
 const allowedKeys = new Set([
-  8, 13, 27, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99,
-  100, 101, 102, 103, 104, 105,
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "Enter",
+  "Backspace",
+  "ArrowUp",
+  "ArrowDown",
+  "Escape",
 ]);
 
 const PHASE = {
@@ -192,7 +209,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   }, []);
 
   function keyDown(e) {
-    if (!allowedKeys.has(e.keyCode)) return;
+    if (!allowedKeys.has(e.key)) return;
 
     if (e.keyCode == 27) return resetGame();
 
@@ -201,31 +218,21 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
     if (stateRef.current.gamePhase == PHASE.OVER) return;
 
-    if (e.keyCode == 8 || e.keyCode == 38)
+    if (e.key == "ArrowUp" || e.key == "Backspace")
       return dispatch({ type: ACTIONS.DECREMENT });
 
-    if (e.keyCode == 13 || e.keyCode == 40)
+    if (e.key == "ArrowDown" || e.key == "Enter")
       return dispatch({ type: ACTIONS.INCREMENT });
 
     if (e.repeat || e.ctrlKey) return;
 
-    if (e.keyCode >= 48 && e.keyCode <= 57) {
-      if (stateRef.current.numbers.length - 10 <= stateRef.current.active)
-        dispatch({ type: ACTIONS.GENERATE_NEXT_NUMBERS });
-      return dispatch({
-        type: ACTIONS.PUSH_ANSWER,
-        payload: { input: e.keyCode - 48 },
-      });
-    }
+    if (stateRef.current.numbers.length - 10 <= stateRef.current.active)
+      dispatch({ type: ACTIONS.GENERATE_NEXT_NUMBERS });
 
-    if (e.keyCode >= 96 && e.keyCode <= 105) {
-      if (stateRef.current.numbers.length - 10 <= stateRef.current.active)
-        dispatch({ type: ACTIONS.GENERATE_NEXT_NUMBERS });
-      return dispatch({
-        type: ACTIONS.PUSH_ANSWER,
-        payload: { input: e.keyCode - 96 },
-      });
-    }
+    return dispatch({
+      type: ACTIONS.PUSH_ANSWER,
+      payload: { input: parseInt(e.key) },
+    });
   }
 
   function createPaddingNumbers(paddingLength, active, keyPrefix) {
