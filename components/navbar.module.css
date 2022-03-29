@@ -111,6 +111,14 @@
   color: dimgray;
 }
 
+.titleContainer.greyed:hover {
+  color: black;
+}
+
+.titleContainer.greyed:active {
+  color: dimgray;
+}
+
 @media only screen and (min-width: 600px) {
   .loginButton .text {
     display: block;
