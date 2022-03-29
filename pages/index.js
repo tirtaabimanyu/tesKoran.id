@@ -9,6 +9,12 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 //   100, 101, 102, 103, 104, 105,
 // ]);
 
+const keyboardKeys = [
+  [7, 8, 9],
+  [4, 5, 6],
+  [1, 2, 3],
+];
+
 const allowedKeys = new Set([
   "0",
   "1",
@@ -408,11 +414,11 @@ export default function Home({ setHideLayout, titleClickHandler }) {
               </div>
             );
           })}
-          {createPaddingNumbers(
+          {/* {createPaddingNumbers(
             3,
             state.numbers.length - state.active - 1,
             "end"
-          )}
+          )} */}
         </div>
 
         <div className={styles.numbersInput}>
@@ -420,90 +426,96 @@ export default function Home({ setHideLayout, titleClickHandler }) {
           {state.answers
             .slice(Math.max(0, state.active - 2), state.active + 4)
             .map((element, idx) => {
-              return idx !== Math.min(state.active, 2) ? (
+              return (
                 <div
                   className={cn([styles.number], {
+                    [styles.activeAnswer]: idx == Math.min(state.active, 2),
                     [styles.paddingNumber]: element === null,
                     [styles.wrong]:
                       state.gameMode == MODE.PRACTICE &&
                       element !==
                         (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
+                    [styles.blink]: state.gamePhase == PHASE.START,
                   })}
                   key={"answer-" + idx}
                 >
                   {element}
                 </div>
-              ) : (
-                <div
-                  key={"answer-" + idx}
-                  className={cn([styles.activeAnswerContainer], {
-                    [styles.blink]: state.gamePhase == PHASE.START,
-                  })}
-                >
-                  <input
-                    // autoFocus
-                    type="number"
-                    className={cn([styles.activeAnswer], {
-                      [styles.wrong]:
-                        state.gameMode == MODE.PRACTICE &&
-                        element !==
-                          (renderedNumbers[idx] + renderedNumbers[idx + 1]) %
-                            10,
-                    })}
-                    ref={inputRef}
-                    onChange={(e) => e.preventDefault()}
-                    value={element === null ? "" : element}
-                  />
-                </div>
               );
             })}
-          {createPaddingNumbers(
+          {/* {createPaddingNumbers(
             3,
             state.numbers.length - state.active - 1,
-            "end"
-          )}
+            "inputEnd"
+          )} */}
         </div>
         <div className={styles.timer} style={{ opacity: 0 }}>
           {formatTime(state.secondsRemaining)}
         </div>
       </div>
       <div className={styles.keyboard}>
+        {keyboardKeys.map((row, idx) => (
+          <>
+            <div className={styles.keyboardRow} key={"row" + idx}>
+              {row.map((e, idx) => (
+                <>
+                  <div
+                    className={styles.keyboardKey}
+                    key={"keys" + e}
+                    onClick={() =>
+                      window.dispatchEvent(
+                        new KeyboardEvent("keydown", { key: e.toString() })
+                      )
+                    }
+                  >
+                    {e}
+                  </div>
+                  {idx == 2 ? null : (
+                    <div
+                      className={styles.verticalKeySeparator}
+                      key={"vsep" + e}
+                    />
+                  )}
+                </>
+              ))}
+            </div>
+            <div className={styles.horizontalKeySeparator} key={"hsep" + idx} />
+          </>
+        ))}
         <div className={styles.keyboardRow}>
-          <div className={styles.keyboardKey}>7</div>
-          <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>8</div>
-          <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>9</div>
-        </div>
-        <div className={styles.horizontalKeySeparator} />
-        <div className={styles.keyboardRow}>
-          <div className={styles.keyboardKey}>4</div>
-          <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>5</div>
-          <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>6</div>
-        </div>
-        <div className={styles.horizontalKeySeparator} />
-        <div className={styles.keyboardRow}>
-          <div className={styles.keyboardKey}>1</div>
-          <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>2</div>
-          <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>3</div>
-        </div>
-        <div className={styles.horizontalKeySeparator} />
-        <div className={styles.keyboardRow}>
-          <div className={styles.keyboardKey}>
+          <div
+            className={styles.keyboardKey}
+            key="keysDecrement"
+            onClick={() => {
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", { key: "ArrowUp" })
+              );
+            }}
+          >
             <FaChevronLeft />
           </div>
           <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>0</div>
+          <div
+            className={styles.keyboardKey}
+            onClick={() => {
+              window.dispatchEvent(new KeyboardEvent("keydown", { key: "0" }));
+            }}
+          >
+            0
+          </div>
           <div className={styles.verticalKeySeparator} />
-          <div className={styles.keyboardKey}>
+          <div
+            className={styles.keyboardKey}
+            key="keysIncrement"
+            onClick={() => {
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", { key: "ArrowDown" })
+              );
+            }}
+          >
             <FaChevronRight />
           </div>
         </div>
-        <div className={styles.horizontalKeySeparator} />
       </div>
     </div>
   );
