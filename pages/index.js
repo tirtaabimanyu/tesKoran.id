@@ -2,18 +2,12 @@ import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
 import router from "next/router";
 import styles from "../styles/Home.module.css";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import Keyboard from "../components/keyboard.js";
 
 // const allowedKeys = new Set([
 //   8, 13, 27, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99,
 //   100, 101, 102, 103, 104, 105,
 // ]);
-
-const keyboardKeys = [
-  [7, 8, 9],
-  [4, 5, 6],
-  [1, 2, 3],
-];
 
 const allowedKeys = new Set([
   "0",
@@ -453,70 +447,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
           {formatTime(state.secondsRemaining)}
         </div>
       </div>
-      <div className={styles.keyboard}>
-        {keyboardKeys.map((row, idx) => (
-          <>
-            <div className={styles.keyboardRow} key={"row" + idx}>
-              {row.map((e, idx) => (
-                <>
-                  <div
-                    className={styles.keyboardKey}
-                    key={"keys" + e}
-                    onClick={() =>
-                      window.dispatchEvent(
-                        new KeyboardEvent("keydown", { key: e.toString() })
-                      )
-                    }
-                  >
-                    {e}
-                  </div>
-                  {idx == 2 ? null : (
-                    <div
-                      className={styles.verticalKeySeparator}
-                      key={"vsep" + e}
-                    />
-                  )}
-                </>
-              ))}
-            </div>
-            <div className={styles.horizontalKeySeparator} key={"hsep" + idx} />
-          </>
-        ))}
-        <div className={styles.keyboardRow}>
-          <div
-            className={styles.keyboardKey}
-            key="keysDecrement"
-            onClick={() => {
-              window.dispatchEvent(
-                new KeyboardEvent("keydown", { key: "ArrowUp" })
-              );
-            }}
-          >
-            <FaChevronLeft />
-          </div>
-          <div className={styles.verticalKeySeparator} />
-          <div
-            className={styles.keyboardKey}
-            onClick={() => {
-              window.dispatchEvent(new KeyboardEvent("keydown", { key: "0" }));
-            }}
-          >
-            0
-          </div>
-          <div className={styles.verticalKeySeparator} />
-          <div
-            className={styles.keyboardKey}
-            key="keysIncrement"
-            onClick={() => {
-              window.dispatchEvent(
-                new KeyboardEvent("keydown", { key: "ArrowDown" })
-              );
-            }}
-          >
-            <FaChevronRight />
-          </div>
-        </div>
-      </div>
+      <Keyboard />
     </div>
   );
 
