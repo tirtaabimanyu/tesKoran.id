@@ -76,3 +76,9 @@
 .keyboardRow:last-child .keyboardKey:last-child {
   border-bottom-right-radius: 16px;
 }
+
+@media only screen and (min-width: 600px) {
+  .keyboard {
+    display: none;
+  }
+}

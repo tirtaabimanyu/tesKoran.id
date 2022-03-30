@@ -55,7 +55,6 @@ const ACTIONS = {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.GENERATE_NEXT_NUMBERS:
-      console.log("hehe");
       const newNumbers = Array.from({ length: 100 }, () =>
         Math.floor(Math.random() * 10)
       );
