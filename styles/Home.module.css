@@ -1,177 +1,12 @@
 .gameContainer {
   display: flex;
-  /* flex-grow: 1; */
+  flex-grow: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: calc(100vh - 59px - 66px);
-}
-
-.mask {
-  /* background: pink; */
-  display: flex;
-  position: relative;
-  overflow: hidden;
-  gap: 1rem;
-  justify-content: center;
-  /* height: 400px; */
-  /* width: 40vw; */
-  mask-image: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 1) 30%,
-      rgba(0, 0, 0, 0) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 1) 30%,
-      rgba(0, 0, 0, 0) 100%
-    );
-}
-
-.numbers {
+  /* height: calc(100vh - 59px - 66px); */
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.numbers > div:last-child {
-  margin: 0;
-}
-
-.numbersInput {
-  height: 100%;
-  min-width: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #0070f3;
-  padding-top: 4rem;
-}
-
-.numbersInput > div:last-child {
-  color: transparent;
-  margin: 0;
-}
-/* 
-.activeAnswer {
-  text-align: center;
-  border: none;
-  font-size: 2em;
-  font-weight: bold;
-  font-family: inherit;
-  color: #0070f3;
-  caret-color: transparent;
-  background-color: transparent;
-  width: 24px;
-}
-
-.activeAnswer:focus {
-  outline: none;
-} */
-
-.wrong {
-  color: red;
-}
-
-@keyframes caretBlink {
-  50% {
-    opacity: 0;
-  }
-}
-
-.blink {
-  animation-name: caretBlink;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-}
-
-.number {
-  text-align: center;
-  font-size: 2em;
-  min-height: 3rem;
-  min-width: 1.5rem;
-  font-weight: bold;
-  background-color: transparent;
-  margin-bottom: 1.5rem;
-  display: block;
-}
-
-.paddingNumber {
-  display: block;
-  min-height: 3rem;
-  min-width: 1.5rem;
-  background-color: transparent;
-  margin-bottom: 1.5rem;
-}
-
-.timer {
-  color: darkorange;
-  font-size: 2em;
-  font-weight: bold;
-  position: relative;
-  top: 13.25rem;
-  width: 6rem;
-  text-align: right;
-}
-
-.paddingTimer {
-  min-width: 6rem;
-}
-
-.activeAnswer:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 15.5rem;
-  width: 1.5rem;
-  height: 0.3rem;
-  background-color: darkorange;
-  border-radius: 16px;
-}
-
-@media only screen and (max-width: 600px) {
-  .mask {
-    width: 100%;
-    flex-grow: 1;
-    /* height: 57.5%; */
-    /* background-color: pink; */
-  }
-
-  .numbers {
-    justify-content: flex-start;
-  }
-
-  .numbers div:first-child {
-    display: none;
-    /* background-color: red; */
-  }
-
-  .numbersInput {
-    justify-content: flex-start;
-    padding-top: 2.25rem;
-  }
-
-  .numbersInput div:first-child {
-    display: none;
-  }
-
-  .activeAnswer:after {
-    top: 9.25rem;
-  }
-
-  .timer {
-    top: 6.75rem;
-  }
-
-  .gameContainer {
-    justify-content: flex-start;
-  }
 }
 
 .menuChoice > div:not(:last-child):after {
@@ -184,14 +19,16 @@
   color: darkorange;
 }
 
-.hide {
-  opacity: 0;
-}
-
 .clickable:hover {
   cursor: pointer;
 }
 
 .strikethrough {
   text-decoration: line-through;
+}
+
+@media only screen and (max-width: 600px) {
+  .gameContainer {
+    justify-content: space-between;
+  }
 }

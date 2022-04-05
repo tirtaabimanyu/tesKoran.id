@@ -6,7 +6,7 @@
   align-items: center;
   transition: opacity 0.1s;
   gap: 8px;
-  padding: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .group {
@@ -19,6 +19,7 @@
 
 .hide {
   opacity: 0;
+  visibility: hidden;
 }
 
 .clickable {

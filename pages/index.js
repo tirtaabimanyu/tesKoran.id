@@ -2,6 +2,8 @@ import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
 import router from "next/router";
 import styles from "../styles/Home.module.css";
+import { MODE, PHASE } from "../utils/constants.js";
+import GameBoard from "../components/gameBoard.js";
 import Keyboard from "../components/keyboard.js";
 
 // const allowedKeys = new Set([
@@ -26,18 +28,6 @@ const allowedKeys = new Set([
   "ArrowDown",
   "Escape",
 ]);
-
-const PHASE = {
-  PRESTART: "prestart",
-  START: "start",
-  RUNNING: "running",
-  OVER: "over",
-};
-
-const MODE = {
-  PRACTICE: "practice",
-  RANKED: "ranked",
-};
 
 const ACTIONS = {
   GENERATE_NEXT_NUMBERS: "generate-next-numbers",
@@ -144,18 +134,6 @@ function useCurrent(state) {
   return ref;
 }
 
-function formatTime(time) {
-  const seconds = (time % 60).toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
-  const minute = Math.floor(time / 60).toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
-  return minute + ":" + seconds;
-}
-
 export default function Home({ setHideLayout, titleClickHandler }) {
   const [state, dispatch] = useReducer(reducer, {
     active: 0,
@@ -168,10 +146,20 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     secondsRemaining: null,
   });
 
-  const renderedNumbers = state.numbers.slice(
-    Math.max(0, state.active - 2),
-    state.active + 4
-  );
+  const gameBoardProps = {
+    gameMode: state.gameMode,
+    gamePhase: state.gamePhase,
+    seconds: state.secondsRemaining,
+    active: state.active,
+    renderedNumbers: state.numbers.slice(
+      Math.max(0, state.active - 2),
+      state.active + 4
+    ),
+    renderedAnswers: state.answers.slice(
+      Math.max(0, state.active - 2),
+      state.active + 4
+    ),
+  };
 
   const stateRef = useCurrent(state);
 
@@ -237,56 +225,47 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     });
   }
 
-  function createPaddingNumbers(paddingLength, active, keyPrefix) {
-    const n = paddingLength - active;
-    if (n < 0) return null;
+  // const inputRef = useRef(null);
+  // function scrollHandler() {
+  //   setTimeout(
+  //     () =>
+  //       inputRef.current?.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "center",
+  //       }),
+  //     50
+  //   );
+  // }
 
-    return [...Array(n)].map((e, idx) => (
-      <div className={styles.paddingNumber} key={`${keyPrefix}-${idx}`} />
-    ));
-  }
+  // useEffect(() => {
+  //   window.addEventListener("resize", scrollHandler);
 
-  const inputRef = useRef(null);
-  function scrollHandler() {
-    setTimeout(
-      () =>
-        inputRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        }),
-      50
-    );
-  }
+  //   return () => {
+  //     window.removeEventListener("resize", scrollHandler);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    window.addEventListener("resize", scrollHandler);
-
-    return () => {
-      window.removeEventListener("resize", scrollHandler);
-    };
-  }, []);
-
-  const gameIsRunning = state.gamePhase == PHASE.RUNNING;
-  useEffect(() => {
-    const warningText = "Are you sure you want to exit the game?";
-    const handleWindowClose = (e) => {
-      if (!gameIsRunning) return;
-      e.preventDefault();
-      return (e.returnValue = warningText);
-    };
-    const handleBrowseAway = () => {
-      if (!gameIsRunning) return;
-      if (window.confirm(warningText)) return;
-      router.events.emit("routeChangeError");
-      throw "routeChange aborted.";
-    };
-    window.addEventListener("beforeunload", handleWindowClose);
-    router.events.on("routeChangeStart", handleBrowseAway);
-    return () => {
-      window.removeEventListener("beforeunload", handleWindowClose);
-      router.events.off("routeChangeStart", handleBrowseAway);
-    };
-  }, [gameIsRunning]);
+  // const gameIsRunning = state.gamePhase == PHASE.RUNNING;
+  // useEffect(() => {
+  //   const warningText = "Are you sure you want to exit the game?";
+  //   const handleWindowClose = (e) => {
+  //     if (!gameIsRunning) return;
+  //     e.preventDefault();
+  //     return (e.returnValue = warningText);
+  //   };
+  //   const handleBrowseAway = () => {
+  //     if (!gameIsRunning) return;
+  //     if (window.confirm(warningText)) return;
+  //     router.events.emit("routeChangeError");
+  //     throw "routeChange aborted.";
+  //   };
+  //   window.addEventListener("beforeunload", handleWindowClose);
+  //   router.events.on("routeChangeStart", handleBrowseAway);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleWindowClose);
+  //     router.events.off("routeChangeStart", handleBrowseAway);
+  //   };
+  // }, [gameIsRunning]);
 
   const renderStartScreen = () => (
     <div style={{ width: "300px" }}>
@@ -390,62 +369,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
   const renderGameBoard = () => (
     <div className={styles.gameContainer}>
-      <div className={styles.mask}>
-        <div
-          className={cn([styles.timer], {
-            [styles.hide]: state.gameMode == MODE.RANKED,
-          })}
-        >
-          {formatTime(state.secondsRemaining)}
-        </div>
-        <div className={styles.numbers}>
-          {createPaddingNumbers(2, state.active, "start")}
-          {renderedNumbers.map((element, idx) => {
-            return (
-              <div className={styles.number} key={"numbers-" + idx}>
-                {element}
-              </div>
-            );
-          })}
-          {/* {createPaddingNumbers(
-            3,
-            state.numbers.length - state.active - 1,
-            "end"
-          )} */}
-        </div>
-
-        <div className={styles.numbersInput}>
-          {createPaddingNumbers(2, state.active, "input")}
-          {state.answers
-            .slice(Math.max(0, state.active - 2), state.active + 4)
-            .map((element, idx) => {
-              return (
-                <div
-                  className={cn([styles.number], {
-                    [styles.activeAnswer]: idx == Math.min(state.active, 2),
-                    [styles.paddingNumber]: element === null,
-                    [styles.wrong]:
-                      state.gameMode == MODE.PRACTICE &&
-                      element !==
-                        (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
-                    [styles.blink]: state.gamePhase == PHASE.START,
-                  })}
-                  key={"answer-" + idx}
-                >
-                  {element}
-                </div>
-              );
-            })}
-          {/* {createPaddingNumbers(
-            3,
-            state.numbers.length - state.active - 1,
-            "inputEnd"
-          )} */}
-        </div>
-        <div className={styles.timer} style={{ opacity: 0 }}>
-          {formatTime(state.secondsRemaining)}
-        </div>
-      </div>
+      <GameBoard {...gameBoardProps} />
       <Keyboard />
     </div>
   );
