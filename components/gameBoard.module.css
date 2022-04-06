@@ -50,7 +50,7 @@
   justify-content: center;
   align-items: center;
   color: #0070f3;
-  padding-top: 2.5rem;
+  padding-top: 2.25rem;
 }
 
 .numbersInput > div:last-child {
@@ -169,7 +169,7 @@
 
   .numbersInput {
     justify-content: flex-start;
-    padding-top: 2rem;
+    padding-top: 1.875rem;
   }
 
   .numbersInput div:first-child {
@@ -185,6 +185,6 @@
   }
 
   .timer {
-    top: 5.75rem;
+    top: 5.625rem;
   }
 }
