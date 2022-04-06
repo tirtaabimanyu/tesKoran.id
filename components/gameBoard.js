@@ -1,4 +1,4 @@
-import { MODE, PHASE } from "../utils/constants.js";
+import { MODE, PHASE, TYPE } from "../utils/constants.js";
 import styles from "./gameBoard.module.css";
 import cn from "classnames";
 
@@ -24,13 +24,27 @@ function formatTime(time) {
 }
 
 export default function GameBoard({
-  gameMode,
   gamePhase,
+  gameMode,
+  gameType,
   seconds,
   active,
   renderedNumbers,
   renderedAnswers,
 }) {
+  const numbers =
+    gameType == TYPE.PAULI
+      ? renderedNumbers
+      : renderedNumbers.slice().reverse();
+  const answers =
+    gameType == TYPE.PAULI
+      ? renderedAnswers.slice(0, -1)
+      : renderedAnswers.slice(0, -1).reverse();
+  const activeAnswer =
+    gameType == TYPE.PAULI
+      ? Math.min(active, 2)
+      : Math.max(answers.length - active - 1, 2);
+
   return (
     <div className={styles.boardContainer}>
       <div className={styles.mask}>
@@ -43,28 +57,28 @@ export default function GameBoard({
         </div>
 
         <div className={styles.numbers}>
-          {createPaddingNumbers(2, active, "start")}
-          {renderedNumbers.map((element, idx) => {
+          {gameType == TYPE.PAULI && createPaddingNumbers(2, active, "start")}
+          {numbers.map((element, idx) => {
             return (
               <div className={styles.number} key={"numbers-" + idx}>
                 {element}
               </div>
             );
           })}
+          {gameType == TYPE.KRAEPELIN &&
+            createPaddingNumbers(2, active, "start")}
         </div>
 
         <div className={styles.numbersInput}>
-          {createPaddingNumbers(2, active, "input")}
-          {renderedAnswers.map((element, idx) => {
+          {gameType == TYPE.PAULI && createPaddingNumbers(2, active, "input")}
+          {answers.map((element, idx) => {
             return (
               <div
                 className={cn([styles.number], {
-                  [styles.activeAnswer]: idx == Math.min(active, 2),
-                  [styles.paddingNumber]: element === null,
+                  [styles.activeAnswer]: idx == activeAnswer,
                   [styles.wrong]:
                     gameMode == MODE.PRACTICE &&
-                    element !==
-                      (renderedNumbers[idx] + renderedNumbers[idx + 1]) % 10,
+                    element !== (numbers[idx] + numbers[idx + 1]) % 10,
                   [styles.blink]: gamePhase == PHASE.START,
                 })}
                 key={"answer-" + idx}
@@ -73,10 +87,10 @@ export default function GameBoard({
               </div>
             );
           })}
+          {gameType == TYPE.KRAEPELIN &&
+            createPaddingNumbers(2, active, "start")}
         </div>
-        <div className={styles.timer} style={{ opacity: 0 }}>
-          {formatTime(seconds)}
-        </div>
+        <div className={styles.timer} />
       </div>
     </div>
   );

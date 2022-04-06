@@ -43,7 +43,7 @@ export default function Keyboard() {
         <div
           className={styles.keyboardKey}
           key="keysDecrement"
-          onClick={() => keydown("ArrowUp")}
+          onClick={() => keydown("Backspace")}
         >
           <FaChevronLeft />
         </div>
@@ -55,7 +55,7 @@ export default function Keyboard() {
         <div
           className={styles.keyboardKey}
           key="keysIncrement"
-          onClick={() => keydown("ArrowDown")}
+          onClick={() => keydown("Enter")}
         >
           <FaChevronRight />
         </div>

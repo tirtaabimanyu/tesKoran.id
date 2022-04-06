@@ -2,7 +2,7 @@ import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
 import router from "next/router";
 import styles from "../styles/Home.module.css";
-import { MODE, PHASE } from "../utils/constants.js";
+import { MODE, PHASE, TYPE } from "../utils/constants.js";
 import GameBoard from "../components/gameBoard.js";
 import Keyboard from "../components/keyboard.js";
 
@@ -40,6 +40,7 @@ const ACTIONS = {
   SET_TIME: "set-time",
   DECREASE_TIME: "decrease-time",
   SET_MODE: "set-mode",
+  SET_TYPE: "set-type",
 };
 
 function reducer(state, action) {
@@ -103,6 +104,8 @@ function reducer(state, action) {
     case ACTIONS.SET_MODE:
       return { ...state, gameMode: action.payload };
 
+    case ACTIONS.SET_TYPE:
+      return { ...state, gameType: action.payload };
     default:
       return state;
   }
@@ -142,13 +145,15 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     answers: [],
     gamePhase: PHASE.PRESTART,
     gameMode: MODE.PRACTICE,
-    gameDuration: 60,
+    gameType: TYPE.KRAEPELIN,
+    gameDuration: 3600,
     secondsRemaining: null,
   });
 
   const gameBoardProps = {
-    gameMode: state.gameMode,
     gamePhase: state.gamePhase,
+    gameMode: state.gameMode,
+    gameType: state.gameType,
     seconds: state.secondsRemaining,
     active: state.active,
     renderedNumbers: state.numbers.slice(
@@ -208,11 +213,23 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
     if (stateRef.current.gamePhase == PHASE.OVER) return;
 
-    if (e.key == "ArrowUp" || e.key == "Backspace")
-      return dispatch({ type: ACTIONS.DECREMENT });
+    if (e.key == "ArrowUp") {
+      if (stateRef.current.gameType == TYPE.PAULI)
+        return dispatch({ type: ACTIONS.DECREMENT });
 
-    if (e.key == "ArrowDown" || e.key == "Enter")
       return dispatch({ type: ACTIONS.INCREMENT });
+    }
+
+    if (e.key == "ArrowDown") {
+      if (stateRef.current.gameType == TYPE.PAULI)
+        return dispatch({ type: ACTIONS.INCREMENT });
+
+      return dispatch({ type: ACTIONS.DECREMENT });
+    }
+
+    if (e.key == "Backspace") return dispatch({ type: ACTIONS.DECREMENT });
+
+    if (e.key == "Enter") return dispatch({ type: ACTIONS.INCREMENT });
 
     if (e.repeat || e.ctrlKey) return;
 
@@ -300,6 +317,34 @@ export default function Home({ setHideLayout, titleClickHandler }) {
             }}
           >
             Ranked
+          </div>
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>Type:</div>
+        <div
+          className={styles.menuChoice}
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
+          <div
+            className={cn([styles.clickable], {
+              [styles.activeChoice]: state.gameType == TYPE.PAULI,
+            })}
+            onClick={() =>
+              dispatch({ type: ACTIONS.SET_TYPE, payload: TYPE.PAULI })
+            }
+          >
+            Pauli
+          </div>
+          <div
+            className={cn([styles.clickable], {
+              [styles.activeChoice]: state.gameType == TYPE.KRAEPELIN,
+            })}
+            onClick={() => {
+              dispatch({ type: ACTIONS.SET_TYPE, payload: TYPE.KRAEPELIN });
+            }}
+          >
+            Kraepelin
           </div>
         </div>
       </div>

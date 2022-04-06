@@ -9,3 +9,8 @@ export const MODE = {
   PRACTICE: "practice",
   RANKED: "ranked",
 };
+
+export const TYPE = {
+  PAULI: "pauli",
+  KRAEPELIN: "kraepelin",
+};
