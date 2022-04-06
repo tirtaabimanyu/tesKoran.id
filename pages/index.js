@@ -145,8 +145,8 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     answers: [],
     gamePhase: PHASE.PRESTART,
     gameMode: MODE.PRACTICE,
-    gameType: TYPE.KRAEPELIN,
-    gameDuration: 3600,
+    gameType: TYPE.PAULI,
+    gameDuration: 60,
     secondsRemaining: null,
   });
 
