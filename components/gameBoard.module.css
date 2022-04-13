@@ -68,6 +68,11 @@
   outline: none;
 } */
 
+.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .wrong {
   color: red;
 }
@@ -103,10 +108,6 @@
   top: 11.25rem;
   width: 6rem;
   text-align: right;
-}
-
-.paddingTimer {
-  min-width: 6rem;
 }
 
 .activeAnswer:after {

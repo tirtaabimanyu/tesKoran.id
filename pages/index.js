@@ -2,7 +2,8 @@ import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
 import router from "next/router";
 import styles from "../styles/Home.module.css";
-import { MODE, PHASE, TYPE } from "../utils/constants.js";
+import { ACTIONS, MODE, PHASE, TYPE } from "../utils/constants.js";
+import StartScreen from "../components/startScreen.js";
 import GameBoard from "../components/gameBoard.js";
 import Keyboard from "../components/keyboard.js";
 
@@ -28,20 +29,6 @@ const allowedKeys = new Set([
   "ArrowDown",
   "Escape",
 ]);
-
-const ACTIONS = {
-  GENERATE_NEXT_NUMBERS: "generate-next-numbers",
-  PUSH_ANSWER: "push-answer",
-  INCREMENT: "increment",
-  DECREMENT: "decrement",
-  INIT_GAME: "init-game",
-  RESET_GAME: "reset-game",
-  SET_PHASE: "set-phase",
-  SET_TIME: "set-time",
-  DECREASE_TIME: "decrease-time",
-  SET_MODE: "set-mode",
-  SET_TYPE: "set-type",
-};
 
 function reducer(state, action) {
   switch (action.type) {
@@ -146,25 +133,9 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     gamePhase: PHASE.PRESTART,
     gameMode: MODE.PRACTICE,
     gameType: TYPE.PAULI,
-    gameDuration: 60,
+    gameDuration: 30,
     secondsRemaining: null,
   });
-
-  const gameBoardProps = {
-    gamePhase: state.gamePhase,
-    gameMode: state.gameMode,
-    gameType: state.gameType,
-    seconds: state.secondsRemaining,
-    active: state.active,
-    renderedNumbers: state.numbers.slice(
-      Math.max(0, state.active - 2),
-      state.active + 4
-    ),
-    renderedAnswers: state.answers.slice(
-      Math.max(0, state.active - 2),
-      state.active + 4
-    ),
-  };
 
   const stateRef = useCurrent(state);
 
@@ -284,140 +255,45 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   //   };
   // }, [gameIsRunning]);
 
-  const renderStartScreen = () => (
-    <div style={{ width: "300px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Mode:</div>
-        <div
-          className={styles.menuChoice}
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameMode == MODE.PRACTICE,
-            })}
-            onClick={() =>
-              dispatch({ type: ACTIONS.SET_MODE, payload: MODE.PRACTICE })
-            }
-          >
-            Practice
-          </div>
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameMode == MODE.RANKED,
-            })}
-            onClick={() => {
-              dispatch({ type: ACTIONS.SET_MODE, payload: MODE.RANKED });
-              if (
-                state.gameDuration != 60 &&
-                state.gameDuration != 180 &&
-                state.gameDuration != 3600
-              )
-                dispatch({ type: ACTIONS.SET_TIME, payload: 60 });
-            }}
-          >
-            Ranked
-          </div>
-        </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Type:</div>
-        <div
-          className={styles.menuChoice}
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameType == TYPE.PAULI,
-            })}
-            onClick={() =>
-              dispatch({ type: ACTIONS.SET_TYPE, payload: TYPE.PAULI })
-            }
-          >
-            Pauli
-          </div>
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameType == TYPE.KRAEPELIN,
-            })}
-            onClick={() => {
-              dispatch({ type: ACTIONS.SET_TYPE, payload: TYPE.KRAEPELIN });
-            }}
-          >
-            Kraepelin
-          </div>
-        </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Duration:</div>
-        <div
-          className={styles.menuChoice}
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameDuration == 60,
-            })}
-            onClick={() => dispatch({ type: ACTIONS.SET_TIME, payload: 60 })}
-          >
-            1m
-          </div>
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameDuration == 180,
-            })}
-            onClick={() => dispatch({ type: ACTIONS.SET_TIME, payload: 180 })}
-          >
-            3m
-          </div>
-          <div
-            className={cn([styles.clickable], {
-              [styles.activeChoice]: state.gameDuration == 3600,
-            })}
-            onClick={() => dispatch({ type: ACTIONS.SET_TIME, payload: 3600 })}
-          >
-            60m
-          </div>
-          <div
-            className={cn({
-              [styles.clickable]: state.gameMode == MODE.PRACTICE,
-              [styles.strikethrough]: state.gameMode == MODE.RANKED,
-              [styles.activeChoice]:
-                state.gameDuration != 60 &&
-                state.gameDuration != 180 &&
-                state.gameDuration != 3600,
-            })}
-            onClick={(e) => {
-              if (state.gameMode == MODE.RANKED) return;
+  const renderStartScreen = () => {
+    const startScreenProps = {
+      gameMode: state.gameMode,
+      gameType: state.gameType,
+      gameDuration: state.gameDuration,
+      dispatch: dispatch,
+    };
 
-              const customSecond = parseInt(
-                prompt("Enter duration in seconds")
-              );
-              if (!customSecond) return;
-              dispatch({ type: ACTIONS.SET_TIME, payload: customSecond });
-            }}
-          >
-            Custom
-          </div>
-        </div>
+    return (
+      <div className={styles.startContainer}>
+        <StartScreen {...startScreenProps} />
       </div>
-      <hr></hr>
-      <div
-        className={styles.clickable}
-        style={{ display: "flex", justifyContent: "center" }}
-        onClick={() => dispatch({ type: ACTIONS.INIT_GAME })}
-      >
-        Start
-      </div>
-    </div>
-  );
+    );
+  };
 
-  const renderGameBoard = () => (
-    <div className={styles.gameContainer}>
-      <GameBoard {...gameBoardProps} />
-      <Keyboard />
-    </div>
-  );
+  const renderGameBoard = () => {
+    const gameBoardProps = {
+      gamePhase: state.gamePhase,
+      gameMode: state.gameMode,
+      gameType: state.gameType,
+      seconds: state.secondsRemaining,
+      active: state.active,
+      renderedNumbers: state.numbers.slice(
+        Math.max(0, state.active - 2),
+        state.active + 4
+      ),
+      renderedAnswers: state.answers.slice(
+        Math.max(0, state.active - 2),
+        state.active + 4
+      ),
+    };
+
+    return (
+      <div className={styles.gameContainer}>
+        <GameBoard {...gameBoardProps} />
+        <Keyboard />
+      </div>
+    );
+  };
 
   const renderResultScreen = () => {
     const correctAnswers = state.answers.filter(

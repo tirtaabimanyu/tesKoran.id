@@ -9,6 +9,7 @@ div#__next > div {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   overscroll-behavior-y: contain;
   height: 100%;
+  background-color: whitesmoke;
 }
 
 a {

@@ -1,0 +1,73 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  font-size: larger;
+}
+
+.menuRow,
+.menuChoice {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuHeader {
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+  /* font-weight: bold; */
+}
+
+.menuHeader::after {
+  content: ":";
+}
+
+.menuChoice > div:not(:last-child):after {
+  content: "/";
+  color: black;
+  cursor: default;
+}
+
+.startButton {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.clickable {
+  color: dimgray;
+  transition: 0.3s;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  color: black;
+}
+
+.activeChoice {
+  transition: 0.1s;
+  color: darkorange;
+}
+
+.activeChoice:hover {
+  color: darkgoldenrod;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.horizontalSep {
+  width: 100%;
+  background-color: black;
+  height: 2px;
+  border-radius: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 100%;
+  }
+}

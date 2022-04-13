@@ -9,22 +9,11 @@
   height: 100%;
 }
 
-.menuChoice > div:not(:last-child):after {
-  content: "/";
-  color: black;
-  cursor: default;
-}
-
-.activeChoice {
-  color: darkorange;
-}
-
-.clickable:hover {
-  cursor: pointer;
-}
-
-.strikethrough {
-  text-decoration: line-through;
+.startContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 @media only screen and (max-width: 600px) {

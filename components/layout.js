@@ -7,7 +7,7 @@ export default function Layout({ children, hide, titleClickHandler }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Tes Koran Online</title>
+        <title>tesKoran.id - Pauli & Kraepelin Test Online</title>
         <meta name="description" content="Add them numbers" />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="icon" href="/favicon.ico" />
