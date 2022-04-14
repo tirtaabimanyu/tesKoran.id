@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 450px;
-  font-size: larger;
+  /* font-size: large; */
 }
 
 .menuRow,
@@ -35,22 +35,23 @@
 }
 
 .clickable {
-  color: dimgray;
+  color: black;
   transition: 0.3s;
 }
 
 .clickable:hover {
   cursor: pointer;
+  color: dimgray;
+}
+
+.clickable:active {
   color: black;
 }
 
-.activeChoice {
+.activeChoice,
+.activeChoice:hover {
   transition: 0.1s;
   color: darkorange;
-}
-
-.activeChoice:hover {
-  color: darkgoldenrod;
 }
 
 .strikethrough {
@@ -69,5 +70,6 @@
 @media only screen and (max-width: 600px) {
   .container {
     width: 100%;
+    padding: 0.5rem;
   }
 }

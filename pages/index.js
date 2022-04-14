@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { useState, useEffect, useReducer, useRef } from "react";
-import router from "next/router";
+import { SwitchTransition, CSSTransition } from "react-transition-group";
 import styles from "../styles/Home.module.css";
 import { ACTIONS, MODE, PHASE, TYPE } from "../utils/constants.js";
 import StartScreen from "../components/startScreen.js";
@@ -347,13 +347,38 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     setHideLayout(hideLayout);
   }, [hideLayout]);
 
-  switch (state.gamePhase) {
-    case PHASE.PRESTART:
-      return renderStartScreen();
-    case PHASE.START:
-    case PHASE.RUNNING:
-      return renderGameBoard();
-    case PHASE.OVER:
-      return renderResultScreen();
-  }
+  const showPage = (gamePhase) => {
+    if (gamePhase == PHASE.PRESTART) return "startScreen";
+    if (gamePhase == PHASE.START || gamePhase == PHASE.RUNNING)
+      return "gameBoard";
+    if (gamePhase == PHASE.OVER) return "resultScreen";
+  };
+
+  return (
+    <SwitchTransition mode="out-in">
+      <CSSTransition
+        key={showPage(state.gamePhase)}
+        classNames="fade"
+        timeout={100}
+      >
+        <>
+          {state.gamePhase == PHASE.PRESTART && renderStartScreen()}
+          {(state.gamePhase == PHASE.START ||
+            state.gamePhase == PHASE.RUNNING) &&
+            renderGameBoard()}
+          {state.gamePhase == PHASE.OVER && renderResultScreen()}
+        </>
+      </CSSTransition>
+    </SwitchTransition>
+  );
+
+  // switch (state.gamePhase) {
+  //   case PHASE.PRESTART:
+  //     return renderStartScreen();
+  //   case PHASE.START:
+  //   case PHASE.RUNNING:
+  //     return renderGameBoard();
+  //   case PHASE.OVER:
+  //     return renderResultScreen();
+  // }
 }
