@@ -78,12 +78,12 @@ export default function GameBoard({
                   [styles.activeAnswer]: idx == activeAnswer,
                   [styles.wrong]:
                     gameMode == MODE.PRACTICE &&
-                    element !== (numbers[idx] + numbers[idx + 1]) % 10,
+                    element.value !== (numbers[idx] + numbers[idx + 1]) % 10,
                   [styles.blink]: gamePhase == PHASE.START,
                 })}
                 key={"answer-" + idx}
               >
-                {element}
+                {element.value}
               </div>
             );
           })}

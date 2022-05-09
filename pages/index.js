@@ -36,8 +36,9 @@ function reducer(state, action) {
       const newNumbers = Array.from({ length: 100 }, () =>
         Math.floor(Math.random() * 10)
       );
-      const newAnswers = Array(state.numbers.length + newNumbers.length).fill(
-        null
+      const newAnswers = Array.from(
+        { length: state.numbers.length + newNumbers.length },
+        () => ({ value: null, time: [] })
       );
       return {
         ...state,
@@ -52,12 +53,19 @@ function reducer(state, action) {
       return { ...state, active: Math.max(0, state.active - 1) };
 
     case ACTIONS.PUSH_ANSWER:
-      state.answers[state.active] = action.payload.input;
-      const active = Math.min(state.numbers.length - 1, state.active + 1);
+      state.answers[state.active].value = action.payload.input;
+      // state.answers[state.active].time = [
+      //   ...state.answers[state.active].time,
+      //   (action.payload.time - state.startTimestamp) / 1000,
+      // ];
+      state.answers[state.active].time.push(
+        (action.payload.time - state.startTimestamp) / 1000
+      );
+      console.log(state.answers[state.active]);
       return {
         ...state,
-        active,
-        maxActive: Math.max(active, state.maxActive),
+        active: state.active + 1,
+        maxActive: Math.max(state.active + 1, state.maxActive),
       };
 
     case ACTIONS.INIT_GAME:
@@ -68,18 +76,23 @@ function reducer(state, action) {
       return {
         ...state,
         numbers,
-        answers: Array(numbers.length).fill(null),
+        answers: Array.from({ length: numbers.length }, () => ({
+          value: null,
+          time: [],
+        })),
         gamePhase: PHASE.START,
         secondsRemaining: state.gameDuration,
         active: 0,
         maxActive: 0,
       };
 
+    case ACTIONS.START_GAME:
+      return { ...state, gamePhase: PHASE.RUNNING, startTimestamp: Date.now() };
+
     case ACTIONS.RESET_GAME:
       return { ...state, gamePhase: PHASE.PRESTART };
 
     case ACTIONS.SET_PHASE:
-      console.log("setphase");
       return { ...state, gamePhase: action.payload };
 
     case ACTIONS.SET_TIME:
@@ -135,6 +148,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     gameType: TYPE.PAULI,
     gameDuration: 30,
     secondsRemaining: null,
+    startTimestamp: null,
   });
 
   const stateRef = useCurrent(state);
@@ -180,7 +194,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     if (e.keyCode == 27) return resetGame();
 
     if (stateRef.current.gamePhase == PHASE.START)
-      dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.RUNNING });
+      dispatch({ type: ACTIONS.START_GAME });
 
     if (stateRef.current.gamePhase == PHASE.OVER) return;
 
@@ -209,7 +223,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
     return dispatch({
       type: ACTIONS.PUSH_ANSWER,
-      payload: { input: parseInt(e.key) },
+      payload: { input: parseInt(e.key), time: Date.now() },
     });
   }
 
@@ -297,7 +311,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
   const renderResultScreen = () => {
     const correctAnswers = state.answers.filter(
-      (e, idx) => e == (state.numbers[idx] + state.numbers[idx + 1]) % 10
+      (e, idx) => e.value == (state.numbers[idx] + state.numbers[idx + 1]) % 10
     ).length;
     const wrongAnswers = state.maxActive - correctAnswers;
     const rawAPM = (state.maxActive / state.gameDuration) * 60;
@@ -329,9 +343,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
         <br></br>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div
-            onClick={() =>
-              dispatch({ type: ACTIONS.SET_PHASE, payload: PHASE.PRESTART })
-            }
+            onClick={() => dispatch({ type: ACTIONS.RESET_GAME })}
             style={{ cursor: "pointer" }}
           >
             Restart

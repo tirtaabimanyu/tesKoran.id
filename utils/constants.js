@@ -21,6 +21,7 @@ export const ACTIONS = {
   INCREMENT: "increment",
   DECREMENT: "decrement",
   INIT_GAME: "init-game",
+  START_GAME: "start-game",
   RESET_GAME: "reset-game",
   SET_PHASE: "set-phase",
   SET_TIME: "set-time",
