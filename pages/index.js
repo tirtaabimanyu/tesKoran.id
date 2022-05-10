@@ -5,6 +5,7 @@ import styles from "../styles/Home.module.css";
 import { ACTIONS, MODE, PHASE, TYPE } from "../utils/constants.js";
 import StartScreen from "../components/startScreen.js";
 import GameBoard from "../components/gameBoard.js";
+import ResultScreen from "../components/resultScreen.js";
 import Keyboard from "../components/keyboard.js";
 
 // const allowedKeys = new Set([
@@ -54,14 +55,10 @@ function reducer(state, action) {
 
     case ACTIONS.PUSH_ANSWER:
       state.answers[state.active].value = action.payload.input;
-      // state.answers[state.active].time = [
-      //   ...state.answers[state.active].time,
-      //   (action.payload.time - state.startTimestamp) / 1000,
-      // ];
       state.answers[state.active].time.push(
         (action.payload.time - state.startTimestamp) / 1000
       );
-      console.log(state.answers[state.active]);
+
       return {
         ...state,
         active: state.active + 1,
@@ -190,6 +187,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     // alert(e.which);
     // console.log(e);
     if (!allowedKeys.has(e.key)) return;
+    if (stateRef.current.secondsRemaining == 0) return;
 
     if (e.keyCode == 27) return resetGame();
 
@@ -310,47 +308,14 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   };
 
   const renderResultScreen = () => {
-    const correctAnswers = state.answers.filter(
-      (e, idx) => e.value == (state.numbers[idx] + state.numbers[idx + 1]) % 10
-    ).length;
-    const wrongAnswers = state.maxActive - correctAnswers;
-    const rawAPM = (state.maxActive / state.gameDuration) * 60;
-    const APM = (correctAnswers / state.gameDuration) * 60;
+    const resultScreenProps = {
+      numbers: state.numbers.slice(0, state.maxActive),
+      answers: state.answers.slice(0, state.maxActive - 1),
+      gameDuration: state.gameDuration,
+      dispatch: dispatch,
+    };
 
-    return (
-      <div style={{ width: "300px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>APM:</div>
-          <div>{APM}</div>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>Raw APM:</div>
-          <div>{rawAPM}</div>
-        </div>
-        <hr></hr>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>Total:</div>
-          <div>{state.maxActive}</div>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>Correct:</div>
-          <div>{correctAnswers}</div>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>Wrong:</div>
-          <div>{wrongAnswers}</div>
-        </div>
-        <br></br>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div
-            onClick={() => dispatch({ type: ACTIONS.RESET_GAME })}
-            style={{ cursor: "pointer" }}
-          >
-            Restart
-          </div>
-        </div>
-      </div>
-    );
+    return <ResultScreen {...resultScreenProps} />;
   };
 
   const hideLayout =

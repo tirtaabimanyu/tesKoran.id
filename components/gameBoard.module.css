@@ -74,7 +74,7 @@
 }
 
 .wrong {
-  color: red;
+  color: red !important;
 }
 
 @keyframes caretBlink {
@@ -108,6 +108,13 @@
   top: 11.25rem;
   width: 6rem;
   text-align: right;
+  transition: 0.5s;
+}
+
+.timerOver {
+  animation-name: caretBlink;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
 }
 
 .activeAnswer:after {

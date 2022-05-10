@@ -51,6 +51,7 @@ export default function GameBoard({
         <div
           className={cn([styles.timer], {
             [styles.hide]: gameMode == MODE.RANKED,
+            [styles.timerOver]: seconds == 0,
           })}
         >
           {formatTime(seconds)}
