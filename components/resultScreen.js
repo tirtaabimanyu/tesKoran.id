@@ -110,7 +110,7 @@ export default function ResultScreen({
   const cumulativeCorrect = 0;
   correctChartData.forEach((e, idx) => {
     cumulativeCorrect += e;
-    apmChartData[idx] = (cumulativeCorrect / (idx + 1)) * 60;
+    apmChartData[idx] = (cumulativeCorrect / (idx + 1) / divisor) * 60;
   });
 
   const cumulativeIncorrect = 0;
@@ -151,7 +151,7 @@ export default function ResultScreen({
       },
       y1: {
         beginAtZero: true,
-        max: maxScale ? maxScale * 2 : 10,
+        max: maxScale ? Math.floor(maxScale * 1.5) : 10,
         stacked: true,
         ticks: {
           stepSize: 1,

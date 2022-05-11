@@ -1,35 +1,13 @@
-import cn from "classnames";
-import { useState, useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer } from "react";
 import { SwitchTransition, CSSTransition } from "react-transition-group";
+
 import styles from "../styles/Home.module.css";
-import { ACTIONS, MODE, PHASE, TYPE } from "../utils/constants.js";
+import { useInterval, useCurrent } from "../utils/customHooks.js";
+import { ACTIONS, MODE, PHASE, TYPE, allowedKeys } from "../utils/constants.js";
 import StartScreen from "../components/startScreen.js";
 import GameBoard from "../components/gameBoard.js";
 import ResultScreen from "../components/resultScreen.js";
 import Keyboard from "../components/keyboard.js";
-
-// const allowedKeys = new Set([
-//   8, 13, 27, 38, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99,
-//   100, 101, 102, 103, 104, 105,
-// ]);
-
-const allowedKeys = new Set([
-  "0",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "Enter",
-  "Backspace",
-  "ArrowUp",
-  "ArrowDown",
-  "Escape",
-]);
 
 function reducer(state, action) {
   switch (action.type) {
@@ -108,32 +86,6 @@ function reducer(state, action) {
   }
 }
 
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
-
-function useCurrent(state) {
-  const ref = useRef(state);
-  useEffect(() => {
-    ref.current = state;
-  }, [state]);
-  return ref;
-}
-
 export default function Home({ setHideLayout, titleClickHandler }) {
   const [state, dispatch] = useReducer(reducer, {
     active: 0,
@@ -184,8 +136,6 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   }, []);
 
   function keyDown(e) {
-    // alert(e.which);
-    // console.log(e);
     if (!allowedKeys.has(e.key)) return;
     if (stateRef.current.secondsRemaining == 0) return;
 
@@ -326,13 +276,6 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     setHideLayout(hideLayout);
   }, [hideLayout]);
 
-  const showPage = (gamePhase) => {
-    if (gamePhase == PHASE.PRESTART) return "startScreen";
-    if (gamePhase == PHASE.START || gamePhase == PHASE.RUNNING)
-      return "gameBoard";
-    if (gamePhase == PHASE.OVER) return "resultScreen";
-  };
-
   return (
     <SwitchTransition mode="out-in">
       <CSSTransition
@@ -350,14 +293,11 @@ export default function Home({ setHideLayout, titleClickHandler }) {
       </CSSTransition>
     </SwitchTransition>
   );
-
-  // switch (state.gamePhase) {
-  //   case PHASE.PRESTART:
-  //     return renderStartScreen();
-  //   case PHASE.START:
-  //   case PHASE.RUNNING:
-  //     return renderGameBoard();
-  //   case PHASE.OVER:
-  //     return renderResultScreen();
-  // }
 }
+
+const showPage = (gamePhase) => {
+  if (gamePhase == PHASE.PRESTART) return "startScreen";
+  if (gamePhase == PHASE.START || gamePhase == PHASE.RUNNING)
+    return "gameBoard";
+  if (gamePhase == PHASE.OVER) return "resultScreen";
+};

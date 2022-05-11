@@ -29,3 +29,21 @@ export const ACTIONS = {
   SET_MODE: "set-mode",
   SET_TYPE: "set-type",
 };
+
+export const allowedKeys = new Set([
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "Enter",
+  "Backspace",
+  "ArrowUp",
+  "ArrowDown",
+  "Escape",
+]);
