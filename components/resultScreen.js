@@ -1,3 +1,4 @@
+import cn from "classnames";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line, Chart } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
+import { FaRedo } from "react-icons/fa";
 import styles from "./resultScreen.module.css";
 import { ACTIONS } from "../utils/constants.js";
 
@@ -24,21 +26,37 @@ ChartJS.register(
   Legend
 );
 
+function parseDuration(second) {
+  const hour = Math.floor(second / 3600);
+  second = second % 3600;
+  const minute = Math.floor(second / 60);
+  second = second % 60;
+
+  let str = "";
+  if (hour) str += hour + "h";
+  if (minute) str += minute + "m";
+  if (second) str += second + "s";
+
+  return str;
+}
+
+function capitalize(str) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+function formatNumber(num) {
+  if (Number.isInteger(num)) return num;
+  return num.toFixed(2);
+}
+
 export default function ResultScreen({
   numbers,
   answers,
   gameDuration,
+  gameType,
+  gameMode,
   dispatch,
 }) {
-  console.log("num", numbers);
-  console.log("ans", answers);
-  // const correctAnswers = answers.filter(
-  //   (e, idx) => e.value == (numbers[idx] + numbers[idx + 1]) % 10
-  // ).length;
-  // const wrongAnswers = maxActive - correctAnswers;
-  // const rawAPM = (maxActive / gameDuration) * 60;
-  // const APM = (correctAnswers / gameDuration) * 60;
-
   let correctChartData = [];
   let incorrectChartData = [];
   let modifiedChartData = [];
@@ -54,6 +72,11 @@ export default function ResultScreen({
     incorrectChartData = Array(20).fill(0);
     modifiedChartData = Array(20).fill(0);
     divisor = 180;
+  } else if (gameDuration == 180) {
+    correctChartData = Array(30).fill(0);
+    incorrectChartData = Array(30).fill(0);
+    modifiedChartData = Array(30).fill(0);
+    divisor = 6;
   } else {
     correctChartData = Array(gameDuration).fill(0);
     incorrectChartData = Array(gameDuration).fill(0);
@@ -81,7 +104,6 @@ export default function ResultScreen({
       incorrectChartData[inputSecond] +
       modifiedChartData[inputSecond];
     maxScale = Math.max(maxScale, total);
-    console.log(idx, inputSecond, total, maxScale);
   });
 
   const apmChartData = Array(correctChartData.length).fill(0);
@@ -90,6 +112,19 @@ export default function ResultScreen({
     cumulativeCorrect += e;
     apmChartData[idx] = (cumulativeCorrect / (idx + 1)) * 60;
   });
+
+  const cumulativeIncorrect = 0;
+  incorrectChartData.forEach((e) => {
+    cumulativeIncorrect += e;
+  });
+
+  const cumulativeModified = 0;
+  modifiedChartData.forEach((e) => {
+    cumulativeModified += e;
+  });
+
+  const apm = (cumulativeCorrect / gameDuration) * 60;
+  const accuracy = (cumulativeCorrect / answers.length) * 100;
 
   const options = {
     responsive: true,
@@ -125,11 +160,18 @@ export default function ResultScreen({
         grid: {
           display: false,
         },
+        title: {
+          display: true,
+          text: "Addition",
+        },
       },
     },
   };
 
-  const labels = Array.from({ length: apmChartData.length }, (v, k) => k + 1);
+  const labels = Array.from(
+    { length: gameDuration / divisor },
+    (v, k) => (k + 1) * divisor
+  );
   const data = {
     labels,
     datasets: [
@@ -138,14 +180,16 @@ export default function ResultScreen({
         label: "apm",
         data: labels.map((v, idx) => apmChartData[idx]),
         yAxisID: "y",
+        borderColor: "#0070f3",
+        backgroundColor: "#0070f3",
       },
       {
         type: "bar",
         label: "correct",
         data: labels.map((v, idx) => correctChartData[idx]),
-        borderColor: "#0070f3",
-        backgroundColor: "#0070f3",
         yAxisID: "y1",
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgb(53, 162, 235)",
       },
       {
         type: "bar",
@@ -166,38 +210,48 @@ export default function ResultScreen({
     ],
   };
 
-  return <Line options={options} data={data} />;
-
   return (
-    <div style={{ width: "300px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>APM:</div>
-        <div>{APM}</div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Raw APM:</div>
-        <div>{rawAPM}</div>
-      </div>
-      <hr></hr>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Total:</div>
-        <div>{maxActive}</div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Correct:</div>
-        <div>{correctAnswers}</div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>Wrong:</div>
-        <div>{wrongAnswers}</div>
-      </div>
-      <br></br>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+    <div className={styles.resultContainer}>
+      <Line options={options} data={data} />
+      <div className={styles.statsContainer}>
+        <div className={styles.statsItem}>
+          <div>APM</div>
+          <div className={styles.statsValue}>{formatNumber(apm)}</div>
+        </div>
+        <div className={styles.statsItem}>
+          <div>Statistics</div>
+          <div className={cn([styles.statsValue, styles.tooltipContainer])}>
+            <span className={styles.tooltip}>Correct/Modified/Incorrect</span>
+            {cumulativeCorrect +
+              "/" +
+              cumulativeModified +
+              "/" +
+              cumulativeIncorrect}
+          </div>
+        </div>
+        <div className={styles.statsItem}>
+          <div>Accuracy</div>
+          <div className={styles.statsValue}>
+            {formatNumber(accuracy) + "%"}
+          </div>
+        </div>
+        <div className={styles.statsItem}>
+          <div>Test Type</div>
+          <div className={styles.statsValueText}>
+            <div>
+              {capitalize(gameType) + ", " + capitalize(gameMode) + ", "}
+            </div>
+            <div>{parseDuration(gameDuration)}</div>
+          </div>
+        </div>
         <div
+          className={styles.statsItem}
           onClick={() => dispatch({ type: ACTIONS.RESET_GAME })}
-          style={{ cursor: "pointer" }}
         >
-          Restart
+          <div className={styles.restartButton}>
+            <FaRedo size={48} />
+            <div>Restart</div>
+          </div>
         </div>
       </div>
     </div>
