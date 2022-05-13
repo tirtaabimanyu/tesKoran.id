@@ -228,7 +228,7 @@ export default function ResultScreen({
           onClick={() => dispatch({ type: ACTIONS.RESET_GAME })}
         >
           <div className={styles.restartButton}>
-            <FaRedo size={48} />
+            <FaRedo className={styles.restartIcon} />
             <div>Restart</div>
           </div>
         </div>
