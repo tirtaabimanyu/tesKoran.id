@@ -1,30 +1,9 @@
 import cn from "classnames";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import { FaRedo } from "react-icons/fa";
 import styles from "./resultScreen.module.css";
 import { ACTIONS } from "../utils/constants.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 function parseDuration(second) {
   const hour = Math.floor(second / 3600);
