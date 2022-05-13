@@ -32,13 +32,18 @@ function reducer(state, action) {
       return { ...state, active: Math.max(0, state.active - 1) };
 
     case ACTIONS.PUSH_ANSWER:
-      state.answers[state.active].value = action.payload.input;
-      state.answers[state.active].time.push(
+      const answers = state.answers.slice();
+
+      answers[state.active] = { ...answers[state.active] };
+      answers[state.active].value = action.payload.input;
+      answers[state.active].time = answers[state.active].time.slice();
+      answers[state.active].time.push(
         (action.payload.time - state.startTimestamp) / 1000
       );
 
       return {
         ...state,
+        answers,
         active: state.active + 1,
         maxActive: Math.max(state.active + 1, state.maxActive),
       };
@@ -103,11 +108,11 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   const stateRef = useCurrent(state);
 
   const resetGame = () => {
-    if (
-      stateRef.current.gamePhase == PHASE.RUNNING &&
-      !confirm("Are you sure you want to exit the game?")
-    )
-      return;
+    // if (
+    //   stateRef.current.gamePhase == PHASE.RUNNING &&
+    //   !confirm("Are you sure you want to exit the game?")
+    // )
+    //   return;
     return dispatch({ type: ACTIONS.RESET_GAME });
   };
 
@@ -225,11 +230,7 @@ export default function Home({ setHideLayout, titleClickHandler }) {
       dispatch: dispatch,
     };
 
-    return (
-      <div className={styles.startContainer}>
-        <StartScreen {...startScreenProps} />
-      </div>
-    );
+    return <StartScreen {...startScreenProps} />;
   };
 
   const renderGameBoard = () => {

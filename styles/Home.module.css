@@ -5,15 +5,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  /* height: calc(100vh - 59px - 66px); */
   height: 100%;
-}
-
-.startContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
 }
 
 @media only screen and (max-width: 600px) {

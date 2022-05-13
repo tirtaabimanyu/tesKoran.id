@@ -1,8 +1,16 @@
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.menuContainer {
+  display: flex;
+  flex-direction: column;
   width: 450px;
-  /* font-size: large; */
+  font-size: large;
 }
 
 .menuRow,
@@ -31,7 +39,7 @@
 .startButton {
   display: flex;
   justify-content: center;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 .clickable {
@@ -60,16 +68,46 @@
 
 .horizontalSep {
   width: 100%;
-  background-color: black;
-  height: 2px;
+  background-color: grey;
+  height: 1px;
   border-radius: 4px;
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
+.paddingText {
+  height: 80px;
+  width: 100%;
+}
+
+.explanationText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.explanationText b {
+  color: darkorange;
+}
+
+.codeText {
+  background-color: lightgray;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: large;
+}
+
 @media only screen and (max-width: 600px) {
-  .container {
+  .menuContainer {
     width: 100%;
     padding: 0.5rem;
+  }
+
+  .paddingText {
+    height: 120px;
   }
 }
