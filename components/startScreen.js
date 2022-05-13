@@ -9,7 +9,7 @@ export default function StartScreen({
   gameType,
   dispatch,
 }) {
-  function getBackKey() {
+  function useGetBackKey() {
     if (useWindowWideMin(600))
       return <span className={styles.codeText}>{"<"}</span>;
     return (
@@ -22,7 +22,7 @@ export default function StartScreen({
     );
   }
 
-  function getForwardKey() {
+  function useGetForwardKey() {
     if (useWindowWideMin(600))
       return <span className={styles.codeText}>{">"}</span>;
     return (
@@ -170,8 +170,8 @@ export default function StartScreen({
           and only type the <b>last digit</b> of the result.
         </div>
         <div>
-          Press {getBackKey()} to navigate backwards and {getForwardKey()} to
-          navigate forwards.
+          Press {useGetBackKey()} to navigate backwards and {useGetForwardKey()}{" "}
+          to navigate forwards.
         </div>
         <div>Just overwrite your answer if you made a mistake.</div>
       </div>
