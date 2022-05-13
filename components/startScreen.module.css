@@ -86,14 +86,21 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  color: dimgray;
   gap: 8px;
 }
 
 .explanationText b {
   color: darkorange;
+  white-space: nowrap;
+}
+
+.explanationText u {
+  text-decoration-color: darkorange;
 }
 
 .codeText {
+  color: black;
   background-color: lightgray;
   padding: 0 4px;
   border-radius: 4px;
@@ -105,9 +112,30 @@
   .menuContainer {
     width: 100%;
     padding: 0.5rem;
+    font-size: medium;
+  }
+
+  .container {
+    justify-content: space-evenly;
   }
 
   .paddingText {
-    height: 120px;
+    display: none;
+    /* height: 0px; */
+  }
+
+  .explanationText {
+    font-size: small;
+    line-height: 1.3;
+    gap: 4px;
+  }
+
+  .explanationText > div {
+    width: 100%;
+    padding: 0 8px;
+  }
+
+  .codeText {
+    font-size: medium;
   }
 }

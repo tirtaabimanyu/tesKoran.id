@@ -1,6 +1,7 @@
 import styles from "./startScreen.module.css";
 import cn from "classnames";
 import { ACTIONS, MODE, TYPE } from "../utils/constants.js";
+import { useWindowWideMin } from "../utils/customHooks.js";
 
 export default function StartScreen({
   gameMode,
@@ -8,6 +9,32 @@ export default function StartScreen({
   gameType,
   dispatch,
 }) {
+  function getBackKey() {
+    if (useWindowWideMin(600))
+      return <span className={styles.codeText}>{"<"}</span>;
+    return (
+      <>
+        <span className={styles.codeText}>Backspace</span> /
+        <span className={styles.codeText}>
+          {gameType == TYPE.PAULI ? "ArrowUp" : "ArrowDown"}
+        </span>
+      </>
+    );
+  }
+
+  function getForwardKey() {
+    if (useWindowWideMin(600))
+      return <span className={styles.codeText}>{">"}</span>;
+    return (
+      <>
+        <span className={styles.codeText}>Enter</span> /
+        <span className={styles.codeText}>
+          {gameType == TYPE.PAULI ? "ArrowDown" : "ArrowUp"}
+        </span>
+      </>
+    );
+  }
+
   const isCustom =
     gameDuration != 30 &&
     gameDuration != 180 &&
@@ -139,20 +166,12 @@ export default function StartScreen({
       <div className={styles.explanationText}>
         <div>
           Add the numbers from{" "}
-          {gameType == TYPE.PAULI ? "top to bottom" : "bottom to top"} and only
-          type the <b>last digit</b> of the result.
+          {gameType == TYPE.PAULI ? <u>top to bottom</u> : <u>bottom to top</u>}{" "}
+          and only type the <b>last digit</b> of the result.
         </div>
         <div>
-          Press <span className={styles.codeText}>Backspace</span>/
-          <span className={styles.codeText}>
-            {gameType == TYPE.PAULI ? "ArrowUp" : "ArrowDown"}
-          </span>{" "}
-          to navigate backwards and{" "}
-          <span className={styles.codeText}>Enter</span>/
-          <span className={styles.codeText}>
-            {gameType == TYPE.PAULI ? "ArrowDown" : "ArrowUp"}
-          </span>{" "}
-          to navigate forwards.
+          Press {getBackKey()} to navigate backwards and {getForwardKey()} to
+          navigate forwards.
         </div>
         <div>Just overwrite your answer if you made a mistake.</div>
       </div>

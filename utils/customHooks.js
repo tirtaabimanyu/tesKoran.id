@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -25,3 +25,23 @@ export function useCurrent(state) {
   }, [state]);
   return ref;
 }
+
+export const useWindowWideMin = (size) => {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [setWidth]);
+
+  return width <= size;
+};
