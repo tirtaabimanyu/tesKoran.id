@@ -3,10 +3,13 @@ import { useState } from "react";
 import "../styles/globals.css";
 import Layout from "../components/layout.js";
 import { SwitchTransition, CSSTransition } from "react-transition-group";
+import useFoucFix from "../utils/useFoucFix";
 
 function MyApp({ Component, pageProps, router }) {
   const [hideLayout, setHideLayout] = useState(false);
   const titleClickHandler = { click: () => {} };
+
+  useFoucFix();
 
   return (
     <Layout {...{ hide: hideLayout, titleClickHandler }}>
