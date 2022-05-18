@@ -1,0 +1,93 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 250px;
+}
+
+.formContainer button,
+.formContainer input {
+  height: 2rem;
+  outline: none;
+  border: none;
+  background-color: lightgray;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.formContainer input::placeholder {
+  color: dimgray;
+}
+
+.formContainer button {
+  font-weight: bold;
+  cursor: pointer;
+  transition: 100ms;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer button:hover {
+  background-color: grey;
+}
+
+.formContainer button:active {
+  background-color: lightgray;
+}
+
+.checkBox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+
+.centered {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.subHeaderText {
+  font-size: small;
+  color: dimgray;
+}
+
+.separator {
+  display: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .formContainer {
+    width: 100%;
+  }
+
+  .separator {
+    display: flex;
+    height: 1px;
+    width: 100%;
+    background-color: gray;
+    margin: 16px 0;
+  }
+}
