@@ -173,7 +173,7 @@ export default function ResultScreen({
       <div className={styles.statsContainer}>
         <div className={styles.statsItem}>
           <div>APM</div>
-          <div className={styles.statsValue}>{toFixed(apm, dec)}</div>
+          <div className={styles.statsValue}>{toFixed(apm)}</div>
         </div>
         <div className={styles.statsItem}>
           <div>Statistics</div>
@@ -188,9 +188,7 @@ export default function ResultScreen({
         </div>
         <div className={styles.statsItem}>
           <div>Accuracy</div>
-          <div className={styles.statsValue}>
-            {toFixed(accuracy, dec) + "%"}
-          </div>
+          <div className={styles.statsValue}>{toFixed(accuracy) + "%"}</div>
         </div>
         <div className={styles.statsItem}>
           <div>Test Type</div>
