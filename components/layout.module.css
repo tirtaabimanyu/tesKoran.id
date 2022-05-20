@@ -10,7 +10,7 @@
   /* min-height: 100vh; */
   min-height: 100%;
   min-width: 1000px;
-  padding: 0.5rem 0;
+  /* padding: 0.5rem 0; */
   /* flex: 1; */
   display: flex;
   flex-direction: column;
@@ -127,6 +127,6 @@
 
   .main {
     padding: 0;
-    min-width: 360px;
+    min-width: 100%;
   }
 }

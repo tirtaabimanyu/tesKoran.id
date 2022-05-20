@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   transition: opacity 0.1s;
+  padding: 0.5rem 0;
 }
 
 .links {
@@ -39,8 +40,10 @@
 }
 
 .title {
+  position: relative;
+  left: -2px;
   margin: 0;
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -56,7 +59,7 @@
   justify-content: space-between;
   align-items: center;
   transition: 0.2s;
-  padding: 10px;
+  padding: 0.5rem;
 }
 
 .expandable .icon {
@@ -65,7 +68,7 @@
   color: dimgray;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
+  user-select: none;
 }
 
 .expandable .icon:hover {
@@ -81,10 +84,10 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
   transition: 0.25s;
   position: relative;
-  padding: 10px;
+  padding: 0.5rem;
   color: dimgray;
   cursor: pointer;
 }
@@ -119,9 +122,13 @@
   color: dimgray;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 601px) {
   .loginButton .text {
     display: block;
+  }
+
+  .loginButton {
+    padding-right: 0;
   }
 
   /* .loginButton::after {
@@ -160,20 +167,24 @@
     color: dimgray;
   }
 
+  .title {
+    padding-left: 0;
+  }
+
   .title::after {
     position: absolute;
     content: " ";
     min-width: 0px;
     min-height: 5px;
     transition: min-width 0.25s;
-    bottom: 0.5rem;
+    bottom: 0rem;
     background-color: darkorange;
     border-radius: 25px;
     margin-left: 2px;
   }
 
   .title:hover::after {
-    min-width: calc(100% - 1rem - 2px);
+    min-width: calc(100% - 0.5rem - 2px);
   }
 
   .container {

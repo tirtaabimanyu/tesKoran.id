@@ -6,7 +6,7 @@
   align-items: center;
   transition: opacity 0.1s;
   gap: 8px;
-  padding-bottom: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .group {
