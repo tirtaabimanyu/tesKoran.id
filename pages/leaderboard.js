@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import cn from "classnames";
 import styles from "../styles/Leaderboard.module.css";
 import { FaCrown, FaUserAlt } from "react-icons/fa";
@@ -59,6 +59,7 @@ export default function Leaderboard() {
         <div className={styles.durationFilter}>
           {durations.map((e) => (
             <div
+              key={"filter-" + e}
               className={cn({ [styles.active]: activeTable == e })}
               onClick={() => setActiveTable(e)}
             >
@@ -70,6 +71,7 @@ export default function Leaderboard() {
       <div className={styles.content}>
         {Object.entries(data).map(([duration, leaderboardData]) => (
           <div
+            key={"leaderboard" + duration}
             className={cn([styles.leaderboardContainer], {
               [styles.hide]: isMobile && activeTable != duration,
             })}
@@ -101,9 +103,9 @@ export default function Leaderboard() {
             <div className={styles.leaderboardContent}>
               <table>
                 {leaderboardData[rankMode[duration]].map((e, idx) => (
-                  <>
+                  <React.Fragment key={duration + "-" + idx}>
                     <tr>
-                      <td colspan="3">
+                      <td colSpan="3">
                         <div>
                           <hr />
                         </div>
@@ -122,7 +124,7 @@ export default function Leaderboard() {
                         {e.accuracy}%
                       </td>
                     </tr>
-                  </>
+                  </React.Fragment>
                 ))}
               </table>
             </div>
