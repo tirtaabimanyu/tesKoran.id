@@ -1,0 +1,156 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.title {
+  font-size: xx-large;
+  font-weight: bold;
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
+}
+
+.durationFilter {
+  display: none;
+  font-size: medium;
+  font-weight: 400;
+  gap: 0.25rem;
+}
+
+.durationFilter div {
+  font-size: small;
+  cursor: pointer;
+  background-color: lightgray;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.durationFilter div.active {
+  background-color: gray;
+  color: white;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.leaderboardContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 0;
+  background-color: lightgray;
+  border-radius: 0.5rem;
+  height: 100%;
+}
+
+.leaderboardContent {
+  overflow-y: auto;
+}
+
+.leaderboardContent table {
+  width: 100%;
+}
+
+.leaderboardContent table td {
+  padding: 0.25rem;
+  font-size: small;
+}
+
+.leaderboardContent table td:only-child {
+  padding: 0;
+}
+
+/* Width */
+.leaderboardContent::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 0.25rem;
+}
+
+/* Track */
+.leaderboardContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.leaderboardContent::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 0.5rem;
+}
+
+/* Handle on hover */
+.leaderboardContent::-webkit-scrollbar-thumb:hover {
+  background: dimgray;
+}
+
+.leaderboardHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  padding-bottom: 0;
+}
+
+.leaderboardHeader h2 {
+  margin: 0;
+}
+
+.modeButtonContainer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  color: gray;
+}
+
+.modeButtonContainer * {
+  cursor: pointer;
+}
+
+.centered {
+  text-align: center;
+}
+
+.dateText {
+  font-size: smaller;
+  color: dimgray;
+}
+
+.hide {
+  display: none;
+}
+
+.activeMode {
+  color: black;
+}
+
+@media only screen and (max-width: 600px) {
+  .title {
+    font-size: x-large;
+    padding: 0 0.5rem;
+  }
+
+  .leaderboardContainer {
+    background-color: transparent;
+  }
+
+  .leaderboardContent table td {
+    font-size: medium;
+  }
+
+  .dateText {
+    font-size: small;
+  }
+
+  .durationFilter {
+    display: flex;
+  }
+}

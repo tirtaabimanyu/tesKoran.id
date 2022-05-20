@@ -4,29 +4,7 @@ import { Line } from "react-chartjs-2";
 import { FaRedo } from "react-icons/fa";
 import styles from "./resultScreen.module.css";
 import { ACTIONS } from "../utils/constants.js";
-
-function parseDuration(second) {
-  const hour = Math.floor(second / 3600);
-  second = second % 3600;
-  const minute = Math.floor(second / 60);
-  second = second % 60;
-
-  let str = "";
-  if (hour) str += hour + "h";
-  if (minute) str += minute + "m";
-  if (second) str += second + "s";
-
-  return str;
-}
-
-function capitalize(str) {
-  return str[0].toUpperCase() + str.slice(1);
-}
-
-function formatNumber(num) {
-  if (Number.isInteger(num)) return num;
-  return num.toFixed(2);
-}
+import { toFixed, parseSecond, capitalize } from "../utils/formattings.js";
 
 export default function ResultScreen({
   numbers,
@@ -195,7 +173,7 @@ export default function ResultScreen({
       <div className={styles.statsContainer}>
         <div className={styles.statsItem}>
           <div>APM</div>
-          <div className={styles.statsValue}>{formatNumber(apm)}</div>
+          <div className={styles.statsValue}>{toFixed(apm, dec)}</div>
         </div>
         <div className={styles.statsItem}>
           <div>Statistics</div>
@@ -211,7 +189,7 @@ export default function ResultScreen({
         <div className={styles.statsItem}>
           <div>Accuracy</div>
           <div className={styles.statsValue}>
-            {formatNumber(accuracy) + "%"}
+            {toFixed(accuracy, dec) + "%"}
           </div>
         </div>
         <div className={styles.statsItem}>
@@ -220,7 +198,7 @@ export default function ResultScreen({
             <div>
               {capitalize(gameType) + ", " + capitalize(gameMode) + ", "}
             </div>
-            <div>{parseDuration(gameDuration)}</div>
+            <div>{parseSecond(gameDuration)}</div>
           </div>
         </div>
         <div

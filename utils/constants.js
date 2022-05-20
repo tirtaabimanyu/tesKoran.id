@@ -47,3 +47,8 @@ export const allowedKeys = new Set([
   "ArrowDown",
   "Escape",
 ]);
+
+export const RANKMODE = {
+  TOP: "top",
+  PERSONAL: "personal",
+};
