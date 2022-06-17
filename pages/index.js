@@ -260,8 +260,8 @@ export default function Home({ setHideLayout, titleClickHandler }) {
 
   const renderResultScreen = () => {
     const resultScreenProps = {
-      numbers: state.numbers.slice(0, state.maxActive),
-      answers: state.answers.slice(0, state.maxActive - 1),
+      numbers: state.numbers.slice(0, state.maxActive + 1),
+      answers: state.answers.slice(0, state.maxActive),
       gameDuration: state.gameDuration,
       gameType: state.gameType,
       gameMode: state.gameMode,

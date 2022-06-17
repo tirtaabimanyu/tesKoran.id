@@ -1,10 +1,36 @@
 import cn from "classnames";
-import Chart from "chart.js/auto";
-import { Line } from "react-chartjs-2";
 import { FaRedo } from "react-icons/fa";
 import styles from "./resultScreen.module.css";
 import { ACTIONS } from "../utils/constants.js";
 import { toFixed, parseSecond, capitalize } from "../utils/formattings.js";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarController,
+  LineController,
+} from "chart.js";
+import { Chart } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarController,
+  LineController
+);
 
 export default function ResultScreen({
   numbers,
@@ -44,9 +70,10 @@ export default function ResultScreen({
   let maxScale = 0;
   answers.forEach((e, idx) => {
     const isCorrectAnswer = e.value == (numbers[idx] + numbers[idx + 1]) % 10;
-    const inputSecond = Math.floor(e.time[e.time.length - 1] / divisor);
+    let inputSecond = Math.floor(e.time[e.time.length - 1] / divisor);
 
-    if (inputSecond >= correctChartData.length) return;
+    if (inputSecond > correctChartData.length) return;
+    if (inputSecond == correctChartData.length) inputSecond -= 1;
 
     if (isCorrectAnswer) {
       correctChartData[inputSecond] += 1;
@@ -169,7 +196,7 @@ export default function ResultScreen({
 
   return (
     <div className={styles.resultContainer}>
-      <Line options={options} data={data} />
+      <Chart type={"line"} options={options} data={data} />
       <div className={styles.statsContainer}>
         <div className={styles.statsItem}>
           <div>APM</div>
