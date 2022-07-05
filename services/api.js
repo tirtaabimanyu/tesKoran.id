@@ -1,8 +1,11 @@
 import axios from "axios";
 import TokenService from "./token.service";
 
+let api_url = "http://localhost:8000/";
+if (process.env.NODE_ENV == "production") api_url = "https://api.teskoran.id/";
+
 const instance = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: api_url,
   headers: {
     "Content-Type": "application/json",
   },
