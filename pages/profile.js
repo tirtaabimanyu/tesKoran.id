@@ -83,7 +83,7 @@ export default function Profile() {
     return (
       <div>
         <h3>Please choose a username</h3>
-        <p>You can't change it later</p>
+        <p>You can&apos;t change it later</p>
         <form
           className={styles.formContainer}
           onSubmit={handleSubmit(onSubmit)}
