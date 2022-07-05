@@ -33,7 +33,9 @@ const getCurrentUser = () => {
 };
 
 const getSocialAuthUrl = () => {
-  const redirect_uri = "http://localhost:3000/login";
+  let redirect_uri = "http://localhost:3000/login";
+  if (process.env.NODE_ENV == "production")
+    redirect_uri = "https://teskoran.id/login";
   return api.get(`auth/o/google-oauth2?redirect_uri=${redirect_uri}`, {
     withCredentials: true,
   });
