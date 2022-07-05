@@ -1,0 +1,30 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formContainer button {
+  height: 2rem;
+  outline: none;
+  border: none;
+  background-color: lightgray;
+  border-radius: 8px;
+  padding: 8px;
+  transition: 100ms;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.formContainer button:disabled {
+  cursor: default;
+}
+
+.formContainer button:hover:not(:disabled) {
+  background-color: grey;
+}
+
+.formContainer button:active {
+  background-color: lightgray;
+}

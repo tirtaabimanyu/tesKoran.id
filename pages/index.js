@@ -132,10 +132,8 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   );
 
   useEffect(() => {
-    console.log("init");
     window.addEventListener("keydown", (e) => keyDown(e));
     return () => {
-      console.log("clean");
       window.removeEventListener("keydown", (e) => keyDown(e));
     };
   }, []);

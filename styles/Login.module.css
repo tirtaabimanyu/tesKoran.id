@@ -35,7 +35,11 @@
   align-items: center;
 }
 
-.formContainer button:hover {
+.formContainer button:disabled {
+  cursor: default;
+}
+
+.formContainer button:hover:not(:disabled) {
   background-color: grey;
 }
 
@@ -66,6 +70,7 @@
 .subHeaderText {
   font-size: small;
   color: dimgray;
+  cursor: pointer;
 }
 
 .separator {

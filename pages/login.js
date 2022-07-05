@@ -1,20 +1,229 @@
-import styles from "../styles/Login.module.css";
+import { useEffect, useState, useRef } from "react";
 import { FaUserPlus, FaSignInAlt, FaGoogle } from "react-icons/fa";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 
-export default function Login() {
+import styles from "../styles/Login.module.css";
+import UserService from "../services/user.service";
+import AuthService from "../services/auth.service";
+import TokenService from "../services/token.service";
+import Spinner from "../components/spinner";
+import InputWithStatus from "../components/inputWithStatus";
+
+const checkUsername = async (username) => {
+  try {
+    await UserService.checkUsername(username);
+  } catch (_error) {
+    return _error.response.data.username[0];
+  }
+  return true;
+};
+
+const validateEmailPattern = (email) => {
+  const pattern =
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  return pattern.test(email) || "Invalid email";
+};
+
+const handleForgotPassword = (e) => {
+  e.preventDefault();
+  const email = prompt("Enter email address");
+  if (!email) return;
+  AuthService.resetPassword(email)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export async function getServerSideProps(context) {
+  console.log("context", context);
+  const { code, state } = context.query;
+  if (code && state) {
+    return {
+      props: {
+        code,
+        state,
+        initLoading: true,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
+
+const useConstructor = (callBack = () => {}) => {
+  const hasBeenCalled = useRef(false);
+  if (hasBeenCalled.current) return;
+  callBack();
+  hasBeenCalled.current = true;
+};
+
+export default function Login({ code, state, initLoading }) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(initLoading);
+
+  useConstructor(() => {
+    const { user } = TokenService.getUser();
+    if (user) router.push("/profile");
+  }, []);
+
+  useEffect(() => {
+    if (code && state) {
+      AuthService.socialLogin(code, state)
+        .then((response) => {
+          setLoading(false);
+          TokenService.setUser(response);
+          router.push("/profile");
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.log(error);
+        });
+    }
+  }, [code, state]);
+
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    formState: { errors, isValid, dirtyFields },
+    getValues,
+  } = useForm();
+
+  const {
+    register: registerLogin,
+    handleSubmit: handleSubmitLogin,
+    trigger: triggerLogin,
+    formState: {
+      errors: errorsLogin,
+      isValid: isValidLogin,
+      dirtyFields: dirtyFieldsLogin,
+    },
+  } = useForm();
+
+  const onSubmitSignup = (data) => {
+    const { username, email, password, re_password } = data;
+    AuthService.signup(username, email, password, re_password)
+      .then((response) => {
+        console.log(response);
+        return AuthService.login(email, password);
+      })
+      .then((response) => {
+        console.log(response);
+        TokenService.setUser(response);
+        router.push("profile/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const onSubmitLogin = (data) => {
+    const { email, password } = data;
+    AuthService.login(email, password)
+      .then((response) => {
+        console.log(response);
+        TokenService.setUser(response);
+        router.push("profile/");
+      })
+      .catch((err) => {
+        console.log("error", err.response.data);
+      });
+  };
+
+  const socialLogin = () => {
+    AuthService.getSocialAuthUrl()
+      .then((response) => {
+        const { authorization_url } = response.data;
+        router.push(authorization_url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  console.log("isvalid", isValid);
+  console.log("errors", errors, errorsLogin);
+  console.log("dirty", dirtyFields);
+
   return (
     <div className={styles.container}>
+      <Spinner loading={loading} />
       <form
         className={styles.formContainer}
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit(onSubmitSignup)}
       >
         <div className={styles.headerText}>Sign Up</div>
-        <input placeholder="username"></input>
-        <input placeholder="email"></input>
-        <input placeholder="verify email"></input>
-        <input type="password" placeholder="password"></input>
-        <input type="password" placeholder="verify password"></input>
-        <button>
+        <InputWithStatus
+          placeholder="username"
+          fieldName="username"
+          debounceWait={500}
+          trigger={trigger}
+          register={register}
+          errors={errors["username"]}
+          isDirty={dirtyFields["username"]}
+          options={{ required: true, validate: checkUsername }}
+        />
+        <InputWithStatus
+          placeholder="email"
+          fieldName="email"
+          debounceWait={500}
+          trigger={trigger}
+          register={register}
+          errors={errors["email"]}
+          isDirty={dirtyFields["email"]}
+          options={{ required: true, validate: validateEmailPattern }}
+        />
+        <InputWithStatus
+          placeholder="verify email"
+          fieldName="re_email"
+          debounceWait={500}
+          trigger={trigger}
+          register={register}
+          errors={errors["re_email"]}
+          isDirty={dirtyFields["re_email"]}
+          options={{
+            required: true,
+            validate: (value) =>
+              value == getValues("email") || "Email does not match",
+          }}
+        />
+        <InputWithStatus
+          type="password"
+          placeholder="password"
+          fieldName="password"
+          debounceWait={500}
+          trigger={trigger}
+          register={register}
+          errors={errors["password"]}
+          isDirty={dirtyFields["password"]}
+          options={{
+            required: true,
+            validate: (value) =>
+              value.length >= 8 || "Password must be at least 8 character",
+          }}
+        />
+        <InputWithStatus
+          type="password"
+          placeholder="verify password"
+          fieldName="re_password"
+          debounceWait={500}
+          trigger={trigger}
+          register={register}
+          errors={errors["re_password"]}
+          isDirty={dirtyFields["re_password"]}
+          options={{
+            required: true,
+            validate: (value) =>
+              value == getValues("password") || "Password does not match",
+          }}
+        />
+        <button type="submit" disabled={!isValid}>
           <FaUserPlus size={20} />
           Sign Up
         </button>
@@ -22,24 +231,41 @@ export default function Login() {
       <div className={styles.separator} />
       <form
         className={styles.formContainer}
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmitLogin(onSubmitLogin)}
       >
         <div className={styles.loginHeader}>
           <div className={styles.headerText}>Log In</div>
-          <div className={styles.subHeaderText}>Forgot password?</div>
+          <div className={styles.subHeaderText} onClick={handleForgotPassword}>
+            Forgot password?
+          </div>
         </div>
-        <input placeholder="email"></input>
-        <input type="password" placeholder="password"></input>
-        <label className={styles.checkBox}>
-          <input type="checkbox" className={styles.checkBoxCheck} />
-          <div className={styles.checkBoxText}>Remember Me</div>
-        </label>
-        <button>
+        <InputWithStatus
+          placeholder="email"
+          fieldName="email"
+          debounceWait={500}
+          trigger={triggerLogin}
+          register={registerLogin}
+          errors={errorsLogin["email"]}
+          isDirty={dirtyFieldsLogin["email"]}
+          options={{ required: true, validate: validateEmailPattern }}
+        />
+        <InputWithStatus
+          type="password"
+          placeholder="password"
+          fieldName="password"
+          debounceWait={500}
+          trigger={triggerLogin}
+          register={registerLogin}
+          errors={errorsLogin["password"]}
+          isDirty={dirtyFieldsLogin["password"]}
+          options={{ required: true }}
+        />
+        <button type="submit">
           <FaSignInAlt size={20} />
           Sign In
         </button>
         <div className={styles.centered}>or</div>
-        <button>
+        <button onClick={() => socialLogin()}>
           <FaGoogle size={20} />
           Google Sign In
         </button>

@@ -1,11 +1,10 @@
-import { useState } from "react";
-// import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import "../styles/globals.css";
 import Layout from "../components/layout.js";
 import { SwitchTransition, CSSTransition } from "react-transition-group";
 import useFoucFix from "../utils/useFoucFix";
 
-function MyApp({ Component, pageProps, router }) {
+function Numberplus({ Component, pageProps, router }) {
   const [hideLayout, setHideLayout] = useState(false);
   const titleClickHandler = { click: () => {} };
 
@@ -26,4 +25,4 @@ function MyApp({ Component, pageProps, router }) {
   );
 }
 
-export default MyApp;
+export default Numberplus;

@@ -8,9 +8,12 @@ import {
   FaInfoCircle,
   FaUserAlt,
 } from "react-icons/fa";
+import TokenService from "../services/token.service";
+import NavbarLoginButton from "./navbarLoginButton";
 
 export default function Navbar({ hide, titleClickHandler }) {
   const router = useRouter();
+  const { user } = TokenService.getUser();
 
   return (
     <div className={cn([styles.container])}>
@@ -44,12 +47,11 @@ export default function Navbar({ hide, titleClickHandler }) {
         </div>
 
         <div className={styles.group}>
-          <Link href="/login">
-            <div className={cn([styles.loginButton], { [styles.hide]: hide })}>
-              <h4 className={cn([styles.text])}>Log In</h4>
-              <FaUserAlt className={styles.icon} size="24px" />
-            </div>
-          </Link>
+          <NavbarLoginButton
+            hide={hide}
+            user={user}
+            pathname={router.pathname}
+          />
         </div>
       </div>
     </div>
