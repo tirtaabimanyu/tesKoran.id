@@ -154,125 +154,131 @@ export default function Login({ code, state, initLoading }) {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <ToastContainer />
-      <Spinner loading={loading} />
-      <form
-        className={styles.formContainer}
-        onSubmit={handleSubmit(onSubmitSignup)}
-      >
-        <div className={styles.headerText}>Sign Up</div>
-        <InputWithStatus
-          placeholder="username"
-          fieldName="username"
-          debounceWait={500}
-          trigger={trigger}
-          register={register}
-          errors={errors["username"]}
-          isDirty={dirtyFields["username"]}
-          options={{ required: true, validate: checkUsername }}
-        />
-        <InputWithStatus
-          placeholder="email"
-          fieldName="email"
-          debounceWait={500}
-          trigger={trigger}
-          register={register}
-          errors={errors["email"]}
-          isDirty={dirtyFields["email"]}
-          options={{ required: true, validate: validateEmailPattern }}
-        />
-        <InputWithStatus
-          placeholder="verify email"
-          fieldName="re_email"
-          debounceWait={500}
-          trigger={trigger}
-          register={register}
-          errors={errors["re_email"]}
-          isDirty={dirtyFields["re_email"]}
-          options={{
-            required: true,
-            validate: (value) =>
-              value == getValues("email") || "Email does not match",
-          }}
-        />
-        <InputWithStatus
-          type="password"
-          placeholder="password"
-          fieldName="password"
-          debounceWait={500}
-          trigger={trigger}
-          register={register}
-          errors={errors["password"]}
-          isDirty={dirtyFields["password"]}
-          options={{
-            required: true,
-            validate: (value) =>
-              value.length >= 8 || "Password must be at least 8 character",
-          }}
-        />
-        <InputWithStatus
-          type="password"
-          placeholder="verify password"
-          fieldName="re_password"
-          debounceWait={500}
-          trigger={trigger}
-          register={register}
-          errors={errors["re_password"]}
-          isDirty={dirtyFields["re_password"]}
-          options={{
-            required: true,
-            validate: (value) =>
-              value == getValues("password") || "Password does not match",
-          }}
-        />
-        <button type="submit" disabled={!isValid}>
-          <FaUserPlus size={20} />
-          Sign Up
-        </button>
-      </form>
-      <div className={styles.separator} />
-      <form
-        className={styles.formContainer}
-        onSubmit={handleSubmitLogin(onSubmitLogin)}
-      >
-        <div className={styles.loginHeader}>
-          <div className={styles.headerText}>Log In</div>
-          <div className={styles.subHeaderText} onClick={handleForgotPassword}>
-            Forgot password?
+      <div className={styles.container}>
+        <Spinner loading={loading} />
+        <form
+          className={styles.formContainer}
+          onSubmit={handleSubmit(onSubmitSignup)}
+        >
+          <div className={styles.headerText}>Sign Up</div>
+          <InputWithStatus
+            placeholder="username"
+            fieldName="username"
+            debounceWait={500}
+            trigger={trigger}
+            register={register}
+            errors={errors["username"]}
+            isDirty={dirtyFields["username"]}
+            options={{ required: true, validate: checkUsername }}
+          />
+          <InputWithStatus
+            placeholder="email"
+            fieldName="email"
+            debounceWait={500}
+            trigger={trigger}
+            register={register}
+            errors={errors["email"]}
+            isDirty={dirtyFields["email"]}
+            options={{ required: true, validate: validateEmailPattern }}
+          />
+          <InputWithStatus
+            placeholder="verify email"
+            fieldName="re_email"
+            debounceWait={500}
+            trigger={trigger}
+            register={register}
+            errors={errors["re_email"]}
+            isDirty={dirtyFields["re_email"]}
+            options={{
+              required: true,
+              validate: (value) =>
+                value == getValues("email") || "Email does not match",
+            }}
+          />
+          <InputWithStatus
+            type="password"
+            placeholder="password"
+            fieldName="password"
+            debounceWait={500}
+            trigger={trigger}
+            register={register}
+            errors={errors["password"]}
+            isDirty={dirtyFields["password"]}
+            options={{
+              required: true,
+              validate: (value) =>
+                value.length >= 8 || "Password must be at least 8 character",
+            }}
+          />
+          <InputWithStatus
+            type="password"
+            placeholder="verify password"
+            fieldName="re_password"
+            debounceWait={500}
+            trigger={trigger}
+            register={register}
+            errors={errors["re_password"]}
+            isDirty={dirtyFields["re_password"]}
+            options={{
+              required: true,
+              validate: (value) =>
+                value == getValues("password") || "Password does not match",
+            }}
+          />
+          <button type="submit" disabled={!isValid}>
+            <FaUserPlus size={20} />
+            Sign Up
+          </button>
+        </form>
+        <div className={styles.separator} />
+        <form
+          className={styles.formContainer}
+          onSubmit={handleSubmitLogin(onSubmitLogin)}
+        >
+          <div className={styles.loginHeader}>
+            <div className={styles.headerText}>Log In</div>
+            <div
+              className={styles.subHeaderText}
+              onClick={handleForgotPassword}
+            >
+              Forgot password?
+            </div>
           </div>
-        </div>
-        <InputWithStatus
-          placeholder="email"
-          fieldName="email"
-          debounceWait={500}
-          trigger={triggerLogin}
-          register={registerLogin}
-          errors={errorsLogin["email"]}
-          isDirty={dirtyFieldsLogin["email"]}
-          options={{ required: true, validate: validateEmailPattern }}
-        />
-        <InputWithStatus
-          type="password"
-          placeholder="password"
-          fieldName="password"
-          debounceWait={500}
-          trigger={triggerLogin}
-          register={registerLogin}
-          errors={errorsLogin["password"]}
-          isDirty={dirtyFieldsLogin["password"]}
-          options={{ required: true }}
-        />
-        <button type="submit">
-          <FaSignInAlt size={20} />
-          Sign In
-        </button>
-        <div className={styles.centered}>or</div>
-        <button onClick={socialLogin}>
-          <FaGoogle size={20} />
-          Google Sign In
-        </button>
-      </form>
-    </div>
+          <InputWithStatus
+            placeholder="email"
+            fieldName="email"
+            debounceWait={500}
+            trigger={triggerLogin}
+            register={registerLogin}
+            errors={errorsLogin["email"]}
+            isDirty={dirtyFieldsLogin["email"]}
+            options={{ required: true, validate: validateEmailPattern }}
+          />
+          <InputWithStatus
+            type="password"
+            placeholder="password"
+            fieldName="password"
+            debounceWait={500}
+            trigger={triggerLogin}
+            register={registerLogin}
+            errors={errorsLogin["password"]}
+            isDirty={dirtyFieldsLogin["password"]}
+            options={{ required: true }}
+          />
+          <button type="submit">
+            <FaSignInAlt size={20} />
+            Sign In
+          </button>
+          <div className={styles.centered}>or</div>
+          <button onClick={socialLogin}>
+            <FaGoogle size={20} />
+            Google Sign In
+          </button>
+        </form>
+      </div>
+      <div />
+    </>
   );
 }

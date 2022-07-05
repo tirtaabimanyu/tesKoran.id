@@ -14,7 +14,7 @@ export default function StartScreen({
       return <span className={styles.codeText}>{"<"}</span>;
     return (
       <>
-        <span className={styles.codeText}>Backspace</span> /
+        <span className={styles.codeText}>Backspace</span>/
         <span className={styles.codeText}>
           {gameType == TYPE.PAULI ? "ArrowUp" : "ArrowDown"}
         </span>
@@ -27,7 +27,7 @@ export default function StartScreen({
       return <span className={styles.codeText}>{">"}</span>;
     return (
       <>
-        <span className={styles.codeText}>Enter</span> /
+        <span className={styles.codeText}>Enter</span>/
         <span className={styles.codeText}>
           {gameType == TYPE.PAULI ? "ArrowDown" : "ArrowUp"}
         </span>
