@@ -28,3 +28,8 @@
 .formContainer button:active {
   background-color: lightgray;
 }
+
+.resendActivation {
+  cursor: pointer;
+  color: darkorange;
+}

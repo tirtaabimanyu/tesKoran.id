@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import AuthService from "../services/auth.service";
 import TokenService from "../services/token.service";
 import UserService from "../services/user.service";
 import Spinner from "../components/spinner";
@@ -17,6 +18,18 @@ const checkUsername = async (username) => {
     return _error.response.data.username[0];
   }
   return true;
+};
+
+const resendActivation = (email) => {
+  AuthService.resendActivation(email)
+    .then((response) => {
+      console.log(response);
+      toast.success("Activation email has been sent", { theme: "colored" });
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.error("Error while sending activation email", { theme: "colored" });
+    });
 };
 
 export default function Profile() {
@@ -102,7 +115,17 @@ export default function Profile() {
         <ToastContainer />
         <p>Email: {data.email}</p>
         <p>Username: {data.username}</p>
-        <p>is_active: {data.is_active.toString()}</p>
+        <p>
+          is_active: {data.is_active.toString()}{" "}
+          {!data.is_active && (
+            <span
+              className={styles.resendActivation}
+              onClick={() => resendActivation(data.email)}
+            >
+              resend activation email
+            </span>
+          )}
+        </p>
         <p>can_change_username: {data.can_change_username.toString()}</p>
       </div>
     );
