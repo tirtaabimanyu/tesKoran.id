@@ -1,8 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import TokenService from "../services/token.service";
 import UserService from "../services/user.service";
-import { useForm } from "react-hook-form";
 import Spinner from "../components/spinner";
 import InputWithStatus from "../components/inputWithStatus";
 import styles from "../styles/Profile.module.css";
@@ -34,7 +37,7 @@ export default function Profile() {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        toast.error("Server error", { theme: "colored" });
         setLoading(false);
       });
   };
@@ -52,9 +55,13 @@ export default function Profile() {
     UserService.setUsername(username)
       .then(() => {
         setLoading(false);
+        toast.success("Username has been set successfully", {
+          theme: "colored",
+        });
         fetchProfile();
       })
       .catch((error) => {
+        toast.error(error.response.data[0], { theme: "colored" });
         setLoading(false);
       });
   };
@@ -92,6 +99,7 @@ export default function Profile() {
   const renderProfile = () => {
     return (
       <div>
+        <ToastContainer />
         <p>Email: {data.email}</p>
         <p>Username: {data.username}</p>
         <p>is_active: {data.is_active.toString()}</p>

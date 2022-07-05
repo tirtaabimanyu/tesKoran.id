@@ -5,9 +5,9 @@ import AuthService from "../services/auth.service";
 import InputWithStatus from "../components/inputWithStatus";
 import Spinner from "../components/spinner";
 import styles from "../styles/PasswordReset.module.css";
+import { toast } from "react-toastify";
 
 export async function getServerSideProps(context) {
-  console.log("context", context);
   const { uid, token } = context.query;
   if (!uid || !token) {
     return {
@@ -41,17 +41,14 @@ export default function PasswordReset({ uid, token }) {
     AuthService.resetPasswordConfirm(uid, token, new_password, re_new_password)
       .then((response) => {
         setLoading(false);
-        console.log(response);
         setSuccess(true);
         setTimeout(() => router.push("/login"), 3000);
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error);
+        toast.error("Server error", { theme: "colored" });
       });
   };
-
-  console.log("errors", errors);
 
   const showInputScreen = () => (
     <div>

@@ -14,7 +14,6 @@ export default function InputWithStatus({
   errors,
   isDirty,
 }) {
-  console.log("errors", errors);
   return (
     <div className={styles.container}>
       <input

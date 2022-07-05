@@ -59,7 +59,6 @@ const refreshToken = () => {
       return setUser(response.data);
     })
     .catch((error) => {
-      console.log(error);
       return getUser();
     });
 };

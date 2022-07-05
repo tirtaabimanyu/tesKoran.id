@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import Spinner from "../components/spinner";
 import AuthService from "../services/auth.service";
 
@@ -28,7 +29,6 @@ export default function Activation({ uid, token }) {
     AuthService.activation(uid, token)
       .then((response) => {
         setLoading(false);
-        console.log(response);
         setSuccess(true);
         setTimeout(() => {
           router.push("/login");
@@ -36,7 +36,7 @@ export default function Activation({ uid, token }) {
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error);
+        toast.error("Server error", { theme: "colored" });
       });
   }, [uid, token]);
 

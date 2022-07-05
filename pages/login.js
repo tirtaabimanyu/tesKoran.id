@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { FaUserPlus, FaSignInAlt, FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../styles/Login.module.css";
 import UserService from "../services/user.service";
@@ -31,15 +33,14 @@ const handleForgotPassword = (e) => {
   if (!email) return;
   AuthService.resetPassword(email)
     .then((response) => {
-      console.log(response);
+      toast.success("Password reset email has been sent", { theme: "colored" });
     })
     .catch((error) => {
-      console.log(error);
+      toast.error(error.response.data["email"][0], { theme: "colored" });
     });
 };
 
 export async function getServerSideProps(context) {
-  console.log("context", context);
   const { code, state } = context.query;
   if (code && state) {
     return {
@@ -82,7 +83,9 @@ export default function Login({ code, state, initLoading }) {
         })
         .catch((error) => {
           setLoading(false);
-          console.log(error);
+          toast.error(error.response.data["non_field_errors"][0], {
+            theme: "colored",
+          });
         });
     }
   }, [code, state]);
@@ -110,16 +113,16 @@ export default function Login({ code, state, initLoading }) {
     const { username, email, password, re_password } = data;
     AuthService.signup(username, email, password, re_password)
       .then((response) => {
-        console.log(response);
         return AuthService.login(email, password);
       })
       .then((response) => {
-        console.log(response);
         TokenService.setUser(response);
         router.push("profile/");
       })
       .catch((error) => {
-        console.log(error);
+        Object.entries(error.response.data).forEach((items) => {
+          toast.error(`${items[0]}: ${items[1]}`, { theme: "colored" });
+        });
       });
   };
 
@@ -127,32 +130,32 @@ export default function Login({ code, state, initLoading }) {
     const { email, password } = data;
     AuthService.login(email, password)
       .then((response) => {
-        console.log(response);
         TokenService.setUser(response);
         router.push("profile/");
       })
-      .catch((err) => {
-        console.log("error", err.response.data);
+      .catch((error) => {
+        const msg = error.response.data
+          ? "Invalid credentials"
+          : "Service unavailable";
+        toast.error(msg, { theme: "colored" });
       });
   };
 
-  const socialLogin = () => {
+  const socialLogin = (e) => {
+    e.preventDefault();
     AuthService.getSocialAuthUrl()
       .then((response) => {
         const { authorization_url } = response.data;
         router.push(authorization_url);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        toast.error("Service unavailable", { theme: "colored" });
       });
   };
 
-  console.log("isvalid", isValid);
-  console.log("errors", errors, errorsLogin);
-  console.log("dirty", dirtyFields);
-
   return (
     <div className={styles.container}>
+      <ToastContainer />
       <Spinner loading={loading} />
       <form
         className={styles.formContainer}
@@ -265,7 +268,7 @@ export default function Login({ code, state, initLoading }) {
           Sign In
         </button>
         <div className={styles.centered}>or</div>
-        <button onClick={() => socialLogin()}>
+        <button onClick={socialLogin}>
           <FaGoogle size={20} />
           Google Sign In
         </button>
