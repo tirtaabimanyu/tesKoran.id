@@ -48,17 +48,17 @@
   width: 200px;
   bottom: 100%;
   left: 50%;
-  margin-left: -100px;
+  /* margin-left: -100px; */
   margin-bottom: 8px;
-  transition: 0.25s;
+  transition: opacity 0.25s;
 }
 
-.tooltipContainer .tooltip::after {
+.tooltipContainer .arrow {
   content: "";
   position: absolute;
   top: 100%;
-  left: 50%;
-  margin-left: -5px;
+  /* left: 50%; */
+  /* margin-left: -5px; */
   border-width: 5px;
   border-style: solid;
   border-color: rgb(0, 0, 0, 0.8) transparent transparent transparent;
