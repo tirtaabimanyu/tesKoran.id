@@ -108,6 +108,7 @@ export default function Login({ code, state, initLoading }) {
       dirtyFields: dirtyFieldsLogin,
     },
   } = useForm();
+  console.log("errorslogin", errorsLogin);
 
   const onSubmitSignup = (data) => {
     const { username, email, password, re_password } = data;
@@ -171,28 +172,35 @@ export default function Login({ code, state, initLoading }) {
             register={register}
             errors={errors["username"]}
             isDirty={dirtyFields["username"]}
-            options={{ required: true, validate: checkUsername }}
+            options={{
+              required: "Username is required",
+              validate: checkUsername,
+            }}
           />
           <InputWithStatus
             placeholder="email"
             fieldName="email"
-            debounceWait={500}
+            debounceWait={250}
             trigger={trigger}
             register={register}
             errors={errors["email"]}
             isDirty={dirtyFields["email"]}
-            options={{ required: true, validate: validateEmailPattern }}
+            options={{
+              required: "Email is required",
+              onChange: () => trigger("re_email"),
+              validate: validateEmailPattern,
+            }}
           />
           <InputWithStatus
             placeholder="verify email"
             fieldName="re_email"
-            debounceWait={500}
+            debounceWait={250}
             trigger={trigger}
             register={register}
             errors={errors["re_email"]}
             isDirty={dirtyFields["re_email"]}
             options={{
-              required: true,
+              required: "Please retype your email",
               validate: (value) =>
                 value == getValues("email") || "Email does not match",
             }}
@@ -201,13 +209,14 @@ export default function Login({ code, state, initLoading }) {
             type="password"
             placeholder="password"
             fieldName="password"
-            debounceWait={500}
+            debounceWait={250}
             trigger={trigger}
             register={register}
             errors={errors["password"]}
             isDirty={dirtyFields["password"]}
             options={{
-              required: true,
+              required: "Password is required",
+              onChange: () => trigger("re_password"),
               validate: (value) =>
                 value.length >= 8 || "Password must be at least 8 character",
             }}
@@ -216,13 +225,13 @@ export default function Login({ code, state, initLoading }) {
             type="password"
             placeholder="verify password"
             fieldName="re_password"
-            debounceWait={500}
+            debounceWait={250}
             trigger={trigger}
             register={register}
             errors={errors["re_password"]}
             isDirty={dirtyFields["re_password"]}
             options={{
-              required: true,
+              required: "Please retype your password",
               validate: (value) =>
                 value == getValues("password") || "Password does not match",
             }}
@@ -249,23 +258,30 @@ export default function Login({ code, state, initLoading }) {
           <InputWithStatus
             placeholder="email"
             fieldName="email"
-            debounceWait={500}
+            debounceWait={250}
             trigger={triggerLogin}
             register={registerLogin}
             errors={errorsLogin["email"]}
             isDirty={dirtyFieldsLogin["email"]}
-            options={{ required: true, validate: validateEmailPattern }}
+            options={{
+              required: "Email is required",
+              validate: validateEmailPattern,
+            }}
           />
           <InputWithStatus
             type="password"
             placeholder="password"
             fieldName="password"
-            debounceWait={500}
+            debounceWait={250}
             trigger={triggerLogin}
             register={registerLogin}
             errors={errorsLogin["password"]}
             isDirty={dirtyFieldsLogin["password"]}
-            options={{ required: true }}
+            options={{
+              required: "Password is required",
+              validate: (value) =>
+                value.length >= 8 || "Password must be at least 8 character",
+            }}
           />
           <button type="submit">
             <FaSignInAlt size={20} />

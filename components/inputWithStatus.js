@@ -29,14 +29,14 @@ export default function InputWithStatus({
         )}
       />
 
-      <div className={cn([styles.status], { [styles.hide]: !isDirty })}>
+      <div className={cn([styles.status])}>
         {errors ? (
           <div className={styles.tooltipContainer}>
             <span className={styles.tooltip}>{errors.message}</span>
             <FaTimes color={"red"} />
           </div>
         ) : (
-          <FaCheck color={"green"} />
+          isDirty && <FaCheck color={"green"} />
         )}
       </div>
     </div>

@@ -65,7 +65,8 @@ export default function PasswordReset({ uid, token }) {
           errors={errors["new_password"]}
           isDirty={dirtyFields["new_password"]}
           options={{
-            required: true,
+            required: "Password is required",
+            onChange: () => trigger("re_new_password"),
             validate: (value) =>
               value.length >= 8 || "Password must be at least 8 character",
           }}
@@ -80,7 +81,7 @@ export default function PasswordReset({ uid, token }) {
           errors={errors["re_new_password"]}
           isDirty={dirtyFields["re_new_password"]}
           options={{
-            required: true,
+            required: "Please retype your password",
             validate: (value) =>
               value == getValues("new_password") || "Password does not match",
           }}
