@@ -1,5 +1,6 @@
 import axios from "axios";
 import TokenService from "./token.service";
+import { toast } from "react-toastify";
 
 let api_url = "http://localhost:8000/";
 if (process.env.NODE_ENV == "production") api_url = "https://api.teskoran.id/";
@@ -36,16 +37,18 @@ instance.interceptors.response.use(
         originalConfig._retry = true;
         try {
           const refresh = TokenService.getLocalRefreshToken();
-          if (!TokenService.verifyTokenExpiry(refresh)) {
-            TokenService.removeUser();
-            throw "Refresh Token is expired";
-          }
-          const rs = await instance.post("auth/jwt/refresh/", {
-            refresh,
-          });
+          const rs = await instance.post(
+            "auth/jwt/refresh/",
+            {
+              refresh,
+            },
+            originalConfig
+          );
           TokenService.setUser(rs.data);
           return instance(originalConfig);
         } catch (_error) {
+          toast.error("Token expired", { theme: "colored" });
+          TokenService.removeUser();
           return Promise.reject(_error);
         }
       }

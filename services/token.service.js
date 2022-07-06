@@ -43,7 +43,7 @@ const removeUser = () => {
   localStorage.removeItem("user");
 };
 
-const verifyTokenExpiry = (token) => {
+const verifyTokenExpired = (token) => {
   const { exp } = jwt_decode(token);
   const now = Date.now();
   return exp * 1000 < now;
@@ -70,7 +70,7 @@ const TokenService = {
   getUser,
   setUser,
   removeUser,
-  verifyTokenExpiry,
+  verifyTokenExpired,
   refreshToken,
 };
 
