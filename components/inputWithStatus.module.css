@@ -64,7 +64,7 @@
   border-color: rgb(0, 0, 0, 0.8) transparent transparent transparent;
 }
 
-.tooltipContainer:hover .tooltip {
+/* .tooltipContainer:hover .tooltip {
   visibility: visible;
   opacity: 1;
-}
+} */
