@@ -16,7 +16,7 @@ const checkUsername = async (username) => {
   try {
     await UserService.checkUsername(username);
   } catch (_error) {
-    return _error.response.data.username[0];
+    return _error.response.data?.username[0];
   }
   return true;
 };

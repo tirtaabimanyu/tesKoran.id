@@ -5,17 +5,27 @@ import { registerFieldWithDebounceValidation } from "../utils/registerFieldWithD
 import { useRef, useEffect } from "react";
 
 const showTooltip = (tooltipRef, arrowRef) => {
-  tooltipRef.current.style.marginLeft = "0px";
+  const iconWidth = 16;
+  const screenPadding = 8;
+
+  const { width: tooltipWidth } = tooltipRef.current.getBoundingClientRect();
+  const { width: arrowWidth } = arrowRef.current.getBoundingClientRect();
+
+  const defaultLeft = -tooltipWidth / 2 + iconWidth / 2;
+  const defaultArrow = tooltipWidth / 2 - arrowWidth / 2;
+  tooltipRef.current.style.left = `${defaultLeft}px`;
+  arrowRef.current.style.left = `${defaultArrow}px`;
+
   const { x, width } = tooltipRef.current.getBoundingClientRect();
   const { innerWidth } = window;
-  const offset = innerWidth - (x + width) - 8;
-  if (x + width + 8 > innerWidth) {
-    tooltipRef.current.style.marginLeft = offset + "px";
-    arrowRef.current.style.left = -offset - 5 + "px";
-  } else {
-    tooltipRef.current.style.marginLeft = `-100px`;
-    arrowRef.current.style.left = `95px`;
+  const isOverflow = x + width + screenPadding > innerWidth;
+
+  if (isOverflow) {
+    const offset = x + width + screenPadding - innerWidth;
+    tooltipRef.current.style.left = `${defaultLeft - offset}px`;
+    arrowRef.current.style.left = `${defaultArrow + offset}px`;
   }
+
   tooltipRef.current.style.visibility = "visible";
   tooltipRef.current.style.opacity = "1";
 };
@@ -38,29 +48,38 @@ export default function InputWithStatus({
 }) {
   const tooltipRef = useRef(null);
   const arrowRef = useRef(null);
+  const inputRef = useRef(null);
+  const debounceRegister = registerFieldWithDebounceValidation(
+    fieldName,
+    debounceWait,
+    trigger,
+    register,
+    options
+  );
 
   return (
     <div className={styles.container}>
       <input
+        {...debounceRegister}
         className={styles.input}
         placeholder={placeholder}
         type={type}
-        {...registerFieldWithDebounceValidation(
-          fieldName,
-          debounceWait,
-          trigger,
-          register,
-          options
-        )}
+        ref={(e) => {
+          debounceRegister.ref(e);
+          inputRef.current = e;
+        }}
       />
 
-      <div className={cn([styles.status])}>
+      <div
+        className={cn([styles.status])}
+        onClick={() => inputRef.current.focus()}
+      >
         {errors ? (
           <div
             className={styles.tooltipContainer}
-            onClick={(e) => showTooltip(tooltipRef, arrowRef)}
-            onMouseEnter={(e) => showTooltip(tooltipRef, arrowRef)}
-            onMouseLeave={(e) => hideTooltip(tooltipRef)}
+            onClick={() => showTooltip(tooltipRef, arrowRef)}
+            onMouseEnter={() => showTooltip(tooltipRef, arrowRef)}
+            onMouseLeave={() => hideTooltip(tooltipRef)}
           >
             <span ref={tooltipRef} className={styles.tooltip}>
               {errors.message}

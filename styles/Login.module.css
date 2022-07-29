@@ -71,6 +71,15 @@
   font-size: small;
   color: dimgray;
   cursor: pointer;
+  transition: 0.25s;
+}
+
+.subHeaderText:hover {
+  color: black;
+}
+
+.subHeaderText:active {
+  color: dimgray;
 }
 
 .separator {
