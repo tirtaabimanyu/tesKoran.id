@@ -91,18 +91,18 @@ export default function ResultScreen({
   });
 
   const apmChartData = Array(correctChartData.length).fill(0);
-  const cumulativeCorrect = 0;
+  let cumulativeCorrect = 0;
   correctChartData.forEach((e, idx) => {
     cumulativeCorrect += e;
     apmChartData[idx] = (cumulativeCorrect / (idx + 1) / divisor) * 60;
   });
 
-  const cumulativeIncorrect = 0;
+  let cumulativeIncorrect = 0;
   incorrectChartData.forEach((e) => {
     cumulativeIncorrect += e;
   });
 
-  const cumulativeModified = 0;
+  let cumulativeModified = 0;
   modifiedChartData.forEach((e) => {
     cumulativeModified += e;
   });
