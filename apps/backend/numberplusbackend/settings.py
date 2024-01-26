@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'djoser',
     'ebhealthcheck.apps.EBHealthCheckConfig',
     'authentication',
+    'scores',
 ]
 
 MIDDLEWARE = [
