@@ -1,47 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import styles from "../styles/Leaderboard.module.css";
 import { FaCrown, FaUserAlt } from "react-icons/fa";
 import { RANKMODE } from "../utils/constants.js";
 import { toFixed, parseSecond } from "../utils/formattings.js";
 import { useWindowWideMin } from "../utils/customHooks.js";
-
-function generateNames() {
-  return (
-    Math.random().toString(36).substring(2, 10) +
-    Math.random().toString(36).substring(2, 10)
-  );
-}
-
-function generateRandoms() {
-  return Array.from({ length: 30 }, () => ({
-    name: generateNames(),
-    date: new Date().toDateString(),
-    apm: toFixed(50 + Math.random() * 50),
-    accuracy: toFixed(90 + Math.random() * 10),
-  })).sort((a, b) => b.apm - a.apm);
-}
+import ScoresService from "../services/scores.service.js";
 
 const durations = [30, 180, 1200, 3600];
-
-const data = {
-  30: {
-    [RANKMODE.TOP]: generateRandoms(),
-    [RANKMODE.PERSONAL]: generateRandoms(),
-  },
-  180: {
-    [RANKMODE.TOP]: generateRandoms(),
-    [RANKMODE.PERSONAL]: generateRandoms(),
-  },
-  1200: {
-    [RANKMODE.TOP]: generateRandoms(),
-    [RANKMODE.PERSONAL]: generateRandoms(),
-  },
-  3600: {
-    [RANKMODE.TOP]: generateRandoms(),
-    [RANKMODE.PERSONAL]: generateRandoms(),
-  },
-};
 
 export default function Leaderboard() {
   const isMobile = useWindowWideMin(600);
@@ -51,6 +17,48 @@ export default function Leaderboard() {
       return { ...acc, [val]: RANKMODE.TOP };
     }, {})
   );
+  const [data, setData] = useState({
+    30: {
+      [RANKMODE.TOP]: [],
+      [RANKMODE.PERSONAL]: [],
+    },
+    180: {
+      [RANKMODE.TOP]: [],
+      [RANKMODE.PERSONAL]: [],
+    },
+    1200: {
+      [RANKMODE.TOP]: [],
+      [RANKMODE.PERSONAL]: [],
+    },
+    3600: {
+      [RANKMODE.TOP]: [],
+      [RANKMODE.PERSONAL]: [],
+    },
+  });
+
+  const fetchTopLeaderboard = (duration, limit, offset) => {
+    return ScoresService.getTopLeaderboard(duration, limit, offset).then(
+      (response) => {
+        setData((prevData) => ({
+          ...prevData,
+          [duration]: {
+            ...prevData[duration],
+            [RANKMODE.TOP]: [
+              ...prevData[duration][RANKMODE.TOP],
+              ...response.data.results,
+            ],
+          },
+        }));
+      }
+    );
+  };
+
+  useEffect(() => {
+    fetchTopLeaderboard(30, 10, 0);
+    fetchTopLeaderboard(180, 10, 0);
+    fetchTopLeaderboard(1200, 10, 0);
+    fetchTopLeaderboard(3600, 10, 0);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -114,14 +122,16 @@ export default function Leaderboard() {
                     <tr className={styles.leaderboardEntry}>
                       <td className={styles.centered}>{idx + 1}</td>
                       <td>
-                        {e.name}
+                        {e.username}
                         <br />
-                        <span className={styles.dateText}>{e.date}</span>
+                        <span className={styles.dateText}>
+                          {new Date(e.created_at).toLocaleString()}
+                        </span>
                       </td>
                       <td style={{ textAlign: "right" }}>
-                        {e.apm} apm
+                        {e.addition_per_minute} apm
                         <br />
-                        {e.accuracy}%
+                        {toFixed(e.accuracy * 100)}%
                       </td>
                     </tr>
                   </React.Fragment>
