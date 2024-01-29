@@ -17,8 +17,10 @@ import environ
 env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(
-        str, 'django-insecure-(6bim5=mpti7&dfkxbwa3_h(nm8(w^4o8p6e3p50z#(df!h$jb'),
-    DATABASE_URL=(str, 'psql://root:rootroot@localhost:5432/numberplus'),
+        str,
+        "django-insecure-(6bim5=mpti7&dfkxbwa3_h(nm8(w^4o8p6e3p50z#(df!h$jb",
+    ),
+    DATABASE_URL=(str, "psql://root:rootroot@localhost:5432/numberplus"),
     ACCESS_TOKEN_LIFETIME=(int, 5),
     REFRESH_TOKEN_LIFETIME=(int, 14),
     DJOSER_SEND_ACTIVATION_EMAIL=(bool, False),
@@ -26,11 +28,11 @@ env = environ.Env(
     CORS_ALLOWED_ORIGINS=(list, []),
     CORS_ORIGIN_WHITELIST=(list, []),
     SOCIAL_AUTH_ALLOWED_REDIRECT_URIS=(list, []),
-    DOMAIN=(str, ''),
-    AWS_ACCESS_KEY_ID=(str, ''),
-    AWS_SECRET_ACCESS_KEY=(str, ''),
-    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=(str, ''),
-    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=(str, ''),
+    DOMAIN=(str, ""),
+    AWS_ACCESS_KEY_ID=(str, ""),
+    AWS_SECRET_ACCESS_KEY=(str, ""),
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=(str, ""),
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=(str, ""),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,95 +40,93 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Take environment variables from .env file
 PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
-environ.Env.read_env(os.path.join(PROJECT_DIR, '.env'))
+environ.Env.read_env(os.path.join(PROJECT_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'corsheaders',
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'social_django',
-    'djoser',
-    'ebhealthcheck.apps.EBHealthCheckConfig',
-    'authentication',
-    'scores',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "corsheaders",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "social_django",
+    "djoser",
+    "ebhealthcheck.apps.EBHealthCheckConfig",
+    "authentication",
+    "scores",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
-CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST')
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS")
+CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST")
 CORS_ALLOW_CREDENTIALS = True
 
-ROOT_URLCONF = 'numberplusbackend.urls'
+ROOT_URLCONF = "numberplusbackend.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect'
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'numberplusbackend.wsgi.application'
+WSGI_APPLICATION = "numberplusbackend.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-if 'RDS_DB_NAME' in os.environ:
+if "RDS_DB_NAME" in os.environ:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.environ["RDS_DB_NAME"],
+            "USER": os.environ["RDS_USERNAME"],
+            "PASSWORD": os.environ["RDS_PASSWORD"],
+            "HOST": os.environ["RDS_HOSTNAME"],
+            "PORT": os.environ["RDS_PORT"],
         }
     }
 else:
-    DATABASES = {
-        'default': env.db()
-    }
+    DATABASES = {"default": env.db()}
 
 
 # Password validation
@@ -134,10 +134,10 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {
-            'min_length': 8,
-        }
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 8,
+        },
     },
 ]
 
@@ -145,9 +145,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -157,105 +157,100 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'authentication.CustomUser'
+AUTH_USER_MODEL = "authentication.CustomUser"
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.AllowAllUsersModelBackend'
+    "social_core.backends.google.GoogleOAuth2",
+    "django.contrib.auth.backends.AllowAllUsersModelBackend",
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'authentication.jwt.CustomJWTAuthentication',
-    ),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("authentication.jwt.CustomJWTAuthentication",),
+    "DEFAULT_PAGINATION_CLASS": "numberplusbackend.base.pagination.BasePagination",
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=env('ACCESS_TOKEN_LIFETIME')),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=env('REFRESH_TOKEN_LIFETIME')),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': False,
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('JWT',),
-    'USER_ID_FIELD': 'email',
-    'USER_ID_CLAIM': 'email',
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-    'USER_AUTHENTICATION_RULE': 'authentication.jwt.custom_user_authentication_rule',
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=env("ACCESS_TOKEN_LIFETIME")),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=env("REFRESH_TOKEN_LIFETIME")),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": None,
+    "AUTH_HEADER_TYPES": ("JWT",),
+    "USER_ID_FIELD": "email",
+    "USER_ID_CLAIM": "email",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "USER_AUTHENTICATION_RULE": "authentication.jwt.custom_user_authentication_rule",
 }
 
 DJOSER = {
-    'ACTIVATION_URL': 'activation?uid={uid}&token={token}',
-    'PASSWORD_RESET_CONFIRM_URL': 'password-reset?uid={uid}&token={token}',
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'SEND_ACTIVATION_EMAIL': env('DJOSER_SEND_ACTIVATION_EMAIL'),
-    'SOCIAL_AUTH_TOKEN_STRATEGY': 'authentication.jwt.CustomTokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': env.list('SOCIAL_AUTH_ALLOWED_REDIRECT_URIS'),
-    'HIDE_USERS': True,
-    'SERIALIZERS': {
+    "ACTIVATION_URL": "activation?uid={uid}&token={token}",
+    "PASSWORD_RESET_CONFIRM_URL": "password-reset?uid={uid}&token={token}",
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SEND_ACTIVATION_EMAIL": env("DJOSER_SEND_ACTIVATION_EMAIL"),
+    "SOCIAL_AUTH_TOKEN_STRATEGY": "authentication.jwt.CustomTokenStrategy",
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": env.list("SOCIAL_AUTH_ALLOWED_REDIRECT_URIS"),
+    "HIDE_USERS": True,
+    "SERIALIZERS": {
         # 'user': 'authentication.serializers.CustomUserSerializer',
-        'user_create_password_retype': 'authentication.serializers.CustomUserCreatePasswordRetypeSerializer',
+        "user_create_password_retype": "authentication.serializers.CustomUserCreatePasswordRetypeSerializer",
     },
-    'PERMISSIONS': {
-        'activation': ['rest_framework.permissions.AllowAny'],
-        'password_reset': ['rest_framework.permissions.AllowAny'],
-        'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
-        'set_password': ['rest_framework.permissions.IsAdminUser'],
-        'username_reset': ['rest_framework.permissions.IsAdminUser'],
-        'username_reset_confirm': ['rest_framework.permissions.IsAdminUser'],
-        'set_username': ['rest_framework.permissions.IsAdminUser'],
-        'user_create': ['rest_framework.permissions.AllowAny'],
-        'user_delete': ['rest_framework.permissions.IsAdminUser'],
-        'user': ['rest_framework.permissions.IsAdminUser'],
-        'user_list': ['rest_framework.permissions.IsAdminUser'],
-        'token_create': ['rest_framework.permissions.AllowAny'],
-        'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
-    }
+    "PERMISSIONS": {
+        "activation": ["rest_framework.permissions.AllowAny"],
+        "password_reset": ["rest_framework.permissions.AllowAny"],
+        "password_reset_confirm": ["rest_framework.permissions.AllowAny"],
+        "set_password": ["rest_framework.permissions.IsAdminUser"],
+        "username_reset": ["rest_framework.permissions.IsAdminUser"],
+        "username_reset_confirm": ["rest_framework.permissions.IsAdminUser"],
+        "set_username": ["rest_framework.permissions.IsAdminUser"],
+        "user_create": ["rest_framework.permissions.AllowAny"],
+        "user_delete": ["rest_framework.permissions.IsAdminUser"],
+        "user": ["rest_framework.permissions.IsAdminUser"],
+        "user_list": ["rest_framework.permissions.IsAdminUser"],
+        "token_create": ["rest_framework.permissions.AllowAny"],
+        "token_destroy": ["rest_framework.permissions.IsAuthenticated"],
+    },
 }
 
-DOMAIN = env('DOMAIN')
-SITE_NAME = 'tesKoran.id'
-DEFAULT_FROM_EMAIL = 'no-reply@teskoran.id'
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_SES_REGION_NAME = 'ap-southeast-1'
-AWS_SES_REGION_ENDPOINT = 'email.ap-southeast-1.amazonaws.com'
+DOMAIN = env("DOMAIN")
+SITE_NAME = "tesKoran.id"
+DEFAULT_FROM_EMAIL = "no-reply@teskoran.id"
+EMAIL_BACKEND = "django_ses.SESBackend"
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_SES_REGION_NAME = "ap-southeast-1"
+AWS_SES_REGION_ENDPOINT = "email.ap-southeast-1.amazonaws.com"
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
-SOCIAL_AUTH_SLUGIFY_FUNCTION = 'authentication.pipelines.slugify'
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_SLUGIFY_FUNCTION = "authentication.pipelines.slugify"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/userinfo.email',
+    "https://www.googleapis.com/auth/userinfo.email",
 ]
 SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'authentication.pipelines.get_user',
-    'social_core.pipeline.social_auth.social_user',
-    'authentication.pipelines.get_username',
-    'social_core.pipeline.user.create_user',
-    'authentication.pipelines.activate_user',
-    'authentication.pipelines.enable_username_change',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "authentication.pipelines.get_user",
+    "social_core.pipeline.social_auth.social_user",
+    "authentication.pipelines.get_username",
+    "social_core.pipeline.user.create_user",
+    "authentication.pipelines.activate_user",
+    "authentication.pipelines.enable_username_change",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
 )
 
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+STATIC_URL = "/static/"
+STATIC_ROOT = "static"

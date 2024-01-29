@@ -3,8 +3,8 @@ from authentication.models import CustomUser
 
 
 class TEST_TYPES(models.TextChoices):
-    PAULI = ("PAULI", "Pauli")
-    KRAEPELIN = ("KRAEPELIN", "Kraepelin")
+    PAULI = ("pauli", "Pauli")
+    KRAEPELIN = ("kraepelin", "Kraepelin")
 
 
 class TestScore(models.Model):
@@ -13,7 +13,7 @@ class TestScore(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     is_ranked = models.BooleanField(null=False, blank=False)
-    addition_per_second = models.FloatField(null=False, blank=False)
+    addition_per_minute = models.FloatField(null=False, blank=False)
     accuracy = models.FloatField(null=False, blank=False)
     correct_answer = models.IntegerField(null=False, blank=False)
     modified_answer = models.IntegerField(null=False, blank=False)
