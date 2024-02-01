@@ -1,15 +1,112 @@
-from rest_framework import views, status
+from django.db.models import Sum
+from rest_framework import views, status, serializers
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .serializers import CustomUserSerializer, CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer, UsernameSerializer
+
+from scores.models import TestScore
+from .serializers import (
+    CustomUserSerializer,
+    CustomTokenObtainPairSerializer,
+    CustomTokenRefreshSerializer,
+    UsernameSerializer,
+)
 
 
 class GetUserProfile(views.APIView):
     permission_classes = [IsAuthenticated]
 
+    class OutputSerializer(serializers.Serializer):
+        class HistorySerializer(serializers.Serializer):
+            class HistoryTypeSerializer(serializers.Serializer):
+                apm = serializers.FloatField(source="addition_per_minute")
+                accuracy = serializers.FloatField()
+
+            ranked = HistoryTypeSerializer(many=True)
+            mixed = HistoryTypeSerializer(many=True)
+
+        class LeaderboardSerializer(serializers.Serializer):
+            class LeaderboardTypeSerializer(serializers.Serializer):
+                class TestSerializer(serializers.Serializer):
+                    username = serializers.CharField(source="user.username")
+                    created_at = serializers.DateTimeField()
+                    addition_per_minute = serializers.FloatField()
+                    accuracy = serializers.FloatField()
+
+                THIRTY_SECOND = TestSerializer(many=True)
+                THREE_MINUTE = TestSerializer(many=True)
+                TWENTY_MINUTE = TestSerializer(many=True)
+                ONE_HOUR = TestSerializer(many=True)
+
+            ranked = LeaderboardTypeSerializer()
+            mixed = LeaderboardTypeSerializer()
+
+        user = CustomUserSerializer()
+        total_test = serializers.IntegerField()
+        total_time = serializers.IntegerField()
+        average_apm = serializers.FloatField()
+        average_accuracy = serializers.FloatField()
+        history = HistorySerializer()
+        leaderboard = LeaderboardSerializer()
+
     def get(self, request):
-        serializer = CustomUserSerializer(request.user)
+        queryset = TestScore.objects.filter(user=request.user)
+        ranked_queryset = queryset.filter(is_ranked=True)
+
+        total_test = len(queryset)
+        total_time = queryset.aggregate(Sum("duration"))["duration__sum"]
+        total_apm = queryset.aggregate(Sum("addition_per_minute"))[
+            "addition_per_minute__sum"
+        ]
+        total_accuracy = queryset.aggregate(Sum("accuracy"))["accuracy__sum"]
+        ranked_history = ranked_queryset.order_by("-created_at")[:10]
+        mixed_history = queryset.order_by("-created_at")[:10]
+        ranked_leaderboard = {
+            "THIRTY_SECOND": ranked_queryset.filter(duration=30).order_by(
+                "-addition_per_minute"
+            )[:10],
+            "THREE_MINUTE": ranked_queryset.filter(duration=180).order_by(
+                "-addition_per_minute"
+            )[:10],
+            "TWENTY_MINUTE": ranked_queryset.filter(duration=1200).order_by(
+                "-addition_per_minute"
+            )[:10],
+            "ONE_HOUR": ranked_queryset.filter(duration=3600).order_by(
+                "-addition_per_minute"
+            )[:10],
+        }
+        mixed_leaderboard = {
+            "THIRTY_SECOND": queryset.filter(duration=30).order_by(
+                "-addition_per_minute"
+            )[:10],
+            "THREE_MINUTE": queryset.filter(duration=180).order_by(
+                "-addition_per_minute"
+            )[:10],
+            "TWENTY_MINUTE": queryset.filter(duration=1200).order_by(
+                "-addition_per_minute"
+            )[:10],
+            "ONE_HOUR": queryset.filter(duration=3600).order_by("-addition_per_minute")[
+                :10
+            ],
+        }
+
+        serializer = self.OutputSerializer(
+            {
+                "user": request.user,
+                "total_test": total_test,
+                "total_time": total_time,
+                "average_apm": total_apm / total_test,
+                "average_accuracy": total_accuracy / total_test,
+                "history": {
+                    "ranked": ranked_history,
+                    "mixed": mixed_history,
+                },
+                "leaderboard": {
+                    "ranked": ranked_leaderboard,
+                    "mixed": mixed_leaderboard,
+                },
+            }
+        )
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
 
@@ -17,7 +114,7 @@ class CheckUsername(views.APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        username = request.GET.get('username', None)
+        username = request.GET.get("username", None)
         if not username:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -26,9 +123,7 @@ class CheckUsername(views.APIView):
             if initial_username == username:
                 return Response(status=status.HTTP_200_OK)
 
-        serializer = UsernameSerializer(data={
-            'username': username
-        }, partial=True)
+        serializer = UsernameSerializer(data={"username": username}, partial=True)
         serializer.is_valid(raise_exception=True)
 
         return Response(status=status.HTTP_200_OK)
@@ -38,13 +133,13 @@ class ChangeUsername(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        if 'username' not in request.data:
+        if "username" not in request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = UsernameSerializer(request.user, data={
-            'username': request.data['username'],
-            'can_change_username': False
-        })
+        serializer = UsernameSerializer(
+            request.user,
+            data={"username": request.data["username"], "can_change_username": False},
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

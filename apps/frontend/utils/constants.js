@@ -52,3 +52,11 @@ export const RANKMODE = {
   TOP: "top",
   PERSONAL: "personal",
 };
+
+export const TEST_DURATIONS = [30, 180, 1200, 3600];
+export const TEST_DURATIONS_DICT = {
+  THIRTY_SECOND: 30,
+  THREE_MINUTE: 180,
+  TWENTY_MINUTE: 1200,
+  ONE_HOUR: 3600,
+};

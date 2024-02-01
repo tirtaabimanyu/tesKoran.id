@@ -111,17 +111,17 @@
 @media only screen and (max-width: 600px) {
   .menuContainer {
     width: 100%;
-    padding: 0.5rem;
     font-size: medium;
   }
 
   .container {
     justify-content: space-evenly;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .paddingText {
     display: none;
-    /* height: 0px; */
   }
 
   .explanationText {
@@ -132,7 +132,6 @@
 
   .explanationText > div {
     width: 100%;
-    padding: 0 8px;
   }
 
   .codeText {

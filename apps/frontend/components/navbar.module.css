@@ -142,7 +142,7 @@
     min-width: 0px;
     min-height: 5px;
     transition: min-width 0.25s;
-    bottom: 0rem;
+    bottom: -2px;
     background-color: darkorange;
     border-radius: 25px;
     margin-left: 2px;

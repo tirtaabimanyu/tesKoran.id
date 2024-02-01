@@ -33,3 +33,171 @@
   cursor: pointer;
   color: darkorange;
 }
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: lightgray;
+  padding: 16px;
+  border-radius: 8px;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.statsLabel {
+  color: dimgray;
+}
+
+.historyContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: lightgray;
+  padding: 16px;
+  border-radius: 8px;
+  gap: 8px;
+}
+
+.historyContainer h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.personalLeaderboardContainer {
+  background-color: lightgray;
+  padding: 16px;
+  border-radius: 8px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.personalLeaderboardContainer h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.personalLeaderboardContent {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.leaderboardContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 0;
+  background-color: silver;
+  border-radius: 0.5rem;
+  height: 100%;
+  padding: 8px;
+}
+
+.leaderboardContent {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+  font-size: small;
+}
+
+.leaderboardHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.modeButtonContainer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  color: gray;
+}
+
+.modeButtonContainer * {
+  cursor: pointer;
+}
+
+.leaderboardEntry {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dateText {
+  font-size: smaller;
+  color: dimgray;
+}
+
+.hide {
+  display: none;
+}
+
+.durationFilter {
+  display: none;
+  font-size: medium;
+  font-weight: 400;
+  gap: 0.25rem;
+}
+
+.durationFilter div {
+  font-size: small;
+  cursor: pointer;
+  background-color: silver;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.durationFilter div.active {
+  background-color: gray;
+  color: white;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .profile {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .username {
+    width: 100%;
+    padding-bottom: 8px;
+  }
+
+  .profileStats {
+    width: 50%;
+  }
+
+  .durationFilter {
+    display: flex;
+  }
+}
