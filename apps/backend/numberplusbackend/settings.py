@@ -254,3 +254,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 STATIC_URL = "/static/"
 STATIC_ROOT = "static"
+
+# Nginx Config
+USE_X_FORWARDED_HOST = True
+FORCE_SCRIPT_NAME = "/api/"
