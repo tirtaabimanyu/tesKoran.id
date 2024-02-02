@@ -406,7 +406,7 @@ export default function Profile() {
           </div>
           <div className={styles.profileStats}>
             <div className={styles.statsLabel}>average apm</div>
-            <h1>{data.average_apm}</h1>
+            <h1>{toFixed(data.average_apm)}</h1>
           </div>
           <div className={styles.profileStats}>
             <div className={styles.statsLabel}>average accuracy</div>
@@ -430,6 +430,7 @@ export default function Profile() {
                 type="checkbox"
                 style={{ marginTop: 0, marginBottom: 0 }}
                 checked={rankOnlyHistory}
+                readOnly
               />
               <div className={styles.statsLabel}>show ranked test only</div>
             </div>
@@ -458,6 +459,7 @@ export default function Profile() {
                 type="checkbox"
                 style={{ marginTop: 0, marginBottom: 0 }}
                 checked={rankOnlyLeaderboard}
+                readOnly
               />
               <div className={styles.statsLabel}>show ranked test only</div>
             </div>
