@@ -5,8 +5,9 @@ import Link from "next/link";
 import TokenService from "../services/token.service";
 import { useRouter } from "next/router";
 
-export default function NavbarLoginButton({ user, pathname, hide }) {
+export default function NavbarLoginButton({ pathname, hide }) {
   const router = useRouter();
+  const { user } = TokenService.getUser();
 
   const logout = () => {
     TokenService.removeUser();
@@ -40,7 +41,9 @@ export default function NavbarLoginButton({ user, pathname, hide }) {
     return (
       <Link href="/profile">
         <div className={cn([styles.loginButton], { [styles.hide]: hide })}>
-          <h4 className={cn([styles.text])}>{user.username}</h4>
+          <h4 className={cn([styles.text])} suppressHydrationWarning>
+            {user.username}
+          </h4>
           <FaUserAlt className={styles.icon} size="24px" />
         </div>
       </Link>

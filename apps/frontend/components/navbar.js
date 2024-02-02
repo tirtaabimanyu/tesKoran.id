@@ -13,7 +13,6 @@ import NavbarLoginButton from "./navbarLoginButton";
 
 export default function Navbar({ hide, titleClickHandler }) {
   const router = useRouter();
-  const { user } = TokenService.getUser();
 
   return (
     <div className={cn([styles.container])}>
@@ -47,11 +46,7 @@ export default function Navbar({ hide, titleClickHandler }) {
         </div>
 
         <div className={styles.group}>
-          <NavbarLoginButton
-            hide={hide}
-            user={user}
-            pathname={router.pathname}
-          />
+          <NavbarLoginButton hide={hide} pathname={router.pathname} />
         </div>
       </div>
     </div>
