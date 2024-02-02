@@ -42,11 +42,11 @@ class ListTopScores(generics.GenericAPIView):
     def get(self, request, duration):
         test_score_ids = (
             TestScore.objects.filter(is_ranked=True, duration=duration)
-            .order_by("user__id", "-addition_per_minute")
+            .order_by("user__id", "-addition_per_minute", "-accuracy")
             .distinct("user__id")
         )
         queryset = TestScore.objects.filter(id__in=test_score_ids).order_by(
-            "-addition_per_minute"
+            "-addition_per_minute", "-accuracy"
         )
         data = self.paginate_queryset(queryset=queryset)
 
