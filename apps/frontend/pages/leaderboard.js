@@ -16,6 +16,12 @@ export default function Leaderboard() {
     1200: [],
     3600: [],
   });
+  const [maxDataLength, setMaxDataLength] = useState({
+    30: 0,
+    180: 0,
+    1200: 0,
+    3600: 0,
+  });
 
   const fetchTopLeaderboard = (duration, limit, offset) => {
     return ScoresService.getTopLeaderboard(duration, limit, offset).then(
@@ -23,6 +29,10 @@ export default function Leaderboard() {
         setData((prevData) => ({
           ...prevData,
           [duration]: [...prevData[duration], ...response.data.results],
+        }));
+        setMaxDataLength((prevData) => ({
+          ...prevData,
+          [duration]: response.data.count,
         }));
       }
     );
@@ -37,6 +47,9 @@ export default function Leaderboard() {
 
   return (
     <div className={styles.container}>
+      <p style={{ margin: 0, marginBottom: "8px" }}>
+        Only <b>ranked</b> test result is shown
+      </p>
       <div className={styles.title}>
         <div className={styles.durationFilter}>
           {TEST_DURATIONS.map((e) => (
@@ -59,6 +72,10 @@ export default function Leaderboard() {
             })}
             duration={duration}
             data={leaderboardData}
+            maxDataLength={maxDataLength[duration]}
+            scrollCallback={() =>
+              fetchTopLeaderboard(duration, 10, leaderboardData.length)
+            }
           />
         ))}
       </div>

@@ -40,8 +40,10 @@
 .leaderboardHeader {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  align-items: center;
   padding-bottom: 0;
+  gap: 8px;
 }
 
 .leaderboardHeader h2 {
@@ -51,6 +53,17 @@
 .dateText {
   font-size: smaller;
   color: dimgray;
+}
+
+.spinner {
+  border-radius: 100%;
+  animation: rotateSpinner 800ms linear infinite;
+}
+
+@keyframes rotateSpinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media only screen and (max-width: 600px) {
