@@ -1,5 +1,11 @@
+from django.core.cache import cache
 from django.db.models import Sum
+from djoser.compat import get_user_email
+from djoser.conf import settings
+from djoser.views import UserViewSet as DjoserUserViewSet
+
 from rest_framework import views, status, serializers
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -152,3 +158,27 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class CustomTokenRefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
+
+
+class CustomUserViewset(DjoserUserViewSet):
+    @action(["post"], detail=False)
+    def resend_activation(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.get_user(is_active=False)
+
+        if not settings.SEND_ACTIVATION_EMAIL or not user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        # check if user has already sent an email in the last 10 min
+        user_email = get_user_email(user)
+        cache_key = f"activation/{user_email}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        context = {"user": user}
+        settings.EMAIL.activation(self.request, context).send([user_email])
+        cache.set(cache_key, True, timeout=settings.SEND_ACTIVATION_EMAIL_TIMER)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

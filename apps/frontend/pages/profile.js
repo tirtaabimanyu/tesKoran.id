@@ -28,6 +28,13 @@ import {
   LineController,
 } from "chart.js";
 import LeaderboardTable from "../components/leaderboardTable.js";
+import {
+  FaCheckCircle,
+  FaCog,
+  FaEnvelope,
+  FaTimesCircle,
+} from "react-icons/fa";
+import Modal from "../components/modal.js";
 
 ChartJS.register(
   CategoryScale,
@@ -49,16 +56,6 @@ const checkUsername = async (username) => {
     return detail || username[0];
   }
   return true;
-};
-
-const resendActivation = (email) => {
-  AuthService.resendActivation(email)
-    .then((response) => {
-      toast.success("Activation email has been sent", { theme: "colored" });
-    })
-    .catch((error) => {
-      toast.error("Error while sending activation email", { theme: "colored" });
-    });
 };
 
 export default function Profile() {
@@ -108,7 +105,6 @@ export default function Profile() {
     setLoading(true);
     return UserService.getUserProfile()
       .then((response) => {
-        console.log(response.data);
         setData((prevData) => ({ ...prevData, ...response.data }));
         setLoading(false);
       })
@@ -127,7 +123,7 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
-  const onSubmit = (data) => {
+  const onSubmitUsername = (data) => {
     const { username } = data;
     setLoading(true);
     UserService.setUsername(username)
@@ -154,7 +150,7 @@ export default function Profile() {
         <p>{`You can't change it later`}</p>
         <form
           className={styles.formContainer}
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmitUsername)}
         >
           <InputWithStatus
             fieldName="username"
@@ -213,7 +209,6 @@ export default function Profile() {
     { length: Math.min(10, historyData.length) },
     (v, k) => k + 1 + Math.max(0, data.total_test - 10)
   );
-  console.log(labels);
 
   const chartData = {
     labels,
@@ -237,12 +232,166 @@ export default function Profile() {
     ],
   };
 
+  const [settingsModal, setSettingsModal] = useState(false);
+  const toggleSettingsModal = () => setSettingsModal((prev) => !prev);
+
+  const {
+    register: registerChangePassword,
+    handleSubmit: handleSubmitChangePassword,
+    formState: {
+      errors: errorsChangePassword,
+      isValid: isValidChangePassowrd,
+      dirtyFields: dirtyFieldsChangePassword,
+    },
+    trigger: triggerChangePassword,
+    getValues: getValuesChangePassword,
+    reset: resetChangePassword,
+  } = useForm();
+
   const renderProfile = () => {
     return (
       <div className={styles.container}>
+        <Modal visible={settingsModal} onDismiss={toggleSettingsModal}>
+          <div className={styles.settingsModal}>
+            <div>
+              {data.user.is_active ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  Email has been verified <FaCheckCircle />
+                </div>
+              ) : (
+                <div className={styles.formContainer}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    Email has not been verified{" "}
+                    <FaTimesCircle size={16} color="dimgray" />
+                  </div>
+                  <button
+                    onClick={() =>
+                      AuthService.resendActivation(data.user.email)
+                        .then(() =>
+                          toast.success("Activation email has been sent!", {
+                            theme: "colored",
+                          })
+                        )
+                        .catch(() =>
+                          toast.error(
+                            "Can't send the activation email. Please try again later",
+                            { theme: "colored" }
+                          )
+                        )
+                    }
+                  >
+                    Resend activation email{" "}
+                    <FaEnvelope size={16} color="dimgray" />
+                  </button>
+                </div>
+              )}
+            </div>
+            <hr style={{ backgroundColor: "gray", width: "100%" }} />
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
+              <div>Change Password</div>
+              <form
+                className={styles.formContainer}
+                onSubmit={handleSubmitChangePassword((data) =>
+                  AuthService.changePassword(
+                    data.current_password,
+                    data.new_password,
+                    data.re_new_password
+                  )
+                    .then(() => {
+                      resetChangePassword();
+                      toast.success("Password has been updated successfully", {
+                        theme: "colored",
+                      });
+                    })
+                    .catch((error) => {
+                      Object.entries(error.response.data).forEach((items) => {
+                        toast.error(`${items[0]}: ${items[1]}`, {
+                          theme: "colored",
+                        });
+                      });
+                    })
+                )}
+              >
+                <InputWithStatus
+                  className={styles.inputContainer}
+                  type="password"
+                  placeholder="current password"
+                  fieldName="current_password"
+                  debounceWait={0}
+                  trigger={triggerChangePassword}
+                  register={registerChangePassword}
+                  errors={errorsChangePassword["current_password"]}
+                  isDirty={dirtyFieldsChangePassword["current_password"]}
+                  options={{
+                    required: "Please enter your current password",
+                  }}
+                />
+                <InputWithStatus
+                  type="password"
+                  placeholder="new password"
+                  fieldName="new_password"
+                  debounceWait={0}
+                  trigger={triggerChangePassword}
+                  register={registerChangePassword}
+                  errors={errorsChangePassword["new_password"]}
+                  isDirty={dirtyFieldsChangePassword["new_password"]}
+                  options={{
+                    required: "New Password is required",
+                    onChange: () => triggerChangePassword("re_new_password"),
+                    validate: (value) =>
+                      value.length >= 8 ||
+                      "Password must be at least 8 character",
+                  }}
+                />
+                <InputWithStatus
+                  type="password"
+                  placeholder="verify new password"
+                  fieldName="re_new_password"
+                  debounceWait={0}
+                  trigger={triggerChangePassword}
+                  register={registerChangePassword}
+                  errors={errorsChangePassword["re_new_password"]}
+                  isDirty={dirtyFieldsChangePassword["re_new_password"]}
+                  options={{
+                    required: "Please retype your new password",
+                    validate: (value) =>
+                      value == getValuesChangePassword("new_password") ||
+                      "Password does not match",
+                  }}
+                />
+                <button type="input" disabled={!isValidChangePassowrd}>
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </Modal>
         <div className={styles.profile}>
           <div className={styles.username}>
-            <h1>{data.user.username}</h1>
+            <div
+              style={{ display: "flex", alignItems: "baseline", gap: "4px" }}
+            >
+              <h1>{data.user.username}</h1>
+              <FaCog
+                className={styles.iconButton}
+                size={20}
+                onClick={toggleSettingsModal}
+              />
+            </div>
             <div className={styles.statsLabel}>{`Joined ${new Date(
               data.user.created_on
             ).toLocaleDateString()}`}</div>

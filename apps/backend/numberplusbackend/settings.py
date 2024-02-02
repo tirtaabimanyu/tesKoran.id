@@ -24,6 +24,7 @@ env = environ.Env(
     ACCESS_TOKEN_LIFETIME=(int, 5),
     REFRESH_TOKEN_LIFETIME=(int, 14),
     DJOSER_SEND_ACTIVATION_EMAIL=(bool, False),
+    DJOSER_SEND_ACTIVATION_EMAIL_TIMER=(int, 600),
     ALLOWED_HOSTS=(list, []),
     CORS_ALLOWED_ORIGINS=(list, []),
     CORS_ORIGIN_WHITELIST=(list, []),
@@ -129,6 +130,14 @@ else:
     DATABASES = {"default": env.db()}
 
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "numberplus",
+    }
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -197,7 +206,9 @@ DJOSER = {
     "ACTIVATION_URL": "activation?uid={uid}&token={token}",
     "PASSWORD_RESET_CONFIRM_URL": "password-reset?uid={uid}&token={token}",
     "USER_CREATE_PASSWORD_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
     "SEND_ACTIVATION_EMAIL": env("DJOSER_SEND_ACTIVATION_EMAIL"),
+    "SEND_ACTIVATION_EMAIL_TIMER": env("DJOSER_SEND_ACTIVATION_EMAIL_TIMER"),
     "SOCIAL_AUTH_TOKEN_STRATEGY": "authentication.jwt.CustomTokenStrategy",
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": env.list("SOCIAL_AUTH_ALLOWED_REDIRECT_URIS"),
     "HIDE_USERS": True,
@@ -209,7 +220,7 @@ DJOSER = {
         "activation": ["rest_framework.permissions.AllowAny"],
         "password_reset": ["rest_framework.permissions.AllowAny"],
         "password_reset_confirm": ["rest_framework.permissions.AllowAny"],
-        "set_password": ["rest_framework.permissions.IsAdminUser"],
+        "set_password": ["rest_framework.permissions.IsAuthenticated"],
         "username_reset": ["rest_framework.permissions.IsAdminUser"],
         "username_reset_confirm": ["rest_framework.permissions.IsAdminUser"],
         "set_username": ["rest_framework.permissions.IsAdminUser"],
