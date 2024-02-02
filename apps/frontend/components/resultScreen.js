@@ -1,8 +1,10 @@
 import cn from "classnames";
 import { FaRedo } from "react-icons/fa";
 import styles from "./resultScreen.module.css";
-import { ACTIONS } from "../utils/constants.js";
+import { ACTIONS, MODE } from "../utils/constants.js";
 import { toFixed, parseSecond, capitalize } from "../utils/formattings.js";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   Chart as ChartJS,
@@ -18,6 +20,9 @@ import {
   LineController,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
+import { useEffect } from "react";
+import TokenService from "../services/token.service.js";
+import ScoresService from "../services/scores.service.js";
 
 ChartJS.register(
   CategoryScale,
@@ -108,7 +113,7 @@ export default function ResultScreen({
   });
 
   const apm = (cumulativeCorrect / gameDuration) * 60;
-  const accuracy = (cumulativeCorrect / answers.length) * 100;
+  const accuracy = cumulativeCorrect / answers.length;
 
   const options = {
     responsive: true,
@@ -194,6 +199,55 @@ export default function ResultScreen({
     ],
   };
 
+  useEffect(() => {
+    const { user } = TokenService.getUser();
+    if (user == null) {
+      toast.warning("Can not submit score because you are not logged in 👤", {
+        theme: "colored",
+      });
+      return;
+    }
+
+    if (![30, 180, 1200, 3600].includes(gameDuration)) {
+      toast.warning(
+        "Can not submit score because the test duration is custom ⏱️",
+        {
+          theme: "colored",
+        }
+      );
+      return;
+    }
+
+    if (accuracy < 0.5) {
+      toast.warning(
+        "Can not submit score because accuracy is less than 50% 🥲",
+        {
+          theme: "colored",
+        }
+      );
+      return;
+    }
+
+    ScoresService.submitScore({
+      is_ranked: gameMode == MODE.RANKED,
+      addition_per_minute: apm,
+      accuracy: accuracy,
+      correct_answer: cumulativeCorrect,
+      modified_answer: cumulativeModified,
+      incorrect_answer: cumulativeIncorrect,
+      test_type: gameType,
+      duration: gameDuration,
+    })
+      .then(() => {
+        toast.success("Score has been submitted successfully 😀", {
+          theme: "colored",
+        });
+      })
+      .catch(() => {
+        toast.error("Error while submitting score ❌", { theme: "colored" });
+      });
+  }, []);
+
   return (
     <div className={styles.resultContainer}>
       <Chart type={"line"} options={options} data={data} />
@@ -215,7 +269,9 @@ export default function ResultScreen({
         </div>
         <div className={styles.statsItem}>
           <div>Accuracy</div>
-          <div className={styles.statsValue}>{toFixed(accuracy) + "%"}</div>
+          <div className={styles.statsValue}>
+            {toFixed(accuracy * 100) + "%"}
+          </div>
         </div>
         <div className={styles.statsItem}>
           <div>Test Type</div>

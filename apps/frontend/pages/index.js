@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { SwitchTransition, CSSTransition } from "react-transition-group";
 
 import styles from "../styles/Home.module.css";
@@ -132,9 +132,11 @@ export default function Home({ setHideLayout, titleClickHandler }) {
   );
 
   useEffect(() => {
-    window.addEventListener("keydown", (e) => keyDown(e));
+    const callback = (e) => keyDown(e);
+
+    window.addEventListener("keydown", callback);
     return () => {
-      window.removeEventListener("keydown", (e) => keyDown(e));
+      window.removeEventListener("keydown", callback);
     };
   }, []);
 
@@ -275,9 +277,12 @@ export default function Home({ setHideLayout, titleClickHandler }) {
     setHideLayout(hideLayout);
   }, [hideLayout]);
 
+  const nodeRef = useRef(null);
+
   return (
     <SwitchTransition mode="out-in">
       <CSSTransition
+        nodeRef={nodeRef}
         key={showPage(state.gamePhase)}
         classNames="fade"
         timeout={100}

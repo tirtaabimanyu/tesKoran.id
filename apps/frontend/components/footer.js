@@ -33,24 +33,24 @@ export default function Footer({ hide }) {
             <div>Privacy</div>
           </div>
         </Link>
-        <Link href="/donate">
+        {/* <Link href="/donate">
           <div className={styles.clickable}>
             <FaDonate />
             <div>Donate</div>
           </div>
-        </Link>
+        </Link> */}
       </div>
 
       <div className={styles.group}>
-        <div className={styles.clickable}>
+        <div className={styles.disabled}>
           <FaPalette />
           <div>Light Theme</div>
         </div>
-        <div className={styles.clickable}>
+        <div className={styles.disabled}>
           <FaGlobeAsia />
           <div>English</div>
         </div>
-        <div className={styles.clickable}>
+        <div className={styles.disabled}>
           <FaGitAlt />
           <div>v1.0.0</div>
         </div>

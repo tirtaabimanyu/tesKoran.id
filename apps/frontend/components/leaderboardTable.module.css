@@ -1,0 +1,77 @@
+.leaderboardContent {
+  overflow-y: auto;
+}
+
+.leaderboardContent table {
+  width: 100%;
+}
+
+.leaderboardContent table td {
+  padding: 0.25rem;
+  font-size: small;
+}
+
+.leaderboardContent table td:only-child {
+  padding: 0;
+}
+
+/* Width */
+.leaderboardContent::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 0.25rem;
+}
+
+/* Track */
+.leaderboardContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.leaderboardContent::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 0.5rem;
+}
+
+/* Handle on hover */
+.leaderboardContent::-webkit-scrollbar-thumb:hover {
+  background: dimgray;
+}
+
+.leaderboardHeader {
+  width: 100%;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding-bottom: 0;
+  gap: 8px;
+}
+
+.leaderboardHeader h2 {
+  margin: 0;
+}
+
+.dateText {
+  font-size: smaller;
+  color: dimgray;
+}
+
+.spinner {
+  border-radius: 100%;
+  animation: rotateSpinner 800ms linear infinite;
+}
+
+@keyframes rotateSpinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .leaderboardContent table td {
+    font-size: medium;
+  }
+
+  .dateText {
+    font-size: small;
+  }
+}

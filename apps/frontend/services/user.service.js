@@ -1,7 +1,7 @@
 import api from "./api";
 
 const getUserProfile = () => {
-  return api.get(`auth/users/profile`);
+  return api.get(`auth/users/profile/`);
 };
 
 const checkUsername = (username) => {

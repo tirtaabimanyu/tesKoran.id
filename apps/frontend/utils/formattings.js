@@ -15,6 +15,7 @@ export function parseSecond(second, withHour = false) {
   if (minute) str += minute + "m";
   if (second) str += second + "s";
 
+  if (str.length == 0) str += "0s";
   return str;
 }
 

@@ -33,12 +33,12 @@ const getCurrentUser = () => {
 };
 
 const getSocialAuthUrl = () => {
-  let redirect_uri = "http://localhost:3000/login";
-  if (process.env.NODE_ENV == "production")
-    redirect_uri = "https://teskoran.id/login";
-  return api.get(`auth/o/google-oauth2?redirect_uri=${redirect_uri}`, {
-    withCredentials: true,
-  });
+  return api.get(
+    `auth/o/google-oauth2?redirect_uri=${process.env.NEXT_PUBLIC_WEB_URL}`,
+    {
+      withCredentials: true,
+    }
+  );
 };
 
 const socialLogin = (code, state) => {
@@ -76,6 +76,14 @@ const resetPasswordConfirm = (uid, token, new_password, re_new_password) => {
   });
 };
 
+const changePassword = (current_password, new_password, re_new_password) => {
+  return api.post("auth/users/set_password/", {
+    current_password,
+    new_password,
+    re_new_password,
+  });
+};
+
 const AuthService = {
   signup,
   login,
@@ -87,6 +95,7 @@ const AuthService = {
   resendActivation,
   resetPassword,
   resetPasswordConfirm,
+  changePassword,
 };
 
 export default AuthService;

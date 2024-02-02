@@ -2,15 +2,16 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  height: 600px;
   overflow-y: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .title {
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: bold;
-  display: flex;
-  /* align-items: center; */
+  display: none;
   justify-content: space-between;
 }
 
@@ -50,96 +51,22 @@
   background-color: lightgray;
   border-radius: 0.5rem;
   height: 100%;
-}
-
-.leaderboardContent {
-  overflow-y: auto;
-}
-
-.leaderboardContent table {
-  width: 100%;
-}
-
-.leaderboardContent table td {
-  padding: 0.25rem;
-  font-size: small;
-}
-
-.leaderboardContent table td:only-child {
-  padding: 0;
-}
-
-/* Width */
-.leaderboardContent::-webkit-scrollbar {
-  width: 0.25rem;
-  height: 0.25rem;
-}
-
-/* Track */
-.leaderboardContent::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-.leaderboardContent::-webkit-scrollbar-thumb {
-  background: gray;
-  border-radius: 0.5rem;
-}
-
-/* Handle on hover */
-.leaderboardContent::-webkit-scrollbar-thumb:hover {
-  background: dimgray;
-}
-
-.leaderboardHeader {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem;
-  padding-bottom: 0;
-}
-
-.leaderboardHeader h2 {
-  margin: 0;
-}
-
-.modeButtonContainer {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
-  color: gray;
-}
-
-.modeButtonContainer * {
-  cursor: pointer;
-}
-
-.centered {
-  text-align: center;
-}
-
-.dateText {
-  font-size: smaller;
-  color: dimgray;
+  padding: 8px;
 }
 
 .hide {
   display: none;
 }
 
-.activeMode {
-  color: black;
-}
-
 @media only screen and (max-width: 600px) {
   .title {
-    font-size: x-large;
-    padding: 0 0.5rem;
+    display: flex;
   }
 
-  .leaderboardContainer {
-    background-color: transparent;
+  .container {
+    gap: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .leaderboardContent table td {
