@@ -65,8 +65,8 @@ class GetUserProfile(views.APIView):
             "addition_per_minute__sum"
         ]
         total_accuracy = queryset.aggregate(Sum("accuracy"))["accuracy__sum"]
-        ranked_history = ranked_queryset.order_by("-created_at")[:10]
-        mixed_history = queryset.order_by("-created_at")[:10]
+        ranked_history = ranked_queryset.order_by("created_at")[:10]
+        mixed_history = queryset.order_by("created_at")[:10]
         ranked_leaderboard = {
             "THIRTY_SECOND": ranked_queryset.filter(duration=30).order_by(
                 "-addition_per_minute"
