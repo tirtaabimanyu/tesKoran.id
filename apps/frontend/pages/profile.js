@@ -207,7 +207,13 @@ export default function Profile() {
 
   const labels = Array.from(
     { length: Math.min(10, historyData.length) },
-    (v, k) => k + 1 + Math.max(0, data.total_test - 10)
+    (v, k) =>
+      new Date(historyData[k].created_at).toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        hour: "numeric",
+        minute: "numeric",
+      })
   );
 
   const chartData = {
