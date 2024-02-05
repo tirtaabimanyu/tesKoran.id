@@ -10,6 +10,7 @@ import {
   FaGitAlt,
   FaDonate,
 } from "react-icons/fa";
+import ReleaseNotesButton from "./releaseNotesButton";
 
 export default function Footer({ hide }) {
   return (
@@ -42,18 +43,15 @@ export default function Footer({ hide }) {
       </div>
 
       <div className={styles.group}>
-        <div className={styles.disabled}>
+        {/* <div className={styles.disabled}>
           <FaPalette />
           <div>Light Theme</div>
         </div>
         <div className={styles.disabled}>
           <FaGlobeAsia />
           <div>English</div>
-        </div>
-        <div className={styles.disabled}>
-          <FaGitAlt />
-          <div>v1.0.0</div>
-        </div>
+        </div> */}
+        <ReleaseNotesButton />
       </div>
     </div>
   );
