@@ -3,7 +3,7 @@ import styles from "../styles/Privacy.module.css";
 export default function Privacy() {
   return (
     <div className={styles.container}>
-      <h1>Privacy Policy for tesKoran.id</h1>
+      <h2>Privacy Policy</h2>
 
       <p>
         At tesKoran.id, accessible from https://teskoran.id, one of our main
@@ -17,7 +17,7 @@ export default function Privacy() {
         Privacy Policy, do not hesitate to contact us.
       </p>
 
-      <h2>Log Files</h2>
+      <h3>Log Files</h3>
 
       <p>
         tesKoran.id follows a standard procedure of using log files. These files
@@ -36,7 +36,7 @@ export default function Privacy() {
         .
       </p>
 
-      <h2>Cookies and Web Beacons</h2>
+      <h3>Cookies and Web Beacons</h3>
 
       <p>
         Like any other website, tesKoran.id uses "cookies". These cookies are
@@ -54,7 +54,7 @@ export default function Privacy() {
         .
       </p>
 
-      <h2>Privacy Policies</h2>
+      <h3>Privacy Policies</h3>
 
       <p>
         You may consult this list to find the Privacy Policy for each of the
@@ -76,7 +76,7 @@ export default function Privacy() {
         that are used by third-party advertisers.
       </p>
 
-      <h2>Third Party Privacy Policies</h2>
+      <h3>Third Party Privacy Policies</h3>
 
       <p>
         tesKoran.id's Privacy Policy does not apply to other advertisers or
@@ -93,7 +93,7 @@ export default function Privacy() {
         websites. What Are Cookies?
       </p>
 
-      <h2>Children's Information</h2>
+      <h3>Children's Information</h3>
 
       <p>
         Another part of our priority is adding protection for children while
@@ -109,7 +109,7 @@ export default function Privacy() {
         to promptly remove such information from our records.
       </p>
 
-      <h2>Online Privacy Policy Only</h2>
+      <h3>Online Privacy Policy Only</h3>
 
       <p>
         This Privacy Policy applies only to our online activities and is valid
@@ -119,7 +119,7 @@ export default function Privacy() {
         website.
       </p>
 
-      <h2>Consent</h2>
+      <h3>Consent</h3>
 
       <p>
         By using our website, you hereby consent to our Privacy Policy and agree
