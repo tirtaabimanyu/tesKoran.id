@@ -36,7 +36,7 @@ export default function About() {
           see yours on your <Link href="profile">Profile page</Link>.
         </li>
         <li>
-          Ranked - You can't see the test timer. Both correct and incorrect
+          Ranked - You can&apos;t see the test timer. Both correct and incorrect
           answers are the same <span style={{ color: "#0070f3" }}>color</span>.
           Test results will be submitted to the{" "}
           <Link href="/leaderboard">public leaderboard</Link>.

@@ -13,7 +13,7 @@ export default function Contact() {
       <p className={styles.titleContainer}>
         <strong className={styles.title}>hello@teskoran.id</strong>
       </p>
-      <p>we'd love to hear from you!</p>
+      <p>we&apos;d love to hear from you!</p>
     </div>
   );
 }

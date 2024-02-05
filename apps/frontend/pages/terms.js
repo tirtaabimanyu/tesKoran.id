@@ -11,7 +11,7 @@ export default function Terms() {
 
       <p>
         These terms and conditions outline the rules and regulations for the use
-        of tesKoran.id's Website, located at https://teskoran.id.
+        of tesKoran.id&apos;s Website, located at https://teskoran.id.
       </p>
 
       <p>
@@ -22,20 +22,21 @@ export default function Terms() {
 
       <p>
         The following terminology applies to these Terms and Conditions, Privacy
-        Statement and Disclaimer Notice and all Agreements: "Client", "You" and
-        "Your" refers to you, the person log on this website and compliant to
-        the Company’s terms and conditions. "The Company", "Ourselves", "We",
-        "Our" and "Us", refers to our Company. "Party", "Parties", or "Us",
-        refers to both the Client and ourselves. All terms refer to the offer,
-        acceptance and consideration of payment necessary to undertake the
-        process of our assistance to the Client in the most appropriate manner
-        for the express purpose of meeting the Client’s needs in respect of
-        provision of the Company’s stated services, in accordance with and
-        subject to, prevailing law of Netherlands. Any use of the above
-        terminology or other words in the singular, plural, capitalization
-        and/or he/she or they, are taken as interchangeable and therefore as
-        referring to same. Our Terms and Conditions were created with the help
-        of the{" "}
+        Statement and Disclaimer Notice and all Agreements: &quot;Client&quot;,
+        &quot;You&quot; and &quot;Your&quot; refers to you, the person log on
+        this website and compliant to the Company&apos;s terms and conditions.
+        &quot;The Company&quot;, &quot;Ourselves&quot;, &quot;We&quot;,
+        &quot;Our&quot; and &quot;Us&quot;, refers to our Company.
+        &quot;Party&quot;, &quot;Parties&quot;, or &quot;Us&quot;, refers to
+        both the Client and ourselves. All terms refer to the offer, acceptance
+        and consideration of payment necessary to undertake the process of our
+        assistance to the Client in the most appropriate manner for the express
+        purpose of meeting the Client&apos;s needs in respect of provision of
+        the Company&apos;s stated services, in accordance with and subject to,
+        prevailing law of Netherlands. Any use of the above terminology or other
+        words in the singular, plural, capitalization and/or he/she or they, are
+        taken as interchangeable and therefore as referring to same. Our Terms
+        and Conditions were created with the help of the{" "}
         <a href="https://www.privacypolicyonline.com/terms-conditions-generator/">
           Terms & Conditions Generator
         </a>
@@ -48,11 +49,11 @@ export default function Terms() {
 
       <p>
         We employ the use of cookies. By accessing tesKoran.id, you agreed to
-        use cookies in agreement with the tesKoran.id's Privacy Policy.
+        use cookies in agreement with the tesKoran.id&apos;s Privacy Policy.
       </p>
 
       <p>
-        Most interactive websites use cookies to let us retrieve the user's
+        Most interactive websites use cookies to let us retrieve the user&apos;s
         details for each visit. Cookies are used by our website to enable the
         functionality of certain areas to make it easier for people visiting our
         website. Some of our affiliate/advertising partners may also use
@@ -158,7 +159,7 @@ export default function Terms() {
         other Website information so long as the link: (a) is not in any way
         deceptive; (b) does not falsely imply sponsorship, endorsement or
         approval of the linking party and its products and/or services; and (c)
-        fits within the context of the linking party's site.
+        fits within the context of the linking party&apos;s site.
       </p>
 
       <p>
@@ -189,7 +190,8 @@ export default function Terms() {
         These organizations may link to our home page so long as the link: (a)
         is not in any way deceptive; (b) does not falsely imply sponsorship,
         endorsement or approval of the linking party and its products or
-        services; and (c) fits within the context of the linking party's site.
+        services; and (c) fits within the context of the linking party&apos;s
+        site.
       </p>
 
       <p>
@@ -209,12 +211,12 @@ export default function Terms() {
         <li>
           By use of any other description of our Website being linked to that
           makes sense within the context and format of content on the linking
-          party's site.
+          party&apos;s site.
         </li>
       </ul>
 
       <p>
-        No use of tesKoran.id's logo or other artwork will be allowed for
+        No use of tesKoran.id&apos;s logo or other artwork will be allowed for
         linking absent a trademark license agreement.
       </p>
 
@@ -249,7 +251,7 @@ export default function Terms() {
         We reserve the right to request that you remove all links or any
         particular link to our Website. You approve to immediately remove all
         links to our Website upon request. We also reserve the right to amen
-        these terms and conditions and it's linking policy at any time. By
+        these terms and conditions and it&apos;s linking policy at any time. By
         continuously linking to our Website, you agree to be bound to and follow
         these linking terms and conditions.
       </p>
