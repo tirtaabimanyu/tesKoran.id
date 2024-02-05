@@ -170,8 +170,8 @@ export default function StartScreen({
           and only type the <b>last digit</b> of the result.
         </div>
         <div>
-          Press {useGetBackKey()} to navigate backwards and {useGetForwardKey()}{" "}
-          to navigate forwards.
+          Press {useGetBackKey()} to navigate backward and {useGetForwardKey()}{" "}
+          to navigate forward.
         </div>
         <div>Just overwrite your answer if you made a mistake.</div>
       </div>

@@ -10,11 +10,7 @@ div#__next > div {
   overscroll-behavior-y: contain;
   min-height: 100vh;
   background-color: whitesmoke;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+  scrollbar-gutter: stable both-edges;
 }
 
 * {

@@ -1,0 +1,14 @@
+.codeText {
+  color: black;
+  background-color: lightgray;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: large;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 0 16px 0 16px;
+  }
+}
