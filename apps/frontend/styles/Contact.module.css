@@ -1,0 +1,35 @@
+.titleContainer {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+  color: black;
+  transition: 0.25s;
+}
+
+.title {
+  position: relative;
+  display: flex;
+  margin: 0;
+}
+
+.title::after {
+  position: absolute;
+  content: " ";
+  min-width: 0px;
+  min-height: 5px;
+  transition: min-width 0.25s;
+  bottom: -5px;
+  background-color: darkorange;
+  border-radius: 25px;
+}
+
+.title:hover::after {
+  min-width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 0 16px 0 16px;
+  }
+}
