@@ -500,6 +500,6 @@ export default function Profile() {
   };
 
   if (!data || loading) return <Spinner loading={loading} />;
-  if (data.can_change_username) return renderChangeUsername();
+  if (data.user.can_change_username) return renderChangeUsername();
   else return renderProfile();
 }
