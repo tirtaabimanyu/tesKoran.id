@@ -140,7 +140,7 @@ export default function ResultScreen({
       },
       y1: {
         beginAtZero: true,
-        max: maxScale ? Math.floor(maxScale * 1.5) : 10,
+        max: Math.max(Math.floor(maxScale * 1.5), 3),
         stacked: true,
         ticks: {
           stepSize: 1,
