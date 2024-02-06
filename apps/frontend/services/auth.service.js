@@ -34,7 +34,7 @@ const getCurrentUser = () => {
 
 const getSocialAuthUrl = () => {
   return api.get(
-    `auth/o/google-oauth2?redirect_uri=${process.env.NEXT_PUBLIC_WEB_URL}`,
+    `auth/o/google-oauth2?redirect_uri=${process.env.NEXT_PUBLIC_WEB_URL}/login`,
     {
       withCredentials: true,
     }
