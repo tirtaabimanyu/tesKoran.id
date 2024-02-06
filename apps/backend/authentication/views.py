@@ -61,11 +61,15 @@ class GetUserProfile(views.APIView):
         ranked_queryset = queryset.filter(is_ranked=True)
 
         total_test = len(queryset)
-        total_time = queryset.aggregate(Sum("duration"))["duration__sum"]
-        total_apm = queryset.aggregate(Sum("addition_per_minute"))[
-            "addition_per_minute__sum"
-        ]
-        total_accuracy = queryset.aggregate(Sum("accuracy"))["accuracy__sum"]
+        total_time = queryset.aggregate(Sum("duration"))["duration__sum"] or 0
+        total_apm = (
+            queryset.aggregate(Sum("addition_per_minute"))["addition_per_minute__sum"]
+            or 0
+        )
+        total_accuracy = queryset.aggregate(Sum("accuracy"))["accuracy__sum"] or 0
+        average_apm = total_apm / total_test if total_test > 0 else 0
+        average_accuracy = total_accuracy / total_test if total_test > 0 else 0
+
         ranked_history = list(ranked_queryset.order_by("created_at"))[-10:]
         mixed_history = list(queryset.order_by("created_at"))[-10:]
         ranked_leaderboard = {
@@ -102,8 +106,8 @@ class GetUserProfile(views.APIView):
                 "user": request.user,
                 "total_test": total_test,
                 "total_time": total_time,
-                "average_apm": total_apm / total_test,
-                "average_accuracy": total_accuracy / total_test,
+                "average_apm": average_apm,
+                "average_accuracy": average_accuracy,
                 "history": {
                     "ranked": ranked_history,
                     "mixed": mixed_history,
