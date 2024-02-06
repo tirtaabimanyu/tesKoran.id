@@ -11,7 +11,9 @@ export default function Contact() {
         you can get in touch with us at
       </p>
       <p className={styles.titleContainer}>
-        <strong className={styles.title}>hello@teskoran.id</strong>
+        <strong className={styles.title}>
+          <a href="mailto:hello@teskoran.id">hello@teskoran.id</a>
+        </strong>
       </p>
       <p>we&apos;d love to hear from you!</p>
     </div>
