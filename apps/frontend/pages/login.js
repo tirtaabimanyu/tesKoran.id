@@ -36,7 +36,10 @@ const handleForgotPassword = (e) => {
       toast.success("Password reset email has been sent", { theme: "colored" });
     })
     .catch((error) => {
-      toast.error(error.response.data["email"][0], { theme: "colored" });
+      toast.error(
+        "Can't send the reset password email. Please try again later",
+        { theme: "colored" }
+      );
     });
 };
 

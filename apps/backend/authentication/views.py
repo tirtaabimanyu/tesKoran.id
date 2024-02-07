@@ -187,3 +187,23 @@ class CustomUserViewset(DjoserUserViewSet):
         cache.set(cache_key, True, timeout=settings.SEND_ACTIVATION_EMAIL_TIMER)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(["post"], detail=False)
+    def reset_password(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.get_user()
+
+        if user:
+            # check if user has already sent an email in the last 10 min
+            user_email = get_user_email(user)
+            cache_key = f"reset-password/{user_email}"
+            cached_data = cache.get(cache_key)
+            if cached_data is not None:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            context = {"user": user}
+            settings.EMAIL.password_reset(self.request, context).send([user_email])
+            cache.set(cache_key, True, timeout=settings.SEND_RESET_PASSWORD_EMAIL_TIMER)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
