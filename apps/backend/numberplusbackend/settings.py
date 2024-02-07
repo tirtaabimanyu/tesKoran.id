@@ -30,8 +30,7 @@ env = environ.Env(
     CORS_ORIGIN_WHITELIST=(list, []),
     SOCIAL_AUTH_ALLOWED_REDIRECT_URIS=(list, []),
     DOMAIN=(str, ""),
-    AWS_ACCESS_KEY_ID=(str, ""),
-    AWS_SECRET_ACCESS_KEY=(str, ""),
+    POSTMARK_API_TOKEN=(str, ""),
     SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=(str, ""),
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=(str, ""),
 )
@@ -236,11 +235,11 @@ DJOSER = {
 DOMAIN = env("DOMAIN")
 SITE_NAME = "tesKoran.id"
 DEFAULT_FROM_EMAIL = "no-reply@teskoran.id"
-EMAIL_BACKEND = "django_ses.SESBackend"
-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
-AWS_SES_REGION_NAME = "ap-southeast-1"
-AWS_SES_REGION_ENDPOINT = "email.ap-southeast-1.amazonaws.com"
+EMAIL_HOST = "smtp.postmarkapp.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env("POSTMARK_API_TOKEN")
+EMAIL_HOST_PASSWORD = env("POSTMARK_API_TOKEN")
+EMAIL_USE_TLS = True
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_SLUGIFY_FUNCTION = "authentication.pipelines.slugify"
