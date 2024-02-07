@@ -147,7 +147,9 @@ export default function Profile() {
         <h3 style={{ marginTop: 0, marginBottom: 0 }}>
           Please choose a username
         </h3>
-        <p>{`You can't change it later`}</p>
+        <p>
+          You can <strong>NOT</strong> change it later
+        </p>
         <form
           className={styles.formContainer}
           onSubmit={handleSubmit(onSubmitUsername)}

@@ -12,15 +12,6 @@ import TokenService from "../services/token.service";
 import Spinner from "../components/spinner";
 import InputWithStatus from "../components/inputWithStatus";
 
-const checkUsername = async (username) => {
-  try {
-    await UserService.checkUsername(username);
-  } catch (_error) {
-    return _error.response.data?.username[0];
-  }
-  return true;
-};
-
 const validateEmailPattern = (email) => {
   const pattern =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -100,6 +91,25 @@ export default function Login({ code, state, initLoading }) {
     formState: { errors, isValid, dirtyFields },
     getValues,
   } = useForm();
+
+  const [checkedUsername, setCheckedUsername] = useState({
+    username: "",
+    value: null,
+  });
+
+  const checkUsername = async (username) => {
+    if (username == checkedUsername.username) return checkedUsername.value;
+    const returnValue = true;
+
+    try {
+      await UserService.checkUsername(username);
+    } catch (_error) {
+      returnValue = _error.response.data?.username[0];
+    }
+
+    setCheckedUsername({ username: username, value: returnValue });
+    return returnValue;
+  };
 
   const {
     register: registerLogin,
