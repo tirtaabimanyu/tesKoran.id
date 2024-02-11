@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: apps/docker/backend/Dockerfile
+      target: prod
       args:
         - DATABASE_URL=$DATABASE_URL
         - DJANGO_SUPERUSER_EMAIL=$DJANGO_SUPERUSER_EMAIL
@@ -13,7 +14,6 @@ services:
         - DJANGO_SUPERUSER_PASSWORD=$DJANGO_SUPERUSER_PASSWORD
     volumes:
       - static:/app/static
-
     ports:
       - 8000:8000
     env_file:
@@ -26,7 +26,6 @@ services:
       dockerfile: apps/docker/frontend/Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-
     ports:
       - 3000:3000
     env_file:

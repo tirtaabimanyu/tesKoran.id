@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  backend:
+    extends:
+      file: docker-compose.yaml
+      service: backend
+    build:
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: apps/backend
+          target: /app
+        - action: rebuild
+          path: apps/backend/requirements.txt
+
+  frontend:
+    extends:
+      file: docker-compose.yaml
+      service: frontend
+
+  nginx:
+    extends:
+      file: docker-compose.yaml
+      service: nginx
+
+volumes:
+  static:

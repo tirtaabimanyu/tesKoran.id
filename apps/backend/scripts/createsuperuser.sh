@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/opt/venv/bin/python manage.py createsuperuser --noinput || true
+/home/app/venv/bin/python manage.py createsuperuser --noinput || true
