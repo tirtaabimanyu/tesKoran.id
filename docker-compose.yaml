@@ -24,6 +24,7 @@ services:
     build:
       context: .
       dockerfile: apps/docker/frontend/Dockerfile
+      target: prod
       args:
         - NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
     ports:

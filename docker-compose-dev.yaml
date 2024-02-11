@@ -19,6 +19,17 @@ services:
     extends:
       file: docker-compose.yaml
       service: frontend
+    build:
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: apps/frontend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: apps/frontend/package.json
 
   nginx:
     extends:
