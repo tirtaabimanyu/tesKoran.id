@@ -35,6 +35,7 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  text-decoration: none;
 }
 
 .disabled {

@@ -17,28 +17,28 @@ export default function Footer({ hide }) {
     <div className={cn([styles.container], { [styles.hide]: hide })}>
       <div className={styles.group}>
         <Link href="/contact">
-          <div className={styles.clickable}>
+          <a className={styles.clickable}>
             <FaEnvelope />
             <div>Contact</div>
-          </div>
+          </a>
         </Link>
         <Link href="/terms">
-          <div className={styles.clickable}>
+          <a className={styles.clickable}>
             <FaFileContract />
             <div>Terms</div>
-          </div>
+          </a>
         </Link>
         <Link href="/privacy">
-          <div className={styles.clickable}>
+          <a className={styles.clickable}>
             <FaLock />
             <div>Privacy</div>
-          </div>
+          </a>
         </Link>
         {/* <Link href="/donate">
-          <div className={styles.clickable}>
+          <a className={styles.clickable}>
             <FaDonate />
             <div>Donate</div>
-          </div>
+          </a>
         </Link> */}
       </div>
 

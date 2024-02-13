@@ -17,10 +17,10 @@ export default function NavbarLoginButton({ pathname, hide }) {
   const renderLoginButton = () => {
     return (
       <Link href="/login">
-        <div className={cn([styles.loginButton], { [styles.hide]: hide })}>
+        <a className={cn([styles.loginButton], { [styles.hide]: hide })}>
           <h4 className={cn([styles.text])}>Log In</h4>
           <FaUserAlt className={styles.icon} size="24px" />
-        </div>
+        </a>
       </Link>
     );
   };
@@ -40,12 +40,12 @@ export default function NavbarLoginButton({ pathname, hide }) {
   const renderProfileButton = () => {
     return (
       <Link href="/profile">
-        <div className={cn([styles.loginButton], { [styles.hide]: hide })}>
+        <a className={cn([styles.loginButton], { [styles.hide]: hide })}>
           <h4 className={cn([styles.text])} suppressHydrationWarning>
             {user.username}
           </h4>
           <FaUserAlt className={styles.icon} size="24px" />
-        </div>
+        </a>
       </Link>
     );
   };

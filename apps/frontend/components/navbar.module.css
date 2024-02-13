@@ -60,6 +60,7 @@
   align-items: center;
   transition: 0.2s;
   padding: 0.5rem;
+  text-decoration: none;
 }
 
 .expandable .icon {

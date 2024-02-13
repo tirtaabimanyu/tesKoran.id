@@ -31,17 +31,17 @@ export default function Navbar({ hide, titleClickHandler }) {
       <div className={styles.links}>
         <div className={styles.group}>
           <Link href="/leaderboard">
-            <div className={cn([styles.expandable], { [styles.hide]: hide })}>
+            <a className={cn([styles.expandable], { [styles.hide]: hide })}>
               <FaTrophy className={styles.icon} size="24px" />
               <h4 className={cn([styles.text])}>Leaderboard</h4>
-            </div>
+            </a>
           </Link>
 
           <Link href="/about">
-            <div className={cn([styles.expandable], { [styles.hide]: hide })}>
+            <a className={cn([styles.expandable], { [styles.hide]: hide })}>
               <FaInfoCircle className={styles.icon} size="24px" />
               <h4 className={cn([styles.text])}>About</h4>
-            </div>
+            </a>
           </Link>
         </div>
 
