@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/router.js";
 
 const pages = {
-  "/": "tesKoran.id - Pauli & Kraepelin Test Online",
+  "/": "tesKoran.id - Tes Koran Pauli & Kraepelin Online",
   "/leaderboard": "Leaderboard - tesKoran.id",
   "/about": "About - tesKoran.id",
   "/login": "Login - tesKoran.id",
@@ -45,7 +45,7 @@ export default function Layout({ children, hide, titleClickHandler }) {
         <title>{title}</title>
         <meta
           name="description"
-          content="Tes Koran Online, Pauli and Kraepelin"
+          content="Tempat kamu latihan tes koran gratis. Sign up untuk menyimpan hasil tes kamu!"
         />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="icon" href="/favicon.ico" />
