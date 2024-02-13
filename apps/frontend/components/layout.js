@@ -45,10 +45,10 @@ export default function Layout({ children, hide, titleClickHandler }) {
         <title>{title}</title>
         <meta
           name="description"
-          content="Tempat kamu latihan tes koran gratis. Sign up untuk menyimpan hasil tes kamu!"
+          content="Tempat kamu latihan tes koran gratis. Daftar dan simpan hasil tes kamu!"
         />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" href="/favicon.ico" />
       </Head>
       <ToastContainer />
       <main className={styles.main}>
