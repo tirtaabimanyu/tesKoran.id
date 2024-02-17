@@ -19,12 +19,15 @@ const pages = {
   "/password-reset": "Reset Password - tesKoran.id",
 };
 
+const noindexPages = ["/leaderboard"];
+
 export default function Layout({ children, hide, titleClickHandler }) {
   const router = useRouter();
   const title =
     router.pathname in pages
       ? pages[router.pathname]
       : "Page not Found - tesKoran.id";
+  const noindex = router.pathname in noindexPages;
 
   return (
     <div className={styles.container}>
@@ -48,6 +51,8 @@ export default function Layout({ children, hide, titleClickHandler }) {
           content="Tempat kamu latihan tes koran gratis. Daftar dan simpan hasil tes kamu!"
         />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
+        {noindex && <meta name="robots" content="noindex" />}
+
         <link rel="icon" type="image/png" href="/favicon.ico" />
       </Head>
       <ToastContainer />
