@@ -27,7 +27,7 @@ export default function Layout({ children, hide, titleClickHandler }) {
     router.pathname in pages
       ? pages[router.pathname]
       : "Page not Found - tesKoran.id";
-  const noindex = router.pathname in noindexPages;
+  const noindex = noindexPages.includes(router.pathname);
 
   return (
     <div className={styles.container}>
