@@ -1,3 +1,5 @@
+require("dotenv").config({ path: "../../.env" });
+
 // Configuration options for Next.js
 const nextConfig = {
   reactStrictMode: true, // Enable React strict mode for improved error handling
