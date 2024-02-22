@@ -46,14 +46,44 @@ export default function Layout({ children, hide, titleClickHandler }) {
 
       <Head>
         <title>{title}</title>
+        {noindex && <meta name="robots" content="noindex" />}
+
+        {/* PWA metadata */}
+        <meta name="application-name" content="tesKoran.id" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="tesKoran.id" />
         <meta
           name="description"
           content="Tempat kamu latihan tes koran gratis. Daftar dan simpan hasil tes kamu!"
         />
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        {noindex && <meta name="robots" content="noindex" />}
-
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#2B5797" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" href="/favicon.ico" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:url" content="https://teskoran.id" />
+        <meta name="twitter:title" content="tesKoran.id" />
+        <meta
+          name="description"
+          content="Tempat kamu latihan tes koran gratis. Daftar dan simpan hasil tes kamu!"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="tesKoran.id" />
+        <meta
+          name="description"
+          content="Tempat kamu latihan tes koran gratis. Daftar dan simpan hasil tes kamu!"
+        />
+        <meta property="og:site_name" content="tesKoran.id" />
+        <meta property="og:url" content="https://teskoran.id" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
       </Head>
       <ToastContainer />
       <main className={styles.main}>
